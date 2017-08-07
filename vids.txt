@@ -1,0 +1,2 @@
+0x0483	Nucleo
+0x0d28	Phytec KW21D
