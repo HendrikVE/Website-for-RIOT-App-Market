@@ -1,1 +1,1 @@
-# Website-for-RIOT-App-Market
+# RIOT App Market website
