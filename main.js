@@ -5,13 +5,15 @@ async function selectDevice() {
     var downloadSection = document.getElementById("downloadSection");
 
 /*
-Wenn nicht ander genannt stammen alle vendorid und productid Einträge von:
+Wenn nicht anders genannt stammen alle vendorid und productid Einträge von:
     http://www.linux-usb.org/usb.ids
 */
 
     navigator.usb.requestDevice({ filters: [
         
-        //{vendorId: 0x0000}, //ARM (family)
+		REPLACE_BY_SCRIPT
+		
+        /*//{vendorId: 0x0000}, //ARM (family)
         {vendorId: 0x2047},  //MSP430 (family)
         {vendorId: 0x03eb},  //ATmega (family)
         {vendorId: 0x0483},  //MIPS (family)
@@ -92,7 +94,7 @@ Wenn nicht ander genannt stammen alle vendorid und productid Einträge von:
         {vendorId: 0x0000, productId: 0x0000},  //Mulle
         {vendorId: 0x0000, productId: 0x0000},  //UDOO
         {vendorId: 0x0000, productId: 0x0000},  //Zolertia remote
-        {vendorId: 0x0000, productId: 0x0000},  //Zolertia Z1
+        {vendorId: 0x0000, productId: 0x0000},  //Zolertia Z1*/
     ] })
     .then(selectedDevice => {
             device = selectedDevice;
