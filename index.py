@@ -32,7 +32,8 @@ def main():
 	
 	print_checkboxes()
 
-	print "<br><button type=""button"" id=""downloadButton"" onclick=""download()"">Download your personal RIOT OS</button></div><script src=""main.js""></script>"
+	print "<br><button type=""button"" id=""downloadButton"" onclick=""download()"">Download your personal RIOT OS</button></div>"
+	print "<script src=""main.js""></script>"
 
 	print "</body>"
 	print "</html>"
@@ -47,7 +48,7 @@ def print_checkboxes():
 	db_cursor.execute("SELECT * FROM modules ORDER BY group_identifier")
 	results = db_cursor.fetchall()
 	
-	string_to_fill = "<li><label><input type=""checkbox"" name=""{!s}"" value=""{!s}"">{!s}</label></li>"
+	string_to_fill = "<li><label><input type=""checkbox"" name=""module_checkbox"" value=""{!s}"">{!s}</label></li>"
 
 	print "<form><h3>Select modules:</h3><fieldset>"
 	
@@ -63,12 +64,12 @@ def print_checkboxes():
 				print "</ul>"
 			
 			# open new group
-			print "<p>" + row["group_identifier"] + "</p><ul>"
+			print "<p><b>" + row["group_identifier"] + "</b></p><ul>"
 			group_left_open = True
 			
 		last_group_identifier = row["group_identifier"]
 		
-		print string_to_fill.format(row["group_identifier"], row["id"], row["name"])
+		print string_to_fill.format(row["id"], row["name"])
 
 	if group_left_open:
 		print "</ul>"
