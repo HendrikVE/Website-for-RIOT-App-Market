@@ -124,45 +124,31 @@ function printDeviceInfo(device) {
 
 function download() {
     
+    //https://stackoverflow.com/questions/8563240/how-to-get-all-checked-checkboxes
     var checkboxes = document.getElementsByName("module_checkbox");
     var checkboxesChecked = [];
     
     for (var i = 0; i < checkboxes.length; i++) {
-        
         if (checkboxes[i].checked) {
-            checkboxesChecked.push(checkboxes[i]);
+            // add the IDs (retrieved from the database) to the array
+            checkboxesChecked.push(checkboxes[i].value);
         }
     }
     
-    if(checkboxesChecked.length() == 0) {
-        //print error
+    if(checkboxesChecked.length == 0) {
+        // print error
     }
     else {
-        //do post
+        
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("demo").innerHTML = this.responseText;
+           }
+        };
+        xhttp.open("POST", "request.py", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("selected_modules=[" + checkboxesChecked.join(",") + "]");
     }
-}
-
-//https://stackoverflow.com/questions/133925/javascript-post-request-like-a-form-submit
-function post(path, params, method) {
-    method = method || "post"; // Set method to post by default if not specified.
-
-    // The rest of this code assumes you are not using a library.
-    // It can be made less wordy if you use one.
-    var form = document.createElement("form");
-    form.setAttribute("method", method);
-    form.setAttribute("action", path);
-
-    for(var key in params) {
-        if(params.hasOwnProperty(key)) {
-            var hiddenField = document.createElement("input");
-            hiddenField.setAttribute("type", "hidden");
-            hiddenField.setAttribute("name", key);
-            hiddenField.setAttribute("value", params[key]);
-
-            form.appendChild(hiddenField);
-         }
-    }
-
-    document.body.appendChild(form);
-    form.submit();
 }
