@@ -80,5 +80,5 @@ def print_checkboxes():
 	db_cursor.close()
 	db.close()
 	
-if __name__ == '__main__':
+if __name__ == "__main__":
 	main()
