@@ -1,4 +1,4 @@
-var device;
+var device = null;
 
 async function selectDevice() {
 
@@ -149,6 +149,6 @@ function download() {
         };
         xhttp.open("POST", "request.py", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("selected_modules=[" + checkboxesChecked.join(",") + "]");
+        xhttp.send("selected_modules=" + checkboxesChecked.join(" "));
     }
 }

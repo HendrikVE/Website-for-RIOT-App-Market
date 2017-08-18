@@ -18,12 +18,16 @@ def main():
 	form = cgi.FieldStorage()
 
 	selected_modules = form.getlist("selected_modules")
-
+	
+	argument_modules = []
+	argument_modules.append("--modules")
 	for module in selected_modules:
-		print module
+		argument_modules.append(" " + module)
 
+	arguments = "".join(argument_modules) + " " + "--device lululu"
+		
 	os.chdir("../riotam-backend/")
-	build_script = subprocess.check_output([sys.executable, "build.py", "here is build.py"])
+	build_script = subprocess.check_output([sys.executable, "build.py", arguments])
 	
 	print build_script
 
