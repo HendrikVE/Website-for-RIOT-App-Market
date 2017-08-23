@@ -24,12 +24,11 @@ def main():
 	for module in selected_modules:
 		argument_modules.append(" " + module)
 
-	arguments = "".join(argument_modules) + " " + "--device lululu"
+	arguments = "".join(argument_modules) + " " + "--device native"
 		
 	os.chdir("../riotam-backend/")
-	build_script = subprocess.check_output([sys.executable, "build.py", arguments])
-	
-	print build_script
+	proc = subprocess.Popen(["python", "build.py",  arguments], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+	print proc.communicate()[0]
 
 if __name__ == "__main__":
 	main()
