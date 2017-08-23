@@ -140,6 +140,8 @@ function download() {
     }
     else {
         
+        document.getElementById("downloadButton").disabled = true;
+        
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             
