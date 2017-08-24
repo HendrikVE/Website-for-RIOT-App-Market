@@ -147,6 +147,17 @@ function download() {
             
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById("demo").innerHTML = this.responseText;
+                
+                
+                //talk to the riotam chrome extension
+                var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
+
+                // Make a simple request:
+                chrome.runtime.sendMessage(extensionId, {data : {device : "native", flash_program : 0}},
+                    function(response) {
+                        console.log(response)
+                    }
+                );
            }
         };
         xhttp.open("POST", "request.py", true);
