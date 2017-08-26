@@ -146,6 +146,8 @@ function download() {
         xhttp.onreadystatechange = function() {
             
             if (this.readyState == 4 && this.status == 200) {
+				
+				//this.responseText has to be a json string
                 document.getElementById("demo").innerHTML = this.responseText;
                 
                 
@@ -153,7 +155,7 @@ function download() {
                 var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
 
                 // Make a simple request:
-                chrome.runtime.sendMessage(extensionId, {data : {device : "native", flash_program : 0}},
+                chrome.runtime.sendMessage(extensionId, JSON.parse(this.responseText),
                     function(response) {
                         console.log(response)
                     }
