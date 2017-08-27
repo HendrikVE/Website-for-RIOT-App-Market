@@ -164,6 +164,14 @@ function download() {
         };
         xhttp.open("POST", "request.py", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("selected_modules=" + checkboxesChecked.join(" "));
+		
+		params = ""
+		params += "selected_modules=" + checkboxesChecked.join("&selected_modules=")
+		params += "&"
+		params += "device=" + "pba-d-01-kw2x"
+		
+		console.log(params)
+		
+        xhttp.send(params);
     }
 }
