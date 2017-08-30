@@ -30,6 +30,8 @@ def main():
 
 	print "<div id=""downloadSection"" style=""visibility: hidden;"">"
 	
+	print_device_list()
+	
 	print_checkboxes()
 
 	print "<br><button type=""button"" id=""downloadButton"" onclick=""download()"">Download your personal RIOT OS</button></div>"
@@ -77,6 +79,26 @@ def print_checkboxes():
 		
 	print "</form>"
 		
+	db_cursor.close()
+	db.close()
+	
+def print_device_list():
+	
+	db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
+
+	# cursor object to execute queries
+	db_cursor = db.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+	
+	db_cursor.execute("SELECT * FROM devices")
+	results = db_cursor.fetchall()
+	
+	print "<form><p>Please select your device:</p><label>Device:<select id=""device_selector"" size=""1"">"
+	
+	for row in results:
+		print "<option value=""{!s}"">{!s}</option>".format(row["internal_name"], row["display_name"])
+		
+	print "</select></label></form>"
+	
 	db_cursor.close()
 	db.close()
 	

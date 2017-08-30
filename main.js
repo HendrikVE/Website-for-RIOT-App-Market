@@ -165,12 +165,10 @@ function download() {
         xhttp.open("POST", "request.py", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		
-		params = ""
-		params += "selected_modules=" + checkboxesChecked.join("&selected_modules=")
-		params += "&"
-		params += "device=" + "pba-d-01-kw2x"
-		
-		console.log(params)
+		params = "";
+		params += "selected_modules=" + checkboxesChecked.join("&selected_modules=");
+		params += "&";
+		params += "device=" + document.getElementById("device_selector").value;
 		
         xhttp.send(params);
     }
