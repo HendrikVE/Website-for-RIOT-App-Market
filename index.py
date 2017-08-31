@@ -91,6 +91,7 @@ def print_checkboxes():
 	
 	last_group_identifier = None
 	group_left_open = False
+	row_left_open = False
 	new_row = True
 	
 	for row in results:
@@ -99,9 +100,16 @@ def print_checkboxes():
 		if last_group_identifier == None or group_identifier_changed:
 			
 			if group_left_open:
+				# close group
 				print '</div>'
+				
+			if row_left_open:
 				current_width_taken = 0
 				new_row = True
+				
+				# close row
+				print '</div>'
+				row_left_open = False
 			
 			# open new group
 			print '<div class="checkbox"><h3>' + row["group_identifier"] + '</h3>'
@@ -113,7 +121,10 @@ def print_checkboxes():
 				# close the current row. if last_group_identifier is None, there was no row before
 				print '</div>'
 				
+			# open new row
 			print '<div class="row">'
+			row_left_open = True
+			
 			current_width_taken = 0
 			new_row = False
 		
@@ -123,6 +134,9 @@ def print_checkboxes():
 		new_row = current_width_taken >= 12
 		last_group_identifier = row["group_identifier"]
 
+	if row_left_open:
+		print '</div>'
+		
 	if group_left_open:
 		print '</div>'
 		
