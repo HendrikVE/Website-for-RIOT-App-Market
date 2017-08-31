@@ -140,22 +140,37 @@ function download() {
     }
     else {
         
-        document.getElementById("downloadButton").disabled = true;
+        var downloadButton = document.getElementById("downloadButton");
+        var progressBar = document.getElementById("progressBar");
+        
+        downloadButton.disabled = true;
+        progressBar.style.visibility = "visible";
         
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             
             if (this.readyState == 4 && this.status == 200) {
+                
+                var jsonResponse = JSON.parse(this.responseText);
+                
+                if(jsonResponse.output_file != null) {
+                    downloadButton.className = "btn btn-success";
+                    downloadButton.innerHTML = "Download"
+                }
+                else {
+                    downloadButton.className = "btn btn-danger";
+                    downloadButton.innerHTML = "Something went wrong"
+                }
 				
 				//this.responseText has to be a json string
-                document.getElementById("demo").innerHTML = this.responseText;
+                document.getElementById("cmdOutput").innerHTML = this.responseText;
                 
                 
                 //talk to the riotam chrome extension
                 var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
 
                 // Make a simple request:
-                chrome.runtime.sendMessage(extensionId, JSON.parse(this.responseText),
+                chrome.runtime.sendMessage(extensionId, jsonResponse,
                     function(response) {
                         console.log(response)
                     }
