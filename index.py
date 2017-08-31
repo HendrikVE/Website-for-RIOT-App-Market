@@ -19,7 +19,6 @@ def main():
 	print_header()
 	
 	print '<body>'
-	print '<div class="container">'
 
 	# print '<button type="button" id="selectButton" onclick="selectDevice()">Select Device</button>'
 
@@ -28,6 +27,8 @@ def main():
 	# print '<div id="downloadSection" style="visibility: hidden;">'
 	
 	print_jumbotron()
+	
+	print '<div class="container">'
 	
 	print_device_selector()
 	
@@ -38,7 +39,7 @@ def main():
 	print '<div id="cmdOutput">'
 	
 	print '<div class="progress">'
-	print '<div class="progress-bar progress-bar-striped active" id="progressBar" role="progressbar" style="width:100%; visibility:hidden">'
+	print '<div class="progress-bar progress-bar-striped active" id="progressBar" style="width:100%; visibility:hidden">'
 	print '</div></div>'
 	
 	print '</div>'
@@ -65,9 +66,44 @@ def print_header():
 def print_jumbotron():
 	
 	print '<div class="jumbotron">'
-	print '<h1>RIOT AppMarket</h1>'
-	print '<p>Let us compile your custom RIOT OS</p>'
+	print '<div class="container">'
+	print '<div class="row">'
+	
+	print '<div class="col-sm-8">'
+	print '<h1>RIOT OS AppMarket</h1>'
+	print '<p>Let us build your custom RIOT OS according to your needs</p>'
 	print '</div>'
+	
+	print '<div class="col-sm-4">'
+	print '<img src="/img/riot_logo.png" alt="RIOT logo" height="200" width="200"></img>'
+	print '</div>'
+	
+	print '</div>'
+	print '</div>'
+	print '</div>'
+	
+def print_device_selector():
+	
+	db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
+
+	# cursor object to execute queries
+	db_cursor = db.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+	
+	db_cursor.execute("SELECT * FROM devices ORDER BY display_name")
+	results = db_cursor.fetchall()
+	
+	print '<form>'
+	print '<div class="form-group">'
+	print '<label for="device_selector"><h3>1. Select a device:</h3></label>'
+	print '<select class="form-control" id="device_selector">'
+	
+	for row in results:
+		print '<option value="{!s}">{!s}</option>'.format(row["internal_name"], row["display_name"])
+		
+	print '</select></div></form>'
+	
+	db_cursor.close()
+	db.close()
 	
 def print_checkboxes():
 	
@@ -86,7 +122,7 @@ def print_checkboxes():
 	string_to_fill = '<div class="col-sm-' + str(column_width) + '"><label><input type="checkbox" name="module_checkbox" value="{!s}">{!s}</label></div>'
 	
 	print '<form>'
-	print '<label for="checkboxes_container">Select modules:</label>'
+	print '<label for="checkboxes_container"><h3>2. Select modules:</h3></label>'
 	print '<div class="container-fluid" id="checkboxes_container">'
 	
 	last_group_identifier = None
@@ -112,7 +148,7 @@ def print_checkboxes():
 				row_left_open = False
 			
 			# open new group
-			print '<div class="checkbox"><h3>' + row["group_identifier"] + '</h3>'
+			print '<div class="checkbox well"><h4>' + row["group_identifier"] + '</h4>'
 			group_left_open = True
 		
 		if new_row:
@@ -140,32 +176,11 @@ def print_checkboxes():
 	if group_left_open:
 		print '</div>'
 		
+	# close the container
+	print '</div>'	
+	
 	print '</form>'
-	print '</div>'
 		
-	db_cursor.close()
-	db.close()
-	
-def print_device_selector():
-	
-	db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
-
-	# cursor object to execute queries
-	db_cursor = db.cursor(cursorclass=MySQLdb.cursors.DictCursor)
-	
-	db_cursor.execute("SELECT * FROM devices ORDER BY display_name")
-	results = db_cursor.fetchall()
-	
-	print '<form>'
-	print '<div class="form-group">'
-	print '<label for="device_selector">Select a device:</label>'
-	print '<select class="form-control" id="device_selector">'
-	
-	for row in results:
-		print '<option value="{!s}">{!s}</option>'.format(row["internal_name"], row["display_name"])
-		
-	print '</select></div></form>'
-	
 	db_cursor.close()
 	db.close()
 	
