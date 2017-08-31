@@ -37,6 +37,8 @@ def main():
 
 	# print '<div id="downloadSection" style="visibility: hidden;">'
 	
+	print_jumbotron()
+	
 	print_device_selector()
 	
 	print_checkboxes()
@@ -46,6 +48,13 @@ def main():
 	print '<div id="demo">NULL</div>'
 
 	print '</div></body></html>'
+	
+def print_jumbotron():
+	
+	print '<div class="jumbotron">'
+	print '<h1>RIOT AppMarket</h1>'
+	print '<p>Let us compile your custom RIOT OS</p>'
+	print '</div>'
 	
 def print_checkboxes():
 	
@@ -58,8 +67,7 @@ def print_checkboxes():
 	results = db_cursor.fetchall()
 	
 	string_to_fill = '<li><label><input type="checkbox" name="module_checkbox" value="{!s}">{!s}</label></li>'
-
-	print '<div class="container">'
+	
 	print '<form><h3>Select modules:</h3>'
 	
 	last_group_identifier = None
