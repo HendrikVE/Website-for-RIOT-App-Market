@@ -79,14 +79,19 @@ def print_checkboxes():
 	db_cursor.execute("SELECT * FROM modules ORDER BY group_identifier")
 	results = db_cursor.fetchall()
 	
-	string_to_fill = '<label><input type="checkbox" name="module_checkbox" value="{!s}">{!s}</label>'
+	# width should add up to 12 per row (bootstrap grid system)
+	column_width = 3
+	current_width_taken = 0
+	
+	string_to_fill = '<div class="col-md-' + str(column_width) + '"<label><input type="checkbox" name="module_checkbox" value="{!s}">{!s}</label></div>'
 	
 	print '<form>'
 	print '<label for="checkboxes_container">Select modules:</label>'
-	print '<div class="container" id="checkboxes_container">'
+	print '<div class="container-fluid" id="checkboxes_container">'
 	
 	last_group_identifier = None
 	group_left_open = False
+	new_row = True
 	
 	for row in results:
 		
@@ -95,14 +100,27 @@ def print_checkboxes():
 			
 			if group_left_open:
 				print '</div>'
+				new_row = True
 			
 			# open new group
 			print '<div class="checkbox"><legend>' + row["group_identifier"] + '</legend>'
 			group_left_open = True
+		
+		if new_row:
 			
-		last_group_identifier = row["group_identifier"]
+			if last_group_identifier != None:
+				# close the current row. if last_group_identifier is None, there was no row before
+				print '</div>'
+				
+			print '<div class="row">'
+			current_width_taken = 0
+			new_row = False
 		
 		print string_to_fill.format(row["id"], row["name"])
+		
+		current_width_taken += column_width
+		new_row = current_width_taken >= 12
+		last_group_identifier = row["group_identifier"]
 
 	if group_left_open:
 		print '</div>'
