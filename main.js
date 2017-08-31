@@ -163,7 +163,7 @@ function download() {
                 }
 				
 				//this.responseText has to be a json string
-                document.getElementById("cmdOutput").innerHTML = this.responseText;
+                document.getElementById("cmdOutput").innerHTML = jsonResponse.cmd_output;
                 
                 
                 //talk to the riotam chrome extension

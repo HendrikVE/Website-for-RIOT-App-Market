@@ -49,7 +49,7 @@ def print_header():
 	
 	print 
 	print '<head>'
-	print '<meta charset=""utf-8"">'
+	print '<meta charset="utf-8">'
 	print '<meta name="viewport" content="width=device-width, initial-scale=1">'
 	print '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">'
 	print '<link rel="stylesheet" type="text/css" href="/css/custom.css" />'
@@ -83,7 +83,7 @@ def print_checkboxes():
 	column_width = 3
 	current_width_taken = 0
 	
-	string_to_fill = '<div class="col-md-' + str(column_width) + '"<label><input type="checkbox" name="module_checkbox" value="{!s}">{!s}</label></div>'
+	string_to_fill = '<div class="col-sm-' + str(column_width) + '"><label><input type="checkbox" name="module_checkbox" value="{!s}">{!s}</label></div>'
 	
 	print '<form>'
 	print '<label for="checkboxes_container">Select modules:</label>'
@@ -100,10 +100,11 @@ def print_checkboxes():
 			
 			if group_left_open:
 				print '</div>'
+				current_width_taken = 0
 				new_row = True
 			
 			# open new group
-			print '<div class="checkbox"><legend>' + row["group_identifier"] + '</legend>'
+			print '<div class="checkbox"><h3>' + row["group_identifier"] + '</h3>'
 			group_left_open = True
 		
 		if new_row:
