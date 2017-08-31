@@ -109,7 +109,7 @@ def print_checkboxes():
 		
 		if new_row:
 			
-			if last_group_identifier != None:
+			if last_group_identifier != None and not group_identifier_changed:
 				# close the current row. if last_group_identifier is None, there was no row before
 				print '</div>'
 				
