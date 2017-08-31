@@ -19,33 +19,34 @@ def main():
 	print '<meta charset=""utf-8"">'
 	print '<meta name="viewport" content="width=device-width, initial-scale=1">'
 	print '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">'
+	print '<link rel="stylesheet" type="text/css" href="/css/custom.css" />'
 	print '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>'
 	print '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>'
+	print '<script src="main.js"></script>'
 	print '<title>RIOT OS App Market</title>'
 	print '<!-- Origin Trial Token, feature = WebUSB (For Chrome M57+), origin = https://www.vanappsteer.de, expires = 2017-09-05 -->'
 	print '<meta http-equiv="origin-trial" data-feature="WebUSB (For Chrome M57+)" data-expires="2017-09-05" content="AkyHUtyQc2+ctDNdGbCJpuTTdTmkZM1U0cxMhvwvgkGdfX4vB28BwYm/8Z3OJTVfGD1r8OIiS7QwazYx97rZ1QIAAABTeyJvcmlnaW4iOiJodHRwczovL3d3dy52YW5hcHBzdGVlci5kZTo0NDMiLCJmZWF0dXJlIjoiV2ViVVNCMiIsImV4cGlyeSI6MTUwNDU2OTYwMH0=">'
 	print '</head>'
 	print
 	print '<body>'
+	print '<div class="container">'
 
 	# print '<button type="button" id="selectButton" onclick="selectDevice()">Select Device</button>'
 
-	print '<p><div id="deviceInfo" style="white-space: pre"></div></p>'
+	# print '<p><div id="deviceInfo" style="white-space: pre"></div></p>'
 
 	# print '<div id="downloadSection" style="visibility: hidden;">'
 	
-	print_device_list()
+	print_device_selector()
 	
 	print_checkboxes()
 
 	print '<br><button type="button" id="downloadButton" onclick="download()">Download your personal RIOT OS</button>'
 	# print '</div>'
 	print '<div id="demo">NULL</div>'
-	print '<script src="main.js"></script>'
 
-	print '</body>'
-	print '</html>'
-
+	print '</div></body></html>'
+	
 def print_checkboxes():
 	
 	db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
@@ -58,6 +59,7 @@ def print_checkboxes():
 	
 	string_to_fill = '<li><label><input type="checkbox" name="module_checkbox" value="{!s}">{!s}</label></li>'
 
+	print '<div class="container">'
 	print '<form><h3>Select modules:</h3>'
 	
 	last_group_identifier = None
@@ -87,7 +89,7 @@ def print_checkboxes():
 	db_cursor.close()
 	db.close()
 	
-def print_device_list():
+def print_device_selector():
 	
 	db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
 
@@ -97,12 +99,15 @@ def print_device_list():
 	db_cursor.execute("SELECT * FROM devices ORDER BY display_name")
 	results = db_cursor.fetchall()
 	
-	print '<form><p>Please select your device:</p><label>Device:<select id="device_selector" size="1">'
+	print '<form>'
+	print '<div class="form-group">'
+	print '<label for="device_selector">Select a device:</label>'
+	print '<select class="form-control" id="device_selector">'
 	
 	for row in results:
 		print '<option value="{!s}">{!s}</option>'.format(row["internal_name"], row["display_name"])
 		
-	print '</select></label></form>'
+	print '</select></div></form>'
 	
 	db_cursor.close()
 	db.close()
