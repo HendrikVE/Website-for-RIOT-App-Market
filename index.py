@@ -12,22 +12,12 @@ def main():
 
 	print 'Content-Type: text/html'
 	print '\n\r'
-
+	
 	print '<!DOCTYPE html>'
 	print '<html>'
-	print '<head>'
-	print '<meta charset=""utf-8"">'
-	print '<meta name="viewport" content="width=device-width, initial-scale=1">'
-	print '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">'
-	print '<link rel="stylesheet" type="text/css" href="/css/custom.css" />'
-	print '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>'
-	print '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>'
-	print '<script src="main.js"></script>'
-	print '<title>RIOT OS App Market</title>'
-	print '<!-- Origin Trial Token, feature = WebUSB (For Chrome M57+), origin = https://www.vanappsteer.de, expires = 2017-09-05 -->'
-	print '<meta http-equiv="origin-trial" data-feature="WebUSB (For Chrome M57+)" data-expires="2017-09-05" content="AkyHUtyQc2+ctDNdGbCJpuTTdTmkZM1U0cxMhvwvgkGdfX4vB28BwYm/8Z3OJTVfGD1r8OIiS7QwazYx97rZ1QIAAABTeyJvcmlnaW4iOiJodHRwczovL3d3dy52YW5hcHBzdGVlci5kZTo0NDMiLCJmZWF0dXJlIjoiV2ViVVNCMiIsImV4cGlyeSI6MTUwNDU2OTYwMH0=">'
-	print '</head>'
-	print
+	
+	print_header()
+	
 	print '<body>'
 	print '<div class="container">'
 
@@ -43,11 +33,28 @@ def main():
 	
 	print_checkboxes()
 
-	print '<br><button type="button" id="downloadButton" onclick="download()">Download your personal RIOT OS</button>'
+	print '<br><button type="button" class="btn btn-success" id="downloadButton" onclick="download()">Download your personal RIOT OS</button>'
 	# print '</div>'
 	print '<div id="demo">NULL</div>'
 
 	print '</div></body></html>'
+	
+def print_header():
+	
+	print 
+	print '<head>'
+	print '<meta charset=""utf-8"">'
+	print '<meta name="viewport" content="width=device-width, initial-scale=1">'
+	print '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">'
+	print '<link rel="stylesheet" type="text/css" href="/css/custom.css" />'
+	print '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>'
+	print '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>'
+	print '<script src="main.js"></script>'
+	print '<title>RIOT OS App Market</title>'
+	print '<!-- Origin Trial Token, feature = WebUSB (For Chrome M57+), origin = https://www.vanappsteer.de, expires = 2017-09-05 -->'
+	print '<meta http-equiv="origin-trial" data-feature="WebUSB (For Chrome M57+)" data-expires="2017-09-05" content="AkyHUtyQc2+ctDNdGbCJpuTTdTmkZM1U0cxMhvwvgkGdfX4vB28BwYm/8Z3OJTVfGD1r8OIiS7QwazYx97rZ1QIAAABTeyJvcmlnaW4iOiJodHRwczovL3d3dy52YW5hcHBzdGVlci5kZTo0NDMiLCJmZWF0dXJlIjoiV2ViVVNCMiIsImV4cGlyeSI6MTUwNDU2OTYwMH0=">'
+	print '</head>'
+	print 
 	
 def print_jumbotron():
 	
@@ -66,9 +73,11 @@ def print_checkboxes():
 	db_cursor.execute("SELECT * FROM modules ORDER BY group_identifier")
 	results = db_cursor.fetchall()
 	
-	string_to_fill = '<li><label><input type="checkbox" name="module_checkbox" value="{!s}">{!s}</label></li>'
+	string_to_fill = '<label><input type="checkbox" name="module_checkbox" value="{!s}">{!s}</label>'
 	
-	print '<form><h3>Select modules:</h3>'
+	print '<form>'
+	print '<label for="checkboxes_container">Select modules:</label>'
+	print '<div class="container" id="checkboxes_container">'
 	
 	last_group_identifier = None
 	group_left_open = False
@@ -79,10 +88,10 @@ def print_checkboxes():
 		if last_group_identifier == None or group_identifier_changed:
 			
 			if group_left_open:
-				print '</ul></fieldset>'
+				print '</div>'
 			
 			# open new group
-			print '<fieldset><legend>' + row["group_identifier"] + '</legend><ul>'
+			print '<div class="checkbox"><legend>' + row["group_identifier"] + '</legend>'
 			group_left_open = True
 			
 		last_group_identifier = row["group_identifier"]
@@ -90,9 +99,10 @@ def print_checkboxes():
 		print string_to_fill.format(row["id"], row["name"])
 
 	if group_left_open:
-		print '</ul></fieldset>'
+		print '</div>'
 		
 	print '</form>'
+	print '</div>'
 		
 	db_cursor.close()
 	db.close()
