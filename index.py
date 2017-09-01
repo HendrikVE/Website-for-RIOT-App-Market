@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # enable debugging
-import cgitb
+import cgitb, cgi
 import db_config as config
 import MySQLdb
 
@@ -115,14 +115,14 @@ def print_checkboxes():
 	# cursor object to execute queries
 	db_cursor = db.cursor(cursorclass=MySQLdb.cursors.DictCursor)
 
-	db_cursor.execute("SELECT * FROM modules ORDER BY group_identifier")
+	db_cursor.execute("SELECT * FROM modules ORDER BY group_identifier ASC, name ASC")
 	results = db_cursor.fetchall()
 	
 	# width should add up to 12 per row (bootstrap grid system)
 	column_width = 3
 	current_width_taken = 0
 	
-	string_to_fill = '<div class="col-md-' + str(column_width) + '"><label><input type="checkbox" name="module_checkbox" value="{!s}">{!s}</label></div>'
+	string_to_fill = '<div class="col-md-' + str(column_width) + '"><label><input type="checkbox" name="module_checkbox" value="{!s}"><div data-toggle="tooltip" data-placement="bottom" title="{!s}">{!s}</div></label></div>'
 	
 	print '<form>'
 	print '<label for="checkboxes_container"><h3>2. Select modules:</h3></label>'
@@ -167,7 +167,11 @@ def print_checkboxes():
 			current_width_taken = 0
 			new_row = False
 		
-		print string_to_fill.format(row["id"], row["name"])
+		description = row["description"]
+		if description is None:
+			description = ""
+		
+		print string_to_fill.format(row["id"], cgi.escape(description, True), row["name"])
 		
 		current_width_taken += column_width
 		new_row = current_width_taken >= 12
