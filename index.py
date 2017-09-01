@@ -55,10 +55,17 @@ def print_html_header():
 	print '<head>'
 	print '<meta charset="utf-8">'
 	print '<meta name="viewport" content="width=device-width, initial-scale=1">'
-	print '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">'
+	
+	#print '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">'
+	print '<link rel="stylesheet" href="/css/bootstrap.min.css">'
+	
 	print '<link rel="stylesheet" type="text/css" href="/css/custom.css" />'
-	print '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>'
-	print '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>'
+	
+	#print '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>'
+	
+	#print '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>'
+	print '<script src="/js/bootstrap.min.js"></script>'
+	
 	print '<script src="main.js"></script>'
 	print '<title>RIOT OS App Market</title>'
 	print '<!-- Origin Trial Token, feature = WebUSB (For Chrome M57+), origin = https://www.vanappsteer.de, expires = 2017-09-05 -->'
@@ -98,12 +105,13 @@ def print_device_selector():
 	print '<form>'
 	print '<div class="form-group">'
 	print '<label for="device_selector"><h3>1. Select a device:</h3></label>'
+	print '<div class="container-fluid">'
 	print '<select class="form-control" id="device_selector">'
 	
 	for row in results:
 		print '<option value="{!s}">{!s}</option>'.format(row["internal_name"], row["display_name"])
 		
-	print '</select></div></form>'
+	print '</select></div></form></div>'
 	
 	db_cursor.close()
 	db.close()
