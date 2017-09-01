@@ -16,17 +16,15 @@ def main():
 	print '<!DOCTYPE html>'
 	print '<html>'
 	
-	print_header()
+	print_html_header()
 	
 	print '<body>'
 
 	# print '<button type="button" id="selectButton" onclick="selectDevice()">Select Device</button>'
 
 	# print '<p><div id="deviceInfo" style="white-space: pre"></div></p>'
-
-	# print '<div id="downloadSection" style="visibility: hidden;">'
 	
-	print_jumbotron()
+	print_header()
 	
 	print '<div class="container">'
 	
@@ -34,8 +32,9 @@ def main():
 	
 	print_checkboxes()
 
+	print '<h3>3. Build and flash:</h3>'
 	print '<br><button type="button" class="btn" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>'
-	# print '</div>'
+	
 	print '<div id="cmdOutput">'
 	
 	print '<div class="progress">'
@@ -44,9 +43,13 @@ def main():
 	
 	print '</div>'
 
-	print '</div></body></html>'
+	print '</div>'
 	
-def print_header():
+	print_footer()
+	
+	print '</body></html>'
+	
+def print_html_header():
 	
 	print 
 	print '<head>'
@@ -63,7 +66,7 @@ def print_header():
 	print '</head>'
 	print 
 	
-def print_jumbotron():
+def print_header():
 	
 	print '<div class="jumbotron">'
 	print '<div class="container">'
@@ -119,7 +122,7 @@ def print_checkboxes():
 	column_width = 3
 	current_width_taken = 0
 	
-	string_to_fill = '<div class="col-sm-' + str(column_width) + '"><label><input type="checkbox" name="module_checkbox" value="{!s}">{!s}</label></div>'
+	string_to_fill = '<div class="col-md-' + str(column_width) + '"><label><input type="checkbox" name="module_checkbox" value="{!s}">{!s}</label></div>'
 	
 	print '<form>'
 	print '<label for="checkboxes_container"><h3>2. Select modules:</h3></label>'
@@ -183,6 +186,14 @@ def print_checkboxes():
 		
 	db_cursor.close()
 	db.close()
+	
+def print_footer():
+	
+	print '<footer class="footer">'
+	print '<div class="container">'
+	print '<p class="text-muted">Hendrik van Essen, 2017</p>'
+	print '</div>'
+	print '</footer>'
 	
 if __name__ == "__main__":
 	main()

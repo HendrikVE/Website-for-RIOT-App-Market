@@ -2,8 +2,6 @@ var device = null;
 
 async function selectDevice() {
 
-    var downloadSection = document.getElementById("downloadSection");
-
 /*
 Wenn nicht anders genannt stammen alle vendorid und productid Einträge von:
     http://www.linux-usb.org/usb.ids
@@ -79,12 +77,10 @@ see riotam-backend/js_update.py for details
      })
     .then(() => {
         printDeviceInfo(device);
-        downloadSection.style.visibility = "visible";
         return device;
     })
     .catch(error => { 
         console.log(error);
-        downloadSection.style.visibility = "hidden";
     });
 }
 
