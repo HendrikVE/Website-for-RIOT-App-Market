@@ -203,7 +203,10 @@ def print_footer():
 	
 	print '<footer class="footer">'
 	print '<div class="container">'
-	print '<p class="text-muted">Hendrik van Essen, 2017</p>'
+	print '<div class="row">'
+	print '<div class="col-sm-8">&copy; Hendrik van Essen, 2017</div>'
+	print '<div class="col-sm-4"><a href="https://github.com/RIOT-OS/RIOT"><img src="/img/riot_logo_footer.png" alt="RIOT logo" height="44" width="81"></img></a></div>'
+	print '</div>'
 	print '</div>'
 	print '</footer>'
 	
