@@ -33,16 +33,17 @@ def main():
 	print_checkboxes()
 
 	print '<h3>3. Build and flash:</h3>'
-	print '<br><button type="button" class="btn" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>'
 	
-	print '<div id="cmdOutput">'
+	print '<div class="container-fluid">'
+	print '<br><button type="button" class="btn" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>'
+	print '<div class="well" id="cmdOutput">'
 	
 	print '<div class="progress">'
 	print '<div class="progress-bar progress-bar-striped active" id="progressBar" style="width:100%; visibility:hidden">'
 	print '</div></div>'
 	
 	print '</div>'
-
+	print '</div>'
 	print '</div>'
 	
 	print_footer()
