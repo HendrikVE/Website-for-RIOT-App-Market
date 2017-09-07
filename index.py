@@ -3,7 +3,7 @@
 
 # enable debugging
 import cgitb, cgi
-import db_config as config
+import config.db_config as config
 import MySQLdb
 
 def main():

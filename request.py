@@ -2,10 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 import cgi, cgitb
-import db_config as config
-import MySQLdb
 import os
-import sys
 import subprocess
 import logging
 	
