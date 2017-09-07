@@ -7,10 +7,13 @@ import MySQLdb
 import os
 import sys
 import subprocess
+import logging
 	
 def main():
 	
 	cgitb.enable()
+	
+	logging.basicConfig(filename = "log/log.txt", format="%(asctime)s [%(levelname)s]: %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
 
 	print "Content-Type: text/html"
 	print "\n\r"
@@ -30,6 +33,6 @@ def main():
 	os.chdir("../riotam-backend/")
 	proc = subprocess.Popen(["python", "build.py",  arguments], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 	print proc.communicate()[0]
-
+	
 if __name__ == "__main__":
 	main()
