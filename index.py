@@ -5,10 +5,13 @@
 import cgitb, cgi
 import config.db_config as config
 import MySQLdb
+#import logging
 
 def main():
 	
 	cgitb.enable()
+	
+	#logging.basicConfig(filename = "log/index_log.txt", format="%(asctime)s [%(levelname)s]: %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
 
 	print 'Content-Type: text/html'
 	print '\n\r'

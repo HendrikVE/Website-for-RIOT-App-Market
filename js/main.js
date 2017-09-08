@@ -147,6 +147,8 @@ function download() {
             
             if (this.readyState == 4 && this.status == 200) {
                 
+                document.getElementById("cmdOutput").innerHTML = this.responseText;
+                
                 var jsonResponse = JSON.parse(this.responseText);
                 
                 if(jsonResponse.output_file != null) {
@@ -173,7 +175,7 @@ function download() {
                 );
            }
         };
-        xhttp.open("POST", "request.py", true);
+        xhttp.open("POST", "/request.py", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		
 		params = "";
