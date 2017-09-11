@@ -30,14 +30,7 @@ def main():
     print_header()
     
     print '<div class="container">'
-    
-    print '<ul class="nav nav-tabs">'
-    print '<li class="active"><a data-toggle="tab" href="#tab0">Examples</a></li>'
-    print '<li><a data-toggle="tab" href="#tab1">Custom</a></li>'
-    print '</ul>'
-    
     print_tabs()
-    
     print '</div>'
     
     print_footer()
@@ -51,14 +44,9 @@ def print_html_header():
     print '<meta charset="utf-8">'
     print '<meta name="viewport" content="width=device-width, initial-scale=1">'
     
-    #print '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">'
     print '<link rel="stylesheet" href="/css/bootstrap.min.css">'
-    
     print '<link rel="stylesheet" type="text/css" href="/css/custom.css" />'
-    
     print '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>'
-    
-    #print '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>'
     print '<script src="/js/bootstrap.min.js"></script>'
     
     print '<script src="/js/main.js"></script>'
@@ -89,14 +77,19 @@ def print_header():
     
 def print_tabs():
     
+    print '<ul class="nav nav-tabs">'
+    print '<li class="active"><a data-toggle="tab" href="#tab0">Example applications</a></li>'
+    print '<li><a data-toggle="tab" href="#tab1">Your custom RIOT OS</a></li>'
+    print '</ul>'
+    
     print '<div class="tab-content">'
     
     print '<div id="tab0" class="tab-pane fade in active">'
-    print_custom_tab()
+    print_examples_tab()
     print '</div>'
     
     print '<div id="tab1" class="tab-pane fade">'
-    print_examples_tab()
+    print_custom_tab()
     print '</div>'
     
     print '</div>'
@@ -124,6 +117,14 @@ def print_examples_tab():
     
     print_device_selector()
     
+    db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
+
+    # cursor object to execute queries
+    db_cursor = db.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+    
+    db_cursor.execute("SELECT * FROM devices ORDER BY display_name")
+    results = db_cursor.fetchall()
+    
 def print_device_selector():
     
     db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
@@ -134,9 +135,12 @@ def print_device_selector():
     db_cursor.execute("SELECT * FROM devices ORDER BY display_name")
     results = db_cursor.fetchall()
     
+    print '<label for="device_selector"><h3>1. Select a device:</h3></label>'
+    print '<div class="row">'
+    
+    print '<div class="col-md-10">'
     print '<form>'
     print '<div class="form-group">'
-    print '<label for="device_selector"><h3>1. Select a device:</h3></label>'
     print '<div class="container-fluid">'
     print '<select class="form-control" id="device_selector">'
     
@@ -147,6 +151,13 @@ def print_device_selector():
     
     db_cursor.close()
     db.close()
+    print '</div>'
+    
+    print '<div class="col-md-2">'
+    print '<button type="button" class="btn" id="autodetectButton" onclick="autodetect()">Try autodetect</button>'
+    print '</div>'
+    
+    print '</div>'
     
 def print_checkboxes():
     
