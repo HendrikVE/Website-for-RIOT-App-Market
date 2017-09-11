@@ -19,3 +19,8 @@ body {
     line-height: 85px; /* Vertically center the text there */
     background-color: #f5f5f5;
 }
+
+/*for file upload button when using Bootstrap 3 and not 4*/
+[hidden] {
+  display: none !important;
+}

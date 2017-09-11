@@ -17,7 +17,7 @@ def main():
     print '\n\r'
     
     print '<!DOCTYPE html>'
-    print '<html>'
+    print '<html lang="en">'
     
     print_html_header()
     
@@ -40,40 +40,44 @@ def main():
 def print_html_header():
     
     print 
-    print '<head>'
-    print '<meta charset="utf-8">'
-    print '<meta name="viewport" content="width=device-width, initial-scale=1">'
-    
-    print '<link rel="stylesheet" href="/css/bootstrap.min.css">'
-    print '<link rel="stylesheet" type="text/css" href="/css/custom.css" />'
-    print '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>'
-    print '<script src="/js/bootstrap.min.js"></script>'
-    
-    print '<script src="/js/main.js"></script>'
-    print '<title>RIOT OS App Market</title>'
-    print '<!-- Origin Trial Token, feature = WebUSB (For Chrome M57+), origin = https://www.vanappsteer.de, expires = 2017-09-05 -->'
-    print '<meta http-equiv="origin-trial" data-feature="WebUSB (For Chrome M57+)" data-expires="2017-09-05" content="AkyHUtyQc2+ctDNdGbCJpuTTdTmkZM1U0cxMhvwvgkGdfX4vB28BwYm/8Z3OJTVfGD1r8OIiS7QwazYx97rZ1QIAAABTeyJvcmlnaW4iOiJodHRwczovL3d3dy52YW5hcHBzdGVlci5kZTo0NDMiLCJmZWF0dXJlIjoiV2ViVVNCMiIsImV4cGlyeSI6MTUwNDU2OTYwMH0=">'
-    print '</head>'
+    print """
+        <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/css/custom.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+
+        <script src="/js/main.js"></script>
+        <title>RIOT OS App Market</title>
+        <!-- Origin Trial Token, feature = WebUSB (For Chrome M57+), origin = https://www.vanappsteer.de, expires = 2017-09-05 -->
+        <meta http-equiv="origin-trial" data-feature="WebUSB (For Chrome M57+)" data-expires="2017-09-05" content="AkyHUtyQc2+ctDNdGbCJpuTTdTmkZM1U0cxMhvwvgkGdfX4vB28BwYm/8Z3OJTVfGD1r8OIiS7QwazYx97rZ1QIAAABTeyJvcmlnaW4iOiJodHRwczovL3d3dy52YW5hcHBzdGVlci5kZTo0NDMiLCJmZWF0dXJlIjoiV2ViVVNCMiIsImV4cGlyeSI6MTUwNDU2OTYwMH0=">
+        </head>
+    """
     print 
     
 def print_header():
     
-    print '<div class="jumbotron">'
-    print '<div class="container">'
-    print '<div class="row">'
-    
-    print '<div class="col-sm-8">'
-    print '<h1>RIOT OS AppMarket</h1>'
-    print '<p>Let us build your custom RIOT OS according to your needs</p>'
-    print '</div>'
-    
-    print '<div class="col-sm-4">'
-    print '<img src="/img/riot_logo.png" alt="RIOT logo" height="200" width="200"></img>'
-    print '</div>'
-    
-    print '</div>'
-    print '</div>'
-    print '</div>'
+    print """
+        <div class="jumbotron">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-sm-8">
+                        <h1>RIOT OS AppMarket</h1>
+                        <p>Let us build your custom RIOT OS according to your needs</p>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <img src="/img/riot_logo.png" alt="RIOT logo" height="200" width="200"></img>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    """
     
 def print_tabs():
     
@@ -98,12 +102,14 @@ def print_custom_tab():
     
     print_device_selector()
     
+    print_file_upload()
+    
     print_checkboxes()
 
-    print '<h3>3. Build and flash:</h3>'
+    print '<h3>4. Build and flash:</h3>'
     
     print '<div class="container-fluid">'
-    print '<br><button type="button" class="btn" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>'
+    print '<button type="button" class="btn" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>'
     print '<div class="well" id="cmdOutput">'
     
     print '<div class="progress">'
@@ -117,13 +123,26 @@ def print_examples_tab():
     
     print_device_selector()
     
-    db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
-
-    # cursor object to execute queries
-    db_cursor = db.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+    print_applications()
     
-    db_cursor.execute("SELECT * FROM devices ORDER BY display_name")
-    results = db_cursor.fetchall()
+# https://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3
+def print_file_upload():
+    
+    print '<h3>2. Upload your main.c:</h3>'
+    print '<div class="container-fluid">'
+    print """
+        <div class="col-lg-6 col-sm-6 col-12">
+            <div class="input-group">
+                <label class="input-group-btn">
+                    <span class="btn btn-default">
+                        Browse&hellip; <input type="file" style="display: none;" multiple>
+                    </span>
+                </label>
+                <input type="text" class="form-control" readonly>
+            </div>
+        </div>
+        """
+    print '</div>'
     
 def print_device_selector():
     
@@ -176,7 +195,7 @@ def print_checkboxes():
     string_to_fill = '<div class="col-md-' + str(column_width) + '"><label><input type="checkbox" name="module_checkbox" value="{!s}"><div data-toggle="tooltip" data-placement="bottom" title="{!s}">{!s}</div></label></div>'
     
     print '<form>'
-    print '<label for="checkboxes_container"><h3>2. Select modules:</h3></label>'
+    print '<label for="checkboxes_container"><h3>3. Select modules:</h3></label>'
     print '<div class="container-fluid" id="checkboxes_container">'
     
     last_group_identifier = None
@@ -235,12 +254,63 @@ def print_checkboxes():
         print '</div>'
         
     # close the container
-    print '</div>'  
+    print '</div>'
     
     print '</form>'
         
     db_cursor.close()
     db.close()
+    
+def print_applications():
+    
+    db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
+
+    # cursor object to execute queries
+    db_cursor = db.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+    
+    db_cursor.execute("SELECT * FROM applications ORDER BY name")
+    results = db_cursor.fetchall()
+    
+    # width should add up to 12 per row (bootstrap grid system)
+    column_width = 3
+    current_width_taken = 0
+    
+    string_to_fill = '<div class="col-md-' + str(column_width) + '"><p><button type="button" class="btn btn-block" id="{!s}" onclick="download()"><div data-toggle="tooltip" data-placement="bottom" title="{!s}">{!s}</div></button></p></div>'
+    
+    print '<label for="applications_container"><h3>2. Select an application:</h3></label>'
+    print '<div class="container-fluid" id="applications_container">'
+    
+    row_left_open = False
+    new_row = True
+    
+    for row in results:
+        
+        if new_row:
+            
+            if row_left_open:
+                print '</div>'
+                
+            # open new row
+            print '<div class="row">'
+            row_left_open = True
+            
+            current_width_taken = 0
+            new_row = False
+        
+        description = row["description"]
+        if description is None:
+            description = ""
+        
+        print string_to_fill.format(row["id"], cgi.escape(description, True), row["name"])
+        
+        current_width_taken += column_width
+        new_row = current_width_taken >= 12
+
+    if row_left_open:
+        print '</div>'
+        
+    # close the container
+    print '</div>'
     
 def print_footer():
     
