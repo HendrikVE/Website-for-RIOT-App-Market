@@ -169,8 +169,10 @@ function download() {
 
                 // Make a simple request:
                 chrome.runtime.sendMessage(extensionId, jsonResponse,
-                    function(response) {
-                        console.log(response)
+                    function() {
+                        if(chrome.runtime.lastError) {
+                            alert("You need to install the RIOT OS AppMarket Extension");
+                        }
                     }
                 );
            }
@@ -222,8 +224,10 @@ function download_example() {
 
             // Make a simple request:
             chrome.runtime.sendMessage(extensionId, jsonResponse,
-                function(response) {
-                    console.log(response)
+                function() {
+                    if(chrome.runtime.lastError) {
+                        alert("You need to install the RIOT OS AppMarket Extension");
+                    }
                 }
             );
        }
