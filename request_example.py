@@ -14,11 +14,11 @@ def main():
 
     form = cgi.FieldStorage()
 
-    selected_modules = form.getlist("selected_modules")
+    application = form.getfirst("application")
     device = form.getfirst("device")
-
+    
     os.chdir("../riotam-backend/")
-    proc = Popen(["python", "build.py", arguments], stdout=PIPE)
+    proc = Popen(["python", "build_example.py", "--application " + application + " --device " + device], stdout=PIPE)
     output = proc.communicate()[0]
     print output
 	

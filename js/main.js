@@ -69,7 +69,7 @@ see riotam-backend/js_update.py for details
 {vendorId: 0x0000}, //Zolertia remote
 {vendorId: 0x0000}, //Zolertia Z1
 /* end of replacement */
-		
+        
     ] })
     .then(selectedDevice => {
             device = selectedDevice;
@@ -159,8 +159,8 @@ function download() {
                     downloadButton.className = "btn btn-danger";
                     downloadButton.innerHTML = "Something went wrong"
                 }
-				
-				//this.responseText has to be a json string
+                
+                //this.responseText has to be a json string
                 document.getElementById("cmdOutput").innerHTML = jsonResponse.cmd_output;
                 
                 
@@ -177,12 +177,64 @@ function download() {
         };
         xhttp.open("POST", "/request.py", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		
-		params = "";
-		params += "selected_modules=" + checkboxesChecked.join("&selected_modules=");
-		params += "&";
-		params += "device=" + document.getElementById("device_selector").value;
-		
+        
+        params = "";
+        params += "selected_modules=" + checkboxesChecked.join("&selected_modules=");
+        params += "&";
+        params += "device=" + document.getElementById("device_selector").value;
+        
         xhttp.send(params);
     }
+}
+
+function download_example() {
+    
+    //var downloadButton = document.getElementById("downloadButton");
+    //var progressBar = document.getElementById("progressBar");
+
+    //downloadButton.disabled = true;
+    //progressBar.style.visibility = "visible";
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+
+        if (this.readyState == 4 && this.status == 200) {
+
+            //document.getElementById("cmdOutput").innerHTML = this.responseText;
+
+            var jsonResponse = JSON.parse(this.responseText);
+
+            /*if(jsonResponse.output_file != null) {
+                downloadButton.className = "btn btn-success";
+                downloadButton.innerHTML = "Download"
+            }
+            else {
+                downloadButton.className = "btn btn-danger";
+                downloadButton.innerHTML = "Something went wrong"
+            }*/
+
+            //this.responseText has to be a json string
+            //document.getElementById("cmdOutput").innerHTML = jsonResponse.cmd_output;
+
+
+            //talk to the riotam chrome extension
+            var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
+
+            // Make a simple request:
+            chrome.runtime.sendMessage(extensionId, jsonResponse,
+                function(response) {
+                    console.log(response)
+                }
+            );
+       }
+    };
+    xhttp.open("POST", "/request_example.py", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    params = "";
+    params += "application=7";
+    params += "&";
+    params += "device=" + document.getElementById("device_selector").value;
+
+    xhttp.send(params);
 }
