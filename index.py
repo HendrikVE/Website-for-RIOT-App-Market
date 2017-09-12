@@ -100,7 +100,7 @@ def print_tabs():
     
 def print_custom_tab():
     
-    print_device_selector()
+    print_device_selector("custom_tab_device_selector")
     
     print_file_upload()
     
@@ -121,7 +121,7 @@ def print_custom_tab():
     
 def print_examples_tab():
     
-    print_device_selector()
+    print_device_selector("examples_tab_device_selector")
     
     print_applications()
     
@@ -144,7 +144,7 @@ def print_file_upload():
         """
     print '</div>'
     
-def print_device_selector():
+def print_device_selector(id):
     
     db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
 
@@ -154,14 +154,14 @@ def print_device_selector():
     db_cursor.execute("SELECT * FROM devices ORDER BY display_name")
     results = db_cursor.fetchall()
     
-    print '<label for="device_selector"><h3>1. Select a device:</h3></label>'
+    print '<label for="' + id + '"><h3>1. Select a device:</h3></label>'
     print '<div class="row">'
     
     print '<div class="col-md-10">'
     print '<form>'
     print '<div class="form-group">'
     print '<div class="container-fluid">'
-    print '<select class="form-control" id="device_selector">'
+    print '<select class="form-control" id="' + id + '">'
     
     for row in results:
         print '<option value="{!s}">{!s}</option>'.format(row["internal_name"], row["display_name"])
