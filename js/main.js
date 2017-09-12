@@ -172,6 +172,7 @@ function download() {
                     function() {
                         if(chrome.runtime.lastError) {
                             alert("You need to install the RIOT OS AppMarket Extension");
+                            console.log(chrome.runtime.lastError.message);
                         }
                     }
                 );
@@ -183,7 +184,7 @@ function download() {
         params = "";
         params += "selected_modules=" + checkboxesChecked.join("&selected_modules=");
         params += "&";
-        params += "device=" + document.getElementById("device_selector").value;
+        params += "device=" + document.getElementById("custom_tab_device_selector").value;
         
         xhttp.send(params);
     }
@@ -227,6 +228,7 @@ function download_example() {
                 function() {
                     if(chrome.runtime.lastError) {
                         alert("You need to install the RIOT OS AppMarket Extension");
+                        console.log(chrome.runtime.lastError.message);
                     }
                 }
             );
@@ -238,7 +240,7 @@ function download_example() {
     params = "";
     params += "application=7";
     params += "&";
-    params += "device=" + document.getElementById("device_selector").value;
+    params += "device=" + document.getElementById("examples_tab_device_selector").value;
 
     xhttp.send(params);
 }
