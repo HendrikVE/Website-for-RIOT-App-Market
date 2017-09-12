@@ -100,30 +100,37 @@ def print_tabs():
     
 def print_custom_tab():
     
-    print_device_selector("custom_tab_device_selector")
+    print_device_selector("deviceSelectorCustomTab")
     
     print_file_upload()
     
     print_checkboxes()
 
-    print '<h3>4. Build and flash:</h3>'
-    
-    print '<div class="container-fluid">'
-    print '<button type="button" class="btn" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>'
-    print '<div class="well" id="cmdOutput">'
-    
-    print '<div class="progress">'
-    print '<div class="progress-bar progress-bar-striped active" id="progressBar" style="width:100%; visibility:hidden">'
-    print '</div></div>'
-    
-    print '</div>'
-    print '</div>'
+    print """
+        <h3>4. Build and flash:</h3>
+        <div class="container-fluid">
+            <button type="button" class="btn" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>
+            <div class="well" id="cmdOutputCustomTab">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" id="progressBarCustomTab" style="width:100%; visibility:hidden"></div>
+                </div>
+            </div>
+        </div>
+    """
     
 def print_examples_tab():
     
-    print_device_selector("examples_tab_device_selector")
+    print_device_selector("deviceSelectorExamplesTab")
     
     print_applications()
+    
+    print """
+        <div class="well" id="cmdOutputExamplesTab">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped active" id="progressBarExamplesTab" style="width:100%; visibility:hidden"></div>
+            </div>
+        </div>
+    """
     
 # https://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3
 def print_file_upload():

@@ -137,7 +137,7 @@ function download() {
     else {
         
         var downloadButton = document.getElementById("downloadButton");
-        var progressBar = document.getElementById("progressBar");
+        var progressBar = document.getElementById("progressBarCustomTab");
         
         downloadButton.disabled = true;
         progressBar.style.visibility = "visible";
@@ -146,8 +146,6 @@ function download() {
         xhttp.onreadystatechange = function() {
             
             if (this.readyState == 4 && this.status == 200) {
-                
-                document.getElementById("cmdOutput").innerHTML = this.responseText;
                 
                 var jsonResponse = JSON.parse(this.responseText);
                 
@@ -161,7 +159,7 @@ function download() {
                 }
                 
                 //this.responseText has to be a json string
-                document.getElementById("cmdOutput").innerHTML = jsonResponse.cmd_output;
+                document.getElementById("cmdOutputCustomTab").innerHTML = jsonResponse.cmd_output;
                 
                 
                 //talk to the riotam chrome extension
@@ -184,7 +182,7 @@ function download() {
         params = "";
         params += "selected_modules=" + checkboxesChecked.join("&selected_modules=");
         params += "&";
-        params += "device=" + document.getElementById("custom_tab_device_selector").value;
+        params += "device=" + document.getElementById("deviceSelectorCustomTab").value;
         
         xhttp.send(params);
     }
@@ -193,17 +191,15 @@ function download() {
 function download_example() {
     
     //var downloadButton = document.getElementById("downloadButton");
-    //var progressBar = document.getElementById("progressBar");
+    var progressBar = document.getElementById("progressBarExamplesTab");
 
     //downloadButton.disabled = true;
-    //progressBar.style.visibility = "visible";
+    progressBar.style.visibility = "visible";
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
 
         if (this.readyState == 4 && this.status == 200) {
-
-            //document.getElementById("cmdOutput").innerHTML = this.responseText;
 
             var jsonResponse = JSON.parse(this.responseText);
 
@@ -217,7 +213,7 @@ function download_example() {
             }*/
 
             //this.responseText has to be a json string
-            //document.getElementById("cmdOutput").innerHTML = jsonResponse.cmd_output;
+            document.getElementById("cmdOutputExamplesTab").innerHTML = jsonResponse.cmd_output;
 
 
             //talk to the riotam chrome extension
@@ -240,7 +236,7 @@ function download_example() {
     params = "";
     params += "application=7";
     params += "&";
-    params += "device=" + document.getElementById("examples_tab_device_selector").value;
+    params += "device=" + document.getElementById("deviceSelectorExamplesTab").value;
 
     xhttp.send(params);
 }
