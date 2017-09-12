@@ -168,9 +168,8 @@ function download() {
                 // Make a simple request:
                 chrome.runtime.sendMessage(extensionId, jsonResponse,
                     function() {
-                        if(chrome.runtime.lastError) {
+                        if(chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
                             alert("You need to install the RIOT OS AppMarket Extension");
-                            console.log(chrome.runtime.lastError.message);
                         }
                     }
                 );
@@ -222,9 +221,8 @@ function download_example() {
             // Make a simple request:
             chrome.runtime.sendMessage(extensionId, jsonResponse,
                 function() {
-                    if(chrome.runtime.lastError) {
+                    if(chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
                         alert("You need to install the RIOT OS AppMarket Extension");
-                        console.log(chrome.runtime.lastError.message);
                     }
                 }
             );
