@@ -147,9 +147,16 @@ function download() {
             
             if (this.readyState == 4 && this.status == 200) {
                 
-                var jsonResponse = JSON.parse(this.responseText);
+                var jsonResponse = null;
+                try {
+                    jsonResponse = JSON.parse(this.responseText);
+                }
+                catch(e) {
+                    alert("Server sent broken JSON");
+                    return;
+                }
                 
-                if(jsonResponse.output_file != null) {
+                if(jsonResponse == null || jsonResponse.output_file != null) {
                     downloadButton.className = "btn btn-success";
                     downloadButton.innerHTML = "Download"
                 }
@@ -187,29 +194,45 @@ function download() {
     }
 }
 
-function download_example() {
+function download_example(buttonID) {
     
-    //var downloadButton = document.getElementById("downloadButton");
+    var buttons = document.getElementsByClassName("example-application-button");
     var progressBar = document.getElementById("progressBarExamplesTab");
-
-    //downloadButton.disabled = true;
+    var clickedButton = null;
+    
+    for(var i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+        
+        if(buttons[i].id == buttonID) {
+            clickedButton = buttons[i];
+        }
+    }
     progressBar.style.visibility = "visible";
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
 
         if (this.readyState == 4 && this.status == 200) {
+            
+            document.getElementById("cmdOutputExamplesTab").innerHTML = this.responseText
 
-            var jsonResponse = JSON.parse(this.responseText);
+            var jsonResponse = null;
+            try {
+                jsonResponse = JSON.parse(this.responseText);
+            }
+            catch(e) {
+                alert("Server sent broken JSON");
+                return;
+            }
 
-            /*if(jsonResponse.output_file != null) {
-                downloadButton.className = "btn btn-success";
-                downloadButton.innerHTML = "Download"
+            if(jsonResponse == null || jsonResponse.output_file != null) {
+                clickedButton.className = "btn btn-block btn-success";
+                clickedButton.innerHTML = "Download";
             }
             else {
-                downloadButton.className = "btn btn-danger";
-                downloadButton.innerHTML = "Something went wrong"
-            }*/
+                clickedButton.className = "btn btn-block btn-danger";
+                clickedButton.innerHTML = "Something went wrong";
+            }
 
             //this.responseText has to be a json string
             document.getElementById("cmdOutputExamplesTab").innerHTML = jsonResponse.cmd_output;

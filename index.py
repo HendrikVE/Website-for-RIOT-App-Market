@@ -282,7 +282,7 @@ def print_applications():
     column_width = 3
     current_width_taken = 0
     
-    string_to_fill = '<div class="col-md-' + str(column_width) + '"><p><button type="button" class="btn btn-block" id="{!s}" onclick="download_example()"><div data-toggle="tooltip" data-placement="bottom" title="{!s}">{!s}</div></button></p></div>'
+    string_to_fill = '<div class="col-md-' + str(column_width) + '"><p><button type="button" class="btn btn-block example-application-button" id="{!s}" onclick="download_example(this.id)"><div data-toggle="tooltip" data-placement="bottom" title="{!s}">{!s}</div></button></p></div>'
     
     print '<label for="applications_container"><h3>2. Select an application:</h3></label>'
     print '<div class="container-fluid" id="applications_container">'
