@@ -205,6 +205,9 @@ def device_selector(id):
         </div>
     """.format(ID=id, SELECTOR_OPTIONS=selector_options))
 
+def slices(input_list, group_size):
+    return [input_list[x:x + group_size] for x in xrange(0, len(input_list), group_size)]
+
 def checkboxes():
     
     def get_checkboxes():
@@ -231,7 +234,7 @@ def checkboxes():
         </div>
     """)
     
-    dynamic = ""
+    checkboxes_html = ""
     
     checkboxes = list(get_checkboxes())
     
@@ -247,17 +250,16 @@ def checkboxes():
         else:
             dict_entry.append(checkbox)
             
-    for group in checkbox_groups:
+    for group in sorted(checkbox_groups):
         
-        dynamic += '<div class="checkbox well"><h4>' + group + '</h4>'
+        checkboxes_html += '<div class="checkbox well"><h4>' + group + '</h4>'
         
-        checkboxes = checkbox_groups.get(group)
-        rows = [ checkboxes[x:x + elements_per_row] for x in xrange(0, len(checkboxes), elements_per_row)]
+        grouped_checkboxes_slices = slices(checkbox_groups.get(group), elements_per_row)
         
-        for row in rows:
+        for grouped_checkboxes in grouped_checkboxes_slices:
 
             columns = ""
-            for checkbox in row:
+            for checkbox in grouped_checkboxes:
 
                 description = checkbox["description"]
                 if description is None:
@@ -265,9 +267,9 @@ def checkboxes():
 
                 columns += column_template.format(checkbox["id"], cgi.escape(description, True), checkbox["name"])
 
-            dynamic += row_template.format(COLUMNS=columns)
+            checkboxes_html += row_template.format(COLUMNS=columns)
             
-        dynamic += '</div>'
+        checkboxes_html += '</div>'
     
     return textwrap.dedent("""
         <form>
@@ -276,7 +278,7 @@ def checkboxes():
                 {ROWS}
             </div>
         </form>
-    """.format(ROWS=dynamic))
+    """.format(ROWS=checkboxes_html))
     
 def applications():
     
@@ -305,15 +307,13 @@ def applications():
         </div>
     """)
     
-    applications = get_applications()
+    grouped_applications_slices = slices(get_applications(), elements_per_row)
     
-    rows = [ applications[x:x + elements_per_row] for x in xrange(0, len(applications), elements_per_row)]
-    
-    rows_html = ""
-    for row in rows:
+    applications_html = ""
+    for grouped_applications in grouped_applications_slices:
         
         columns = ""
-        for application in row:
+        for application in grouped_applications:
 
             description = application["description"]
             if description is None:
@@ -321,14 +321,14 @@ def applications():
 
             columns += column_template.format(application["id"], cgi.escape(description, True), application["name"])
         
-        rows_html += row_template.format(COLUMNS=columns)
+        applications_html += row_template.format(COLUMNS=columns)
     
     return textwrap.dedent("""
         <label for="applications_container"><h3>2. Select an application:</h3></label>'
             <div class="container-fluid" id="applications_container">
                 {ROWS}
             </div>
-    """.format(ROWS=rows_html))
+    """.format(ROWS=applications_html))
     
 def footer():
     
