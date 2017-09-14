@@ -5,62 +5,82 @@
 import cgitb, cgi
 import config.db_config as config
 import MySQLdb
+import textwrap
 #import logging
+
+db = None
+db_cursor = None
 
 def main():
     
-    cgitb.enable()
-    
     #logging.basicConfig(filename = "log/index_log.txt", format="%(asctime)s [%(levelname)s]: %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
-
+    
+    cgitb.enable()
+    init_db()
+    
     print 'Content-Type: text/html'
     print '\n\r'
     
-    print '<!DOCTYPE html>'
-    print '<html lang="en">'
-    
-    print_html_header()
-    
-    print '<body>'
+    print textwrap.dedent("""
+        <!DOCTYPE html>
+        <html lang="en">
 
-    # print '<button type="button" id="selectButton" onclick="selectDevice()">Select Device</button>'
+            {HTML_HEADER}
 
-    # print '<p><div id="deviceInfo" style="white-space: pre"></div></p>'
+            <body>
+
+                {HEADER}
+
+                <div class="container">
+                {TABS}
+                </div>
+
+                {FOOTER}
+
+            </body>
+        </html>
+    """.format(HTML_HEADER=html_header(),
+              HEADER=header(),
+              TABS=tabs(),
+              FOOTER=footer()))
     
-    print_header()
+    close_db()
     
-    print '<div class="container">'
-    print_tabs()
-    print '</div>'
+def init_db():
     
-    print_footer()
+    global db
+    db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
+
+    # cursor object to execute queries
+    global db_cursor
+    db_cursor = db.cursor(cursorclass=MySQLdb.cursors.DictCursor)
     
-    print '</body></html>'
+def close_db():
+    db_cursor.close()
+    db.close()
     
-def print_html_header():
+def html_header():
     
-    print 
-    print """
+    return textwrap.dedent("""
         <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <link rel="stylesheet" href="/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="/css/custom.css" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <script src="/js/main.js"></script>
-        <title>RIOT OS App Market</title>
-        <!-- Origin Trial Token, feature = WebUSB (For Chrome M57+), origin = https://www.vanappsteer.de, expires = 2017-09-05 -->
-        <meta http-equiv="origin-trial" data-feature="WebUSB (For Chrome M57+)" data-expires="2017-09-05" content="AkyHUtyQc2+ctDNdGbCJpuTTdTmkZM1U0cxMhvwvgkGdfX4vB28BwYm/8Z3OJTVfGD1r8OIiS7QwazYx97rZ1QIAAABTeyJvcmlnaW4iOiJodHRwczovL3d3dy52YW5hcHBzdGVlci5kZTo0NDMiLCJmZWF0dXJlIjoiV2ViVVNCMiIsImV4cGlyeSI6MTUwNDU2OTYwMH0=">
+            <link rel="stylesheet" href="/css/bootstrap.min.css">
+            <link rel="stylesheet" type="text/css" href="/css/custom.css" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <script src="/js/bootstrap.min.js"></script>
+
+            <script src="/js/main.js"></script>
+            <title>RIOT OS App Market</title>
+            <!-- Origin Trial Token, feature = WebUSB (For Chrome M57+), origin = https://www.vanappsteer.de, expires = 2017-09-05 -->
+            <meta http-equiv="origin-trial" data-feature="WebUSB (For Chrome M57+)" data-expires="2017-09-05" content="AkyHUtyQc2+ctDNdGbCJpuTTdTmkZM1U0cxMhvwvgkGdfX4vB28BwYm/8Z3OJTVfGD1r8OIiS7QwazYx97rZ1QIAAABTeyJvcmlnaW4iOiJodHRwczovL3d3dy52YW5hcHBzdGVlci5kZTo0NDMiLCJmZWF0dXJlIjoiV2ViVVNCMiIsImV4cGlyeSI6MTUwNDU2OTYwMH0=">
         </head>
-    """
-    print 
+    """)
     
-def print_header():
+def header():
     
-    print """
+    return textwrap.dedent("""
         <div class="jumbotron">
             <div class="container">
                 <div class="row">
@@ -77,36 +97,35 @@ def print_header():
                 </div>
             </div>
         </div>
-    """
+    """)
     
-def print_tabs():
+def tabs():
     
-    print '<ul class="nav nav-tabs">'
-    print '<li class="active"><a data-toggle="tab" href="#tab0">Example applications</a></li>'
-    print '<li><a data-toggle="tab" href="#tab1">Your custom RIOT OS</a></li>'
-    print '</ul>'
-    
-    print '<div class="tab-content">'
-    
-    print '<div id="tab0" class="tab-pane fade in active">'
-    print_examples_tab()
-    print '</div>'
-    
-    print '<div id="tab1" class="tab-pane fade">'
-    print_custom_tab()
-    print '</div>'
-    
-    print '</div>'
-    
-def print_custom_tab():
-    
-    print_device_selector("deviceSelectorCustomTab")
-    
-    print_file_upload()
-    
-    print_checkboxes()
+    return textwrap.dedent("""
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#tab0">Example applications</a></li>
+            <li><a data-toggle="tab" href="#tab1">Your custom RIOT OS</a></li>
+        </ul>
 
-    print """
+        <div class="tab-content">
+            <div id="tab0" class="tab-pane fade in active">
+                {EXAMPLE_TAB}
+            </div>
+            
+            <div id="tab1" class="tab-pane fade">
+                {CUSTOM_TAB}
+            </div>
+            
+        </div>
+    """.format(EXAMPLE_TAB=examples_tab(),
+               CUSTOM_TAB=custom_tab()))
+    
+def custom_tab():
+
+    return textwrap.dedent("""
+        {DEVICE_SELECTOR}
+        {FILE_UPLOAD}
+        {CHECKBOXES}
         <h3>4. Build and flash:</h3>
         <div class="container-fluid">
             <button type="button" class="btn" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>
@@ -116,219 +135,214 @@ def print_custom_tab():
                 </div>
             </div>
         </div>
-    """
+    """.format(DEVICE_SELECTOR=device_selector("deviceSelectorCustomTab"),
+               FILE_UPLOAD=file_upload(),
+               CHECKBOXES=checkboxes()))
     
-def print_examples_tab():
+def examples_tab():
     
-    print_device_selector("deviceSelectorExamplesTab")
-    
-    print_applications()
-    
-    print """
+    return textwrap.dedent("""
+        {DEVICE_SELECTOR}
+        {APPLICATIONS}
         <div class="well" id="cmdOutputExamplesTab">
             <div class="progress">
                 <div class="progress-bar progress-bar-striped active" id="progressBarExamplesTab" style="width:100%; visibility:hidden"></div>
             </div>
         </div>
-    """
+    """.format(DEVICE_SELECTOR=device_selector("deviceSelectorExamplesTab"),
+              APPLICATIONS=applications()))
     
 # https://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3
-def print_file_upload():
+def file_upload():
     
-    print '<h3>2. Upload your main.c:</h3>'
-    print '<div class="container-fluid">'
-    print """
-        <div class="col-lg-6 col-sm-6 col-12">
-            <div class="input-group">
-                <label class="input-group-btn">
-                    <span class="btn btn-default">
-                        Browse&hellip; <input type="file" style="display: none;" multiple>
-                    </span>
-                </label>
-                <input type="text" class="form-control" readonly>
+    return textwrap.dedent("""
+        <h3>2. Upload your main class file:</h3>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6 col-sm-6 col-12">
+                    <div class="input-group">
+                        <label class="input-group-btn">
+                            <span class="btn btn-default">
+                                Browse&hellip; <input id="mainFileInput" type="file" style="display: none;">
+                            </span>
+                        </label>
+                        <input type="text" class="form-control" readonly>
+                    </div>
+                </div>
             </div>
         </div>
-        """
-    print '</div>'
+    """)
     
-def print_device_selector(id):
+def device_selector(id):
     
-    db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
-
-    # cursor object to execute queries
-    db_cursor = db.cursor(cursorclass=MySQLdb.cursors.DictCursor)
-    
-    db_cursor.execute("SELECT * FROM devices ORDER BY display_name")
-    results = db_cursor.fetchall()
-    
-    print '<label for="' + id + '"><h3>1. Select a device:</h3></label>'
-    print '<div class="row">'
-    
-    print '<div class="col-md-10">'
-    print '<form>'
-    print '<div class="form-group">'
-    print '<div class="container-fluid">'
-    print '<select class="form-control" id="' + id + '">'
-    
-    for row in results:
-        print '<option value="{!s}">{!s}</option>'.format(row["internal_name"], row["display_name"])
+    def get_devices():
         
-    print '</select></div></form></div>'
+        db_cursor.execute("SELECT * FROM devices ORDER BY display_name")
+        return db_cursor.fetchall()
     
-    db_cursor.close()
-    db.close()
-    print '</div>'
+    selector_options = ""
+    for device in get_devices():
+        selector_options += '<option value="{!s}">{!s}</option>'.format(device["internal_name"], device["display_name"])
     
-    print '<div class="col-md-2">'
-    print '<button type="button" class="btn" id="autodetectButton" onclick="autodetect()">Try autodetect</button>'
-    print '</div>'
-    
-    print '</div>'
-    
-def print_checkboxes():
-    
-    db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
+    return textwrap.dedent("""
+        <label for="{ID}"><h3>1. Select a device:</h3></label>
+        <div class="row">
 
-    # cursor object to execute queries
-    db_cursor = db.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+            <div class="col-md-10">
+                <form>'
+                    <div class="form-group">
+                        <div class="container-fluid">
+                            <select class="form-control" id="{ID}">
+                                {SELECTOR_OPTIONS}
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn" id="autodetectButton" onclick="autodetect()">Try autodetect</button>
+            </div>
+        </div>
+    """.format(ID=id, SELECTOR_OPTIONS=selector_options))
 
-    db_cursor.execute("SELECT * FROM modules ORDER BY group_identifier ASC, name ASC")
-    results = db_cursor.fetchall()
+def checkboxes():
     
+    def get_checkboxes():
+        
+        db_cursor.execute("SELECT * FROM modules ORDER BY group_identifier ASC, name ASC")
+        return db_cursor.fetchall()
+    
+    elements_per_row = 4
     # width should add up to 12 per row (bootstrap grid system)
-    column_width = 3
-    current_width_taken = 0
+    column_width = int(12 / elements_per_row)
     
-    string_to_fill = '<div class="col-md-' + str(column_width) + '"><label><input type="checkbox" name="module_checkbox" value="{!s}"><div data-toggle="tooltip" data-placement="bottom" title="{!s}">{!s}</div></label></div>'
+    row_template = textwrap.dedent("""
+        <div class="row">
+            {COLUMNS}
+        </div>
+    """)
     
-    print '<form>'
-    print '<label for="checkboxes_container"><h3>3. Select modules:</h3></label>'
-    print '<div class="container-fluid" id="checkboxes_container">'
+    column_template = textwrap.dedent("""
+        <div class="col-md-""" + str(column_width) + """">
+            <label>
+                <input type="checkbox" name="module_checkbox" value="{!s}">
+                <div data-toggle="tooltip" data-placement="bottom" title="{!s}">{!s}</div>
+            </label>
+        </div>
+    """)
     
-    last_group_identifier = None
-    group_left_open = False
-    row_left_open = False
-    new_row = True
+    dynamic = ""
     
-    for row in results:
+    checkboxes = list(get_checkboxes())
+    
+    checkbox_groups = {}
+    
+    while len(checkboxes) > 0:
+        checkbox = checkboxes.pop(0)
+        group = checkbox["group_identifier"]
         
-        group_identifier_changed = last_group_identifier != row["group_identifier"]
-        if last_group_identifier == None or group_identifier_changed:
+        dict_entry = checkbox_groups.get(group, None)
+        if dict_entry is None:
+            checkbox_groups[group] = [checkbox]
+        else:
+            dict_entry.append(checkbox)
             
-            if group_left_open:
-                # close group
-                print '</div>'
-                
-            if row_left_open:
-                current_width_taken = 0
-                new_row = True
-                
-                # close row
-                print '</div>'
-                row_left_open = False
-            
-            # open new group
-            print '<div class="checkbox well"><h4>' + row["group_identifier"] + '</h4>'
-            group_left_open = True
+    for group in checkbox_groups:
         
-        if new_row:
-            
-            if last_group_identifier != None and not group_identifier_changed:
-                # close the current row. if last_group_identifier is None, there was no row before
-                print '</div>'
-                
-            # open new row
-            print '<div class="row">'
-            row_left_open = True
-            
-            current_width_taken = 0
-            new_row = False
+        dynamic += '<div class="checkbox well"><h4>' + group + '</h4>'
         
-        description = row["description"]
-        if description is None:
-            description = ""
+        checkboxes = checkbox_groups.get(group)
+        rows = [ checkboxes[x:x + elements_per_row] for x in xrange(0, len(checkboxes), elements_per_row)]
         
-        print string_to_fill.format(row["id"], cgi.escape(description, True), row["name"])
-        
-        current_width_taken += column_width
-        new_row = current_width_taken >= 12
-        last_group_identifier = row["group_identifier"]
+        for row in rows:
 
-    if row_left_open:
-        print '</div>'
-        
-    if group_left_open:
-        print '</div>'
-        
-    # close the container
-    print '</div>'
-    
-    print '</form>'
-        
-    db_cursor.close()
-    db.close()
-    
-def print_applications():
-    
-    db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
+            columns = ""
+            for checkbox in row:
 
-    # cursor object to execute queries
-    db_cursor = db.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+                description = checkbox["description"]
+                if description is None:
+                    description = ""
+
+                columns += column_template.format(checkbox["id"], cgi.escape(description, True), checkbox["name"])
+
+            dynamic += row_template.format(COLUMNS=columns)
+            
+        dynamic += '</div>'
     
-    db_cursor.execute("SELECT * FROM applications ORDER BY name")
-    results = db_cursor.fetchall()
+    return textwrap.dedent("""
+        <form>
+            <label for="checkboxes_container"><h3>3. Select modules:</h3></label>
+            <div class="container-fluid" id="checkboxes_container">
+                {ROWS}
+            </div>
+        </form>
+    """.format(ROWS=dynamic))
     
+def applications():
+    
+    def get_applications():
+        
+        db_cursor.execute("SELECT * FROM applications ORDER BY name")
+        return db_cursor.fetchall()
+    
+    elements_per_row = 4
     # width should add up to 12 per row (bootstrap grid system)
-    column_width = 3
-    current_width_taken = 0
+    column_width = int(12 / elements_per_row)
     
-    string_to_fill = '<div class="col-md-' + str(column_width) + '"><p><button type="button" class="btn btn-block example-application-button" id="{!s}" onclick="download_example(this.id)"><div data-toggle="tooltip" data-placement="bottom" title="{!s}">{!s}</div></button></p></div>'
+    row_template = textwrap.dedent("""
+        <div class="row">
+            {COLUMNS}
+        </div>
+    """)
     
-    print '<label for="applications_container"><h3>2. Select an application:</h3></label>'
-    print '<div class="container-fluid" id="applications_container">'
+    column_template = textwrap.dedent("""
+        <div class="col-md-""" + str(column_width) + """">
+            <p>
+                <button type="button" class="btn btn-block example-application-button" id="{}" onclick="download_example(this.id)">
+                    <div data-toggle="tooltip" data-placement="bottom" title="{}">{}</div>
+                </button>
+            </p>
+        </div>
+    """)
     
-    row_left_open = False
-    new_row = True
+    applications = get_applications()
     
-    for row in results:
+    rows = [ applications[x:x + elements_per_row] for x in xrange(0, len(applications), elements_per_row)]
+    
+    rows_html = ""
+    for row in rows:
         
-        if new_row:
-            
-            if row_left_open:
-                print '</div>'
-                
-            # open new row
-            print '<div class="row">'
-            row_left_open = True
-            
-            current_width_taken = 0
-            new_row = False
-        
-        description = row["description"]
-        if description is None:
-            description = ""
-        
-        print string_to_fill.format(row["id"], cgi.escape(description, True), row["name"])
-        
-        current_width_taken += column_width
-        new_row = current_width_taken >= 12
+        columns = ""
+        for application in row:
 
-    if row_left_open:
-        print '</div>'
+            description = application["description"]
+            if description is None:
+                description = ""
+
+            columns += column_template.format(application["id"], cgi.escape(description, True), application["name"])
         
-    # close the container
-    print '</div>'
+        rows_html += row_template.format(COLUMNS=columns)
     
-def print_footer():
+    return textwrap.dedent("""
+        <label for="applications_container"><h3>2. Select an application:</h3></label>'
+            <div class="container-fluid" id="applications_container">
+                {ROWS}
+            </div>
+    """.format(ROWS=rows_html))
     
-    print '<footer class="footer">'
-    print '<div class="container">'
-    print '<div class="row">'
-    print '<div class="col-sm-8">&copy; Hendrik van Essen, 2017</div>'
-    print '<div class="col-sm-4"><a href="https://github.com/RIOT-OS/RIOT"><img src="/img/riot_logo_footer.png" alt="RIOT logo" height="44" width="81"></img></a></div>'
-    print '</div>'
-    print '</div>'
-    print '</footer>'
+def footer():
+    
+    return textwrap.dedent("""
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8">&copy; Hendrik van Essen, 2017</div>
+                    <div class="col-sm-4"><a href="https://github.com/RIOT-OS/RIOT"><img src="/img/riot_logo_footer.png" alt="RIOT logo" height="44" width="81"></img></a></div>
+                </div>
+            </div>
+        </footer>
+    """)
     
 if __name__ == "__main__":
+    
     main()

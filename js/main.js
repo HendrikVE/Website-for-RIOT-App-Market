@@ -1,6 +1,6 @@
 var device = null;
 
-async function selectDevice() {
+async function autodetect() {
 
 /*
 Wenn nicht anders genannt stammen alle vendorid und productid Einträge von:
@@ -189,6 +189,8 @@ function download() {
         params += "selected_modules=" + checkboxesChecked.join("&selected_modules=");
         params += "&";
         params += "device=" + document.getElementById("deviceSelectorCustomTab").value;
+        params += "&";
+        params += "main_file=" + document.getElementById("mainFileInput").value;
         
         xhttp.send(params);
     }
@@ -255,7 +257,7 @@ function download_example(buttonID) {
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     params = "";
-    params += "application=7";
+    params += "application=" + buttonID;
     params += "&";
     params += "device=" + document.getElementById("deviceSelectorExamplesTab").value;
 
