@@ -132,7 +132,7 @@ function download() {
     }
     
     if(checkboxesChecked.length == 0) {
-        // print error
+        alert("You need to select at least one module")
     }
     else {
         
@@ -188,7 +188,7 @@ function download() {
         params = "";
         params += "selected_modules=" + checkboxesChecked.join("&selected_modules=");
         params += "&";
-        params += "device=" + document.getElementById("deviceSelectorCustomTab").value;
+        params += "board=" + document.getElementById("deviceSelectorCustomTab").value;
         params += "&";
         params += "main_file=" + document.getElementById("mainFileInput").value;
         
@@ -259,7 +259,7 @@ function download_example(buttonID) {
     params = "";
     params += "application=" + buttonID;
     params += "&";
-    params += "device=" + document.getElementById("deviceSelectorExamplesTab").value;
+    params += "board=" + document.getElementById("deviceSelectorExamplesTab").value;
 
     xhttp.send(params);
 }
