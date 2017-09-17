@@ -1,19 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-# enable debugging
 import cgitb, cgi
 import config.db_config as config
 import MySQLdb
 import textwrap
-#import logging
+import logging
 
 db = None
 db_cursor = None
 
+
 def main():
-    
-    #logging.basicConfig(filename = "log/index_log.txt", format="%(asctime)s [%(levelname)s]: %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
     
     cgitb.enable()
     init_db()
@@ -45,7 +43,8 @@ def main():
               FOOTER=footer()))
     
     close_db()
-    
+
+
 def init_db():
     
     global db
@@ -54,11 +53,13 @@ def init_db():
     # cursor object to execute queries
     global db_cursor
     db_cursor = db.cursor(cursorclass=MySQLdb.cursors.DictCursor)
-    
+
+
 def close_db():
     db_cursor.close()
     db.close()
-    
+
+
 def html_header():
     
     return textwrap.dedent("""
@@ -77,7 +78,8 @@ def html_header():
             <meta http-equiv="origin-trial" data-feature="WebUSB (For Chrome M57+)" data-expires="2017-09-05" content="AkyHUtyQc2+ctDNdGbCJpuTTdTmkZM1U0cxMhvwvgkGdfX4vB28BwYm/8Z3OJTVfGD1r8OIiS7QwazYx97rZ1QIAAABTeyJvcmlnaW4iOiJodHRwczovL3d3dy52YW5hcHBzdGVlci5kZTo0NDMiLCJmZWF0dXJlIjoiV2ViVVNCMiIsImV4cGlyeSI6MTUwNDU2OTYwMH0=">
         </head>
     """)
-    
+
+
 def header():
     
     return textwrap.dedent("""
@@ -98,7 +100,8 @@ def header():
             </div>
         </div>
     """)
-    
+
+
 def tabs():
     
     return textwrap.dedent("""
@@ -119,7 +122,8 @@ def tabs():
         </div>
     """.format(EXAMPLE_TAB=examples_tab(),
                CUSTOM_TAB=custom_tab()))
-    
+
+
 def custom_tab():
 
     return textwrap.dedent("""
@@ -138,7 +142,8 @@ def custom_tab():
     """.format(DEVICE_SELECTOR=device_selector("deviceSelectorCustomTab"),
                FILE_UPLOAD=file_upload(),
                CHECKBOXES=checkboxes()))
-    
+
+
 def examples_tab():
     
     return textwrap.dedent("""
@@ -151,7 +156,8 @@ def examples_tab():
         </div>
     """.format(DEVICE_SELECTOR=device_selector("deviceSelectorExamplesTab"),
               APPLICATIONS=applications()))
-    
+
+
 # https://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3
 def file_upload():
     
@@ -172,7 +178,8 @@ def file_upload():
             </div>
         </div>
     """)
-    
+
+
 def device_selector(id):
     
     def get_devices():
@@ -205,8 +212,10 @@ def device_selector(id):
         </div>
     """.format(ID=id, SELECTOR_OPTIONS=selector_options))
 
+
 def slices(input_list, group_size):
     return [input_list[x:x + group_size] for x in xrange(0, len(input_list), group_size)]
+
 
 def checkboxes():
     
@@ -279,7 +288,8 @@ def checkboxes():
             </div>
         </form>
     """.format(ROWS=checkboxes_html))
-    
+
+
 def applications():
     
     def get_applications():
@@ -329,7 +339,8 @@ def applications():
                 {ROWS}
             </div>
     """.format(ROWS=applications_html))
-    
+
+
 def footer():
     
     return textwrap.dedent("""
@@ -342,7 +353,15 @@ def footer():
             </div>
         </footer>
     """)
-    
+
+
 if __name__ == "__main__":
-    
-    main()
+
+    logging.basicConfig(filename="log/index_log.txt", format="%(asctime)s [%(levelname)s]: %(message)s",
+                        datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
+
+    try:
+        main()
+
+    except Exception as e:
+        logging.error(str(e), exc_info=True)
