@@ -193,21 +193,21 @@ def device_selector(id):
     
     return textwrap.dedent("""
         <label for="{ID}"><h3>1. Select a device:</h3></label>
-        <div class="row">
-
-            <div class="col-md-10">
-                <form>
-                    <div class="form-group">
-                        <div class="container-fluid">
+        <div class="container-fluid" id="applications_container">
+            <div class="row">
+    
+                <div class="col-md-10">
+                    <form>
+                        <div class="form-group">
                             <select class="form-control" id="{ID}">
                                 {SELECTOR_OPTIONS}
                             </select>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-block" id="autodetectButton" onclick="autodetect()">Try autodetect</button>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-block" id="autodetectButton" onclick="autodetect()">Try autodetect</button>
+                </div>
             </div>
         </div>
     """.format(ID=id, SELECTOR_OPTIONS=selector_options))
