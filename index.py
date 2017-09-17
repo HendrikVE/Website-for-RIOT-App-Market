@@ -127,7 +127,7 @@ def tabs():
 def custom_tab():
 
     return textwrap.dedent("""
-        {DEVICE_SELECTOR}
+        {BOARD_SELECTOR}
         {FILE_UPLOAD}
         {CHECKBOXES}
         <h3>4. Build and flash:</h3>
@@ -139,7 +139,7 @@ def custom_tab():
                 </div>
             </div>
         </div>
-    """.format(DEVICE_SELECTOR=device_selector("deviceSelectorCustomTab"),
+    """.format(BOARD_SELECTOR=board_selector("boardSelectorCustomTab"),
                FILE_UPLOAD=file_upload(),
                CHECKBOXES=checkboxes()))
 
@@ -147,14 +147,14 @@ def custom_tab():
 def examples_tab():
     
     return textwrap.dedent("""
-        {DEVICE_SELECTOR}
+        {BOARD_SELECTOR}
         {APPLICATIONS}
         <div class="well" id="cmdOutputExamplesTab">
             <div class="progress">
                 <div class="progress-bar progress-bar-striped active" id="progressBarExamplesTab" style="width:100%; visibility:hidden"></div>
             </div>
         </div>
-    """.format(DEVICE_SELECTOR=device_selector("deviceSelectorExamplesTab"),
+    """.format(BOARD_SELECTOR=board_selector("boardSelectorExamplesTab"),
               APPLICATIONS=applications()))
 
 
@@ -180,22 +180,21 @@ def file_upload():
     """)
 
 
-def device_selector(id):
+def board_selector(id):
     
-    def get_devices():
+    def get_boards():
         
-        db_cursor.execute("SELECT * FROM devices ORDER BY display_name")
+        db_cursor.execute("SELECT * FROM boards ORDER BY display_name")
         return db_cursor.fetchall()
     
     selector_options = ""
-    for device in get_devices():
-        selector_options += '<option value="{!s}">{!s}</option>'.format(device["internal_name"], device["display_name"])
+    for board in get_boards():
+        selector_options += '<option value="{!s}">{!s}</option>'.format(board["internal_name"], board["display_name"])
     
     return textwrap.dedent("""
-        <label for="{ID}"><h3>1. Select a device:</h3></label>
+        <label for="{ID}"><h3>1. Select a board:</h3></label>
         <div class="container-fluid" id="applications_container">
             <div class="row">
-    
                 <div class="col-md-10">
                     <form>
                         <div class="form-group">
