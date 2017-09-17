@@ -196,7 +196,7 @@ def device_selector(id):
         <div class="row">
 
             <div class="col-md-10">
-                <form>'
+                <form>
                     <div class="form-group">
                         <div class="container-fluid">
                             <select class="form-control" id="{ID}">
@@ -207,7 +207,7 @@ def device_selector(id):
                 </div>
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn" id="autodetectButton" onclick="autodetect()">Try autodetect</button>
+                <button type="button" class="btn btn-block" id="autodetectButton" onclick="autodetect()">Try autodetect</button>
             </div>
         </div>
     """.format(ID=id, SELECTOR_OPTIONS=selector_options))
@@ -334,7 +334,7 @@ def applications():
         applications_html += row_template.format(COLUMNS=columns)
     
     return textwrap.dedent("""
-        <label for="applications_container"><h3>2. Select an application:</h3></label>'
+        <label for="applications_container"><h3>2. Select an application:</h3></label>
             <div class="container-fluid" id="applications_container">
                 {ROWS}
             </div>
