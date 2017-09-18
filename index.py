@@ -116,7 +116,7 @@ def custom_tab():
     boards = fetch_boards()
     modules = fetch_modules()
 
-    board_selector_html = board_selector(boards, "boardSelectorExamplesTab")
+    board_selector_html = board_selector(boards, "boardSelectorCustomTab")
     modules_html = module_selection(modules)
 
     return textwrap.dedent("""
