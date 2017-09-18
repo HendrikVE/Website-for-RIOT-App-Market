@@ -22,5 +22,10 @@ body {
 
 /*for file upload button when using Bootstrap 3 and not 4*/
 [hidden] {
-  display: none !important;
+    display: none !important;
+}
+
+.file {
+    visibility: hidden;
+    position: absolute;
 }

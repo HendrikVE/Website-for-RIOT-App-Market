@@ -27,6 +27,13 @@ def main():
     application = form.getfirst("application")
     board = form.getfirst("board")
 
+    if all(v is not None for v in [application, board]):
+        build_result["cmd_output"] = "missing parameters for request!"
+        build_result["cmd_output"] += "application = " + str(application)
+        build_result["cmd_output"] += "board = " + str(board)
+        print_result(json.dumps(build_result))
+        return
+
     os.chdir("../riotam-backend/")
     proc = Popen(["python build_example.py --application " + application + " --board " + board], stdout=PIPE, stderr=STDOUT, shell=True)
     output = proc.communicate()[0]

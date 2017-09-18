@@ -127,18 +127,20 @@ def tabs():
 def custom_tab():
 
     return textwrap.dedent("""
-        {BOARD_SELECTOR}
-        {FILE_UPLOAD}
-        {CHECKBOXES}
-        <h3>4. Build and flash:</h3>
-        <div class="container-fluid">
-            <button type="button" class="btn" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>
-            <div class="well" id="cmdOutputCustomTab">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped active" id="progressBarCustomTab" style="width:100%; visibility:hidden"></div>
+        <form id="customTabForm" enctype="multipart/form-data">
+            {BOARD_SELECTOR}
+            {FILE_UPLOAD}
+            {CHECKBOXES}
+            <h3>4. Build and flash:</h3>
+            <div class="container-fluid">
+                <button type="button" class="btn" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>
+                <div class="well" id="cmdOutputCustomTab">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" id="progressBarCustomTab" style="width:100%; visibility:hidden"></div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     """.format(BOARD_SELECTOR=board_selector("boardSelectorCustomTab"),
                FILE_UPLOAD=file_upload(),
                CHECKBOXES=checkboxes()))
@@ -147,32 +149,33 @@ def custom_tab():
 def examples_tab():
     
     return textwrap.dedent("""
-        {BOARD_SELECTOR}
-        {APPLICATIONS}
-        <div class="well" id="cmdOutputExamplesTab">
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped active" id="progressBarExamplesTab" style="width:100%; visibility:hidden"></div>
+        <form id="examplesTabForm">
+            {BOARD_SELECTOR}
+            {APPLICATIONS}
+            <div class="well" id="cmdOutputExamplesTab">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" id="progressBarExamplesTab" style="width:100%; visibility:hidden"></div>
+                </div>
             </div>
-        </div>
+        </form>
     """.format(BOARD_SELECTOR=board_selector("boardSelectorExamplesTab"),
               APPLICATIONS=applications()))
 
 
-# https://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3
+# https://codepen.io/CSWApps/pen/GKtvH
 def file_upload():
     
     return textwrap.dedent("""
         <h3>2. Upload your main class file:</h3>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-6 col-sm-6 col-12">
+                <div class="col-md-6">
+                    <input id="main_file_input" type="file" name="img[]" class="file">
                     <div class="input-group">
-                        <label class="input-group-btn">
-                            <span class="btn btn-default">
-                                Browse&hellip; <input id="mainFileInput" type="file" style="display: none;">
-                            </span>
-                        </label>
-                        <input type="text" class="form-control" readonly>
+                        <input type="text" class="form-control" readonly placeholder="Upload main source file">
+                        <span class="input-group-btn">
+                            <button class="browse btn btn-primary" type="button"><i class="glyphicon glyphicon-search"></i> Browse</button>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -196,12 +199,10 @@ def board_selector(id):
         <div class="container-fluid" id="applications_container">
             <div class="row">
                 <div class="col-md-10">
-                    <form>
-                        <div class="form-group">
-                            <select class="form-control" id="{ID}">
-                                {SELECTOR_OPTIONS}
-                            </select>
-                        </form>
+                    <div class="form-group">
+                        <select class="form-control" id="{ID}">
+                            {SELECTOR_OPTIONS}
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -280,12 +281,10 @@ def checkboxes():
         checkboxes_html += '</div>'
     
     return textwrap.dedent("""
-        <form>
-            <label for="checkboxes_container"><h3>3. Select modules:</h3></label>
-            <div class="container-fluid" id="checkboxes_container">
-                {ROWS}
-            </div>
-        </form>
+        <label for="checkboxes_container"><h3>3. Select modules:</h3></label>
+        <div class="container-fluid" id="checkboxes_container">
+            {ROWS}
+        </div>
     """.format(ROWS=checkboxes_html))
 
 

@@ -1,4 +1,4 @@
-var device = null;
+var board = null;
 
 async function autodetect() {
 
@@ -84,6 +84,7 @@ see riotam-backend/js_update.py for details
     });
 }
 
+
 function printDeviceInfo(device) {
 
     var infoArray = [
@@ -118,6 +119,7 @@ function printDeviceInfo(device) {
     document.getElementById("deviceInfo").innerHTML = "<b>Selected Device:</b><br>" + infoTable;
 }
 
+
 function download() {
     
     //https://stackoverflow.com/questions/8563240/how-to-get-all-checked-checkboxes
@@ -130,9 +132,17 @@ function download() {
             checkboxesChecked.push(checkboxes[i].value);
         }
     }
+
+    var board = document.getElementById("boardSelectorCustomTab").value;
+    var main_file = document.getElementById("main_file_input").files[0];
     
-    if(checkboxesChecked.length == 0) {
+    if (checkboxesChecked.length == 0) {
+
         alert("You need to select at least one module")
+    }
+    else if (main_file == null) {
+
+        alert("You have to upload your main source file for your project!")
     }
     else {
         
@@ -141,8 +151,65 @@ function download() {
         
         downloadButton.disabled = true;
         progressBar.style.visibility = "visible";
+
+        var formData = new FormData();
+        for (var i = 0; i < checkboxesChecked.length; i++) {
+            formData.append('selected_modules[]', checkboxesChecked[i]);
+        }
+        formData.append("board", board);
+        formData.append("main_file_content", main_file, "main.c");
+
+        // https://stackoverflow.com/questions/166221/how-can-i-upload-files-asynchronously
+        $.ajax({
+            url: "/request.py",
+            type: "POST",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError);
+            },
+            success: function(response) {
+
+                var jsonResponse = null;
+                try {
+                    jsonResponse = JSON.parse(response);
+                }
+                catch(e) {
+                    alert("Server sent broken JSON");
+                    return;
+                }
+
+                if(jsonResponse == null || jsonResponse.output_file != null) {
+                    downloadButton.className = "btn btn-success";
+                    downloadButton.innerHTML = "Download"
+                }
+                else {
+                    downloadButton.className = "btn btn-danger";
+                    downloadButton.innerHTML = "Something went wrong"
+                }
+
+                //this.responseText has to be a json string
+                document.getElementById("cmdOutputCustomTab").innerHTML = jsonResponse.cmd_output;
+
+
+                //talk to the riotam chrome extension
+                var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
+
+                // Make a simple request:
+                chrome.runtime.sendMessage(extensionId, jsonResponse,
+                    function() {
+                        if(chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
+                            alert("You need to install the RIOT OS AppMarket Extension");
+                        }
+                    }
+                );
+            }
+        });
         
-        var xhttp = new XMLHttpRequest();
+        /*var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             
             if (this.readyState == 4 && this.status == 200) {
@@ -155,7 +222,7 @@ function download() {
                     alert("Server sent broken JSON");
                     return;
                 }
-                
+
                 if(jsonResponse == null || jsonResponse.output_file != null) {
                     downloadButton.className = "btn btn-success";
                     downloadButton.innerHTML = "Download"
@@ -164,11 +231,11 @@ function download() {
                     downloadButton.className = "btn btn-danger";
                     downloadButton.innerHTML = "Something went wrong"
                 }
-                
+
                 //this.responseText has to be a json string
                 document.getElementById("cmdOutputCustomTab").innerHTML = jsonResponse.cmd_output;
-                
-                
+
+
                 //talk to the riotam chrome extension
                 var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
 
@@ -182,19 +249,22 @@ function download() {
                 );
            }
         };
+
+
         xhttp.open("POST", "/request.py", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         
         params = "";
         params += "selected_modules=" + checkboxesChecked.join("&selected_modules=");
         params += "&";
-        params += "board=" + document.getElementById("deviceSelectorCustomTab").value;
+        params += "board=" + document.getElementById("boardSelectorCustomTab").value;
         params += "&";
         params += "main_file=" + document.getElementById("mainFileInput").value;
         
-        xhttp.send(params);
+        xhttp.send(params);*/
     }
 }
+
 
 function download_example(buttonID) {
     
@@ -253,13 +323,54 @@ function download_example(buttonID) {
             );
        }
     };
+
     xhttp.open("POST", "/request_example.py", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     params = "";
     params += "application=" + buttonID;
     params += "&";
-    params += "board=" + document.getElementById("deviceSelectorExamplesTab").value;
+    params += "board=" + document.getElementById("boardSelectorExamplesTab").value;
 
     xhttp.send(params);
 }
+
+
+https://wiki.selfhtml.org/wiki/JavaScript/File_Upload
+function dateiupload(evt) {
+
+    var files = evt.target.files;
+    var file = files[0];
+
+    if (!f.type.match('text/plain')) {
+        return;
+    }
+
+    var reader = new FileReader();
+
+    var senddata = new Object();
+    senddata.name = file.name;
+    senddata.date = file.lastModified;
+    senddata.size = file.size;
+    senddata.type = file.type;
+
+    reader.onload = function(fileContent) {
+        senddata.fileData = fileContent.target.result;
+
+        /*
+        Code für AJAX-Request hier einfügen
+        */
+    }
+
+    // Die Datei einlesen und in eine Data-URL konvertieren
+    reader.readAsDataURL(file);
+}
+
+// https://codepen.io/CSWApps/pen/GKtvH
+$(document).on('click', '.browse', function(){
+    var file = $(this).parent().parent().parent().find('.file');
+    file.trigger('click');
+});
+$(document).on('change', '.file', function(){
+    $(this).parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+});
