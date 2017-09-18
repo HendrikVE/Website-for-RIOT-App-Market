@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+from __future__ import print_function
+
 import cgi
 import cgitb
 import logging
@@ -18,10 +20,10 @@ def main():
     
     cgitb.enable()
     
-    print 'Content-Type: text/html'
-    print '\n\r'
+    print ('Content-Type: text/html')
+    print ('\n\r')
     
-    print textwrap.dedent("""
+    print (textwrap.dedent("""
         <!DOCTYPE html>
         <html lang="en">
 
@@ -42,7 +44,7 @@ def main():
     """.format(HTML_HEADER=html_header(),
                HEADER=header(),
                TABS=tabs(),
-               FOOTER=footer()))
+               FOOTER=footer())))
 
 
 def html_header():

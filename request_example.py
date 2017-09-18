@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+from __future__ import print_function
+
 import cgi, cgitb
 from subprocess import Popen, PIPE, STDOUT
 import os
@@ -38,15 +40,15 @@ def main():
 
 def print_result(result):
 
-    print "Content-Type: text/html"
-    print "\n\r"
-    print result
+    print ("Content-Type: text/html")
+    print ("\n\r")
+    print (result)
 
 
 def print_error():
 
-    print "Status: 400 Bad Request"
-    print
+    print ("Status: 400 Bad Request")
+    print ()
 
 
 if __name__ == "__main__":
