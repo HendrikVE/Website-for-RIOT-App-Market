@@ -21,7 +21,7 @@ def main():
     application = form.getfirst("application")
     board = form.getfirst("board")
 
-    if any(v is None for v in [application, board]):
+    if not all([application, board]):
         print_error()
         """build_result["cmd_output"] = "missing parameters for request!"
         build_result["cmd_output"] += "application = " + str(application)

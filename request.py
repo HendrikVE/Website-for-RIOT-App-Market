@@ -22,7 +22,6 @@ def main():
     board = form.getfirst("board")
     main_file_content = form.getfirst("main_file_content")
 
-    # if any(v is None for v in [selected_modules, board, main_file_content]):
     if not all([selected_modules, board, main_file_content]):
         print_error()
         """build_result["cmd_output"] = "missing parameters for request!<br>"
