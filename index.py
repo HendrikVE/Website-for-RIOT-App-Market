@@ -1,20 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import cgitb, cgi
-import config.db_config as config
-import MySQLdb
-import textwrap
+import cgi
+import cgitb
 import logging
+import textwrap
 
-db = None
-db_cursor = None
+from MyDatabase import MyDatabase
+
+BOOTSTRAP_COLUMS_PER_ROW = 12
+CFG_ELEMENTS_PER_ROW = 4
+
+db = MyDatabase()
 
 
 def main():
     
     cgitb.enable()
-    init_db()
     
     print 'Content-Type: text/html'
     print '\n\r'
@@ -38,26 +40,9 @@ def main():
             </body>
         </html>
     """.format(HTML_HEADER=html_header(),
-              HEADER=header(),
-              TABS=tabs(),
-              FOOTER=footer()))
-    
-    close_db()
-
-
-def init_db():
-    
-    global db
-    db = MySQLdb.connect(config.db_config["host"], config.db_config["user"], config.db_config["passwd"], config.db_config["db"])
-
-    # cursor object to execute queries
-    global db_cursor
-    db_cursor = db.cursor(cursorclass=MySQLdb.cursors.DictCursor)
-
-
-def close_db():
-    db_cursor.close()
-    db.close()
+               HEADER=header(),
+               TABS=tabs(),
+               FOOTER=footer()))
 
 
 def html_header():
@@ -126,11 +111,17 @@ def tabs():
 
 def custom_tab():
 
+    boards = fetch_boards()
+    modules = fetch_modules()
+
+    board_selector_html = board_selector(boards, "boardSelectorExamplesTab")
+    modules_html = module_selection(modules)
+
     return textwrap.dedent("""
         <form id="customTabForm" enctype="multipart/form-data">
             {BOARD_SELECTOR}
             {FILE_UPLOAD}
-            {CHECKBOXES}
+            {MODULES}
             <h3>4. Build and flash:</h3>
             <div class="container-fluid">
                 <button type="button" class="btn" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>
@@ -141,13 +132,19 @@ def custom_tab():
                 </div>
             </div>
         </form>
-    """.format(BOARD_SELECTOR=board_selector("boardSelectorCustomTab"),
-               FILE_UPLOAD=file_upload(),
-               CHECKBOXES=checkboxes()))
+    """.format(BOARD_SELECTOR=board_selector_html,
+               FILE_UPLOAD=file_upload_input(),
+               MODULES=modules_html))
 
 
 def examples_tab():
-    
+
+    boards = fetch_boards()
+    apps = fetch_applications()
+
+    board_selector_html = board_selector(boards, "boardSelectorExamplesTab")
+    applications_html = application_selection(apps)
+
     return textwrap.dedent("""
         <form id="examplesTabForm">
             {BOARD_SELECTOR}
@@ -158,12 +155,12 @@ def examples_tab():
                 </div>
             </div>
         </form>
-    """.format(BOARD_SELECTOR=board_selector("boardSelectorExamplesTab"),
-              APPLICATIONS=applications()))
+    """.format(BOARD_SELECTOR=board_selector_html,
+               APPLICATIONS=applications_html))
 
 
 # https://codepen.io/CSWApps/pen/GKtvH
-def file_upload():
+def file_upload_input():
     
     return textwrap.dedent("""
         <h3>2. Upload your main class file:</h3>
@@ -183,17 +180,13 @@ def file_upload():
     """)
 
 
-def board_selector(id):
-    
-    def get_boards():
-        
-        db_cursor.execute("SELECT * FROM boards ORDER BY display_name")
-        return db_cursor.fetchall()
-    
-    selector_options = ""
-    for board in get_boards():
+def board_selector(boards, id):
+
+    selector_options = ''
+
+    for board in boards:
         selector_options += '<option value="{!s}">{!s}</option>'.format(board["internal_name"], board["display_name"])
-    
+
     return textwrap.dedent("""
         <label for="{ID}"><h3>1. Select a board:</h3></label>
         <div class="container-fluid" id="applications_container">
@@ -217,16 +210,9 @@ def slices(input_list, group_size):
     return [input_list[x:x + group_size] for x in xrange(0, len(input_list), group_size)]
 
 
-def checkboxes():
-    
-    def get_checkboxes():
-        
-        db_cursor.execute("SELECT * FROM modules ORDER BY group_identifier ASC, name ASC")
-        return db_cursor.fetchall()
-    
-    elements_per_row = 4
-    # width should add up to 12 per row (bootstrap grid system)
-    column_width = int(12 / elements_per_row)
+def module_selection(modules, elements_per_row=CFG_ELEMENTS_PER_ROW):
+
+    column_width = int(BOOTSTRAP_COLUMS_PER_ROW / elements_per_row)
     
     row_template = textwrap.dedent("""
         <div class="row">
@@ -245,35 +231,24 @@ def checkboxes():
     
     checkboxes_html = ""
     
-    checkboxes = list(get_checkboxes())
-    
     checkbox_groups = {}
-    
-    while len(checkboxes) > 0:
-        checkbox = checkboxes.pop(0)
-        group = checkbox["group_identifier"]
-        
-        dict_entry = checkbox_groups.get(group, None)
-        if dict_entry is None:
-            checkbox_groups[group] = [checkbox]
-        else:
-            dict_entry.append(checkbox)
-            
-    for group in sorted(checkbox_groups):
-        
+
+    for module in modules:
+
+        group = module["group_identifier"]
+        checkbox_groups.setdefault(group, []).append(module)
+
+    for group, modules in sorted(checkbox_groups.items()):
+        modules = sorted(modules, key=lambda x:x['name'])
         checkboxes_html += '<div class="checkbox well"><h4>' + group + '</h4>'
         
-        grouped_checkboxes_slices = slices(checkbox_groups.get(group), elements_per_row)
+        grouped_checkboxes_slices = slices(modules, elements_per_row)
         
         for grouped_checkboxes in grouped_checkboxes_slices:
 
             columns = ""
             for checkbox in grouped_checkboxes:
-
-                description = checkbox["description"]
-                if description is None:
-                    description = ""
-
+                description = checkbox["description"] or ""
                 columns += column_template.format(checkbox["id"], cgi.escape(description, True), checkbox["name"])
 
             checkboxes_html += row_template.format(COLUMNS=columns)
@@ -288,16 +263,9 @@ def checkboxes():
     """.format(ROWS=checkboxes_html))
 
 
-def applications():
-    
-    def get_applications():
-        
-        db_cursor.execute("SELECT * FROM applications ORDER BY name")
-        return db_cursor.fetchall()
-    
-    elements_per_row = 4
-    # width should add up to 12 per row (bootstrap grid system)
-    column_width = int(12 / elements_per_row)
+def application_selection(apps, elements_per_row=CFG_ELEMENTS_PER_ROW):
+
+    column_width = int(BOOTSTRAP_COLUMS_PER_ROW / elements_per_row)
     
     row_template = textwrap.dedent("""
         <div class="row">
@@ -315,7 +283,7 @@ def applications():
         </div>
     """)
     
-    grouped_applications_slices = slices(get_applications(), elements_per_row)
+    grouped_applications_slices = slices(apps, elements_per_row)
     
     applications_html = ""
     for grouped_applications in grouped_applications_slices:
@@ -351,6 +319,21 @@ def footer():
             </div>
         </footer>
     """)
+
+
+def fetch_boards():
+    db.query("SELECT * FROM boards ORDER BY display_name")
+    return db.fetchall()
+
+
+def fetch_applications():
+    db.query("SELECT * FROM applications ORDER BY name")
+    return db.fetchall()
+
+
+def fetch_modules():
+    db.query("SELECT * FROM modules ORDER BY group_identifier ASC, name ASC")
+    return db.fetchall()
 
 
 if __name__ == "__main__":
