@@ -8,13 +8,7 @@ import logging
 import json
 
 build_result = {
-    "cmd_output": "",
-    "board": None,
-    "application_name": "application",
-    "output_file": None,
-    "output_file_extension": None,
-    "output_archive": None,
-    "output_archive_extension": None
+    "cmd_output": ""
 }
 
 
@@ -28,12 +22,14 @@ def main():
     board = form.getfirst("board")
     main_file_content = form.getfirst("main_file_content")
 
-    if any(v is None for v in [selected_modules, board, main_file_content]):
-        build_result["cmd_output"] = "missing parameters for request!<br>"
+    # if any(v is None for v in [selected_modules, board, main_file_content]):
+    if not all([selected_modules, board, main_file_content]):
+        print_error()
+        """build_result["cmd_output"] = "missing parameters for request!<br>"
         build_result["cmd_output"] += "selected_modules = {}<br>".format(str(selected_modules))
         build_result["cmd_output"] += "board = {}<br>".format(str(board))
         build_result["cmd_output"] += "main_file_content = {}<br>".format(str(main_file_content))
-        print_result(json.dumps(build_result))
+        print_result(json.dumps(build_result))"""
         return
 
     argument_modules = ["--modules"]
@@ -54,7 +50,12 @@ def print_result(result):
     print "Content-Type: text/html"
     print "\n\r"
     print result
-    
+
+
+def print_error():
+
+    print "Status: 403 Forbidden"
+    print "\n\r"
     
 if __name__ == "__main__":
 

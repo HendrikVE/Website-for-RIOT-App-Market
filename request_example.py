@@ -8,13 +8,7 @@ import logging
 import json
 
 build_result = {
-    "cmd_output": "",
-    "board": None,
-    "application_name": "application",
-    "output_file": None,
-    "output_file_extension": None,
-    "output_archive": None,
-    "output_archive_extension": None
+    "cmd_output": ""
 }
 
 
@@ -27,11 +21,12 @@ def main():
     application = form.getfirst("application")
     board = form.getfirst("board")
 
-    if all(v is not None for v in [application, board]):
-        build_result["cmd_output"] = "missing parameters for request!"
+    if any(v is None for v in [application, board]):
+        print_error()
+        """build_result["cmd_output"] = "missing parameters for request!"
         build_result["cmd_output"] += "application = " + str(application)
         build_result["cmd_output"] += "board = " + str(board)
-        print_result(json.dumps(build_result))
+        print_result(json.dumps(build_result))"""
         return
 
     os.chdir("../riotam-backend/")
@@ -46,6 +41,12 @@ def print_result(result):
     print "Content-Type: text/html"
     print "\n\r"
     print result
+
+
+def print_error():
+
+    print "Status: 400 Bad Request"
+    print
 
 
 if __name__ == "__main__":
