@@ -1,6 +1,6 @@
 var board = null;
 
-async function autodetect() {
+async function autodetect(selectorID) {
 
 /*
 Wenn nicht anders genannt stammen alle vendorid und productid Einträge von:
@@ -76,47 +76,43 @@ see riotam-backend/js_update.py for details
             return device;
      })
     .then(() => {
-        printDeviceInfo(device);
+        /*var infoArray = [
+            ["manufacturerName", device.manufacturerName],
+            ["vendorId", device.vendorId.toString(16)],
+            ["productName", device.productName],
+            ["productId", device.productId.toString(16)],
+            ["serialNumber", device.serialNumber],
+            ["usbVersionMajor", device.usbVersionMajor],
+            ["usbVersionMinor", device.usbVersionMinor],
+            ["usbVersionSubminor", device.usbVersionSubminor],
+            ["deviceClass", device.deviceClass],
+            ["deviceSubclass", device.deviceSubclass],
+            ["deviceProtocol", device.deviceProtocol],
+            ["deviceVersionMajor", device.deviceVersionMajor],
+            ["deviceVersionMinor", device.deviceVersionMinor],
+            ["deviceVersionSubminor", device.deviceVersionSubminor],
+            ["configuration", device.configuration],
+            ["configurations", device.configurations],
+            ["opened", device.opened]
+        ];*/
+
+        var boardDictionary = {};
+        boardDictionary["MBED CMSIS-DAP"] = "pba-d-01-kw2x";
+
+        productName = device.productName;
+        if (boardDictionary[productName] === undefined) {
+            alert("Sorry, your board could not be recognized :(");
+        }
+        else {
+            document.getElementById(selectorID).value = boardDictionary[productName];
+        }
+
         return device;
     })
     .catch(error => { 
         console.log(error);
     });
-}
 
-
-function printDeviceInfo(device) {
-
-    var infoArray = [
-        ["manufacturerName", device.manufacturerName],
-        ["vendorId", device.vendorId.toString(16)],
-        ["productName", device.productName],
-        ["productId", device.productId.toString(16)],
-        ["serialNumber", device.serialNumber],
-        ["usbVersionMajor", device.usbVersionMajor],
-        ["usbVersionMinor", device.usbVersionMinor],
-        ["usbVersionSubminor", device.usbVersionSubminor],
-        ["deviceClass", device.deviceClass],
-        ["deviceSubclass", device.deviceSubclass],
-        ["deviceProtocol", device.deviceProtocol],
-        ["deviceVersionMajor", device.deviceVersionMajor],
-        ["deviceVersionMinor", device.deviceVersionMinor],
-        ["deviceVersionSubminor", device.deviceVersionSubminor],
-        ["configuration", device.configuration],
-        ["configurations", device.configurations],
-        ["opened", device.opened]
-    ];
-
-    var infoTable = "<table>";
-    for(let i = 0; i < infoArray.length; i++) {
-
-        infoTable += "<tr>";
-        infoTable += "<td>" + infoArray[i][0] + ": " + "</td><td>" + infoArray[i][1] + "</td>";
-        infoTable += "</tr>";
-    }
-    infoTable += "</table>";
-
-    document.getElementById("deviceInfo").innerHTML = "<b>Selected Device:</b><br>" + infoTable;
 }
 
 

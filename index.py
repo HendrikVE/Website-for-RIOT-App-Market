@@ -116,7 +116,7 @@ def custom_tab():
     boards = fetch_boards()
     modules = fetch_modules()
 
-    board_selector_html = board_selector(boards, "boardSelectorCustomTab")
+    board_selector_html = board_selector(boards, "boardSelectorCustomTab", "buttonAutodetectCustomTab")
     modules_html = module_selection(modules)
 
     return textwrap.dedent("""
@@ -144,7 +144,7 @@ def examples_tab():
     boards = fetch_boards()
     apps = fetch_applications()
 
-    board_selector_html = board_selector(boards, "boardSelectorExamplesTab")
+    board_selector_html = board_selector(boards, "boardSelectorExamplesTab", "buttonAutodetectExamplesTab")
     applications_html = application_selection(apps)
 
     return textwrap.dedent("""
@@ -182,7 +182,7 @@ def file_upload_input():
     """)
 
 
-def board_selector(boards, id):
+def board_selector(boards, selector_id, button_id):
 
     selector_options = ''
 
@@ -190,22 +190,24 @@ def board_selector(boards, id):
         selector_options += '<option value="{!s}">{!s}</option>'.format(board["internal_name"], board["display_name"])
 
     return textwrap.dedent("""
-        <label for="{ID}"><h3>1. Select a board:</h3></label>
+        <label for="{SELECTOR_ID}"><h3>1. Select a board:</h3></label>
         <div class="container-fluid" id="applications_container">
             <div class="row">
                 <div class="col-md-10">
                     <div class="form-group">
-                        <select class="form-control" id="{ID}">
+                        <select class="form-control" id="{SELECTOR_ID}">
                             {SELECTOR_OPTIONS}
                         </select>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-block" id="autodetectButton" onclick="autodetect()">Try autodetect</button>
+                    <button type="button" class="btn btn-block" id="{BUTTON_ID}" onclick="autodetect('{SELECTOR_ID}')">Try autodetect</button>
                 </div>
             </div>
         </div>
-    """.format(ID=id, SELECTOR_OPTIONS=selector_options))
+    """.format(SELECTOR_ID=selector_id,
+               SELECTOR_OPTIONS=selector_options,
+               BUTTON_ID=button_id))
 
 
 def slices(input_list, group_size):

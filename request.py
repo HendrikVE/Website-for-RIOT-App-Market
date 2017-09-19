@@ -57,7 +57,8 @@ def print_error():
 
     print ("Status: 403 Forbidden")
     print ("\n\r")
-    
+
+
 if __name__ == "__main__":
 
     logging.basicConfig(filename="log/request_log.txt", format="%(asctime)s [%(levelname)s]: %(message)s",
