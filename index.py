@@ -80,7 +80,7 @@ def header():
                     </div>
 
                     <div class="col-sm-4">
-                        <img src="/img/riot_logo.png" alt="RIOT logo" height="200" width="200"></img>
+                        <img src="/img/riot_logo.png" alt="RIOT logo" height="200" width="445"></img>
                     </div>
 
                 </div>
@@ -318,7 +318,7 @@ def footer():
             <div class="container">
                 <div class="row">
                     <div class="col-sm-8">&copy; Hendrik van Essen, 2017</div>
-                    <div class="col-sm-4"><a href="https://github.com/RIOT-OS/RIOT"><img src="/img/riot_logo_footer.png" alt="RIOT logo" height="44" width="81"></img></a></div>
+                    <div class="col-sm-4"><a href="https://riot-os.org/"><img src="/img/riot_logo_footer.png" alt="RIOT logo" height="35" width="64"></img></a></div>
                 </div>
             </div>
         </footer>
