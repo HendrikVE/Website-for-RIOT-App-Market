@@ -341,10 +341,10 @@ def collapsible_panel(title, content, application_id, progress_div_id_prefix, pr
             </div>
             <div class="panel-footer">
                 <div class="row">
-                    <div class="col-md-3">
-                        <button type="button" class="btn btn-info" onclick="download_example('{APPLICATION_ID}', '{PROGRESS_DIV_ID}', '{PROGRESSBAR_ID}', '{PANEL_ID}')">Download</button>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-info" onclick="download_example('{APPLICATION_ID}', '{PROGRESS_DIV_ID}', '{PROGRESSBAR_ID}', '{PANEL_ID}')">Download and flash</button>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-8">
                         <div class="progress" id="{PROGRESS_DIV_ID}" style="visibility:hidden">
                             <div class="progress-bar progress-bar-striped active" id="{PROGRESSBAR_ID}" style="width:100%;"></div>
                         </div>                        

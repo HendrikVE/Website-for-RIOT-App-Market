@@ -231,6 +231,8 @@ function download_example(applicationID, progressDivID, progressBarID, panelID) 
             }
             catch(e) {
                 alert("Server sent broken JSON");
+                progressDiv.style.visibility = "hidden";
+                progressBar.style.visibility = "hidden";
                 return;
             }
 
@@ -240,6 +242,9 @@ function download_example(applicationID, progressDivID, progressBarID, panelID) 
             else {
                 panel.className = "panel panel-danger";
             }
+
+            progressDiv.style.visibility = "hidden";
+            progressBar.style.visibility = "hidden";
 
             //this.responseText has to be a json string
             document.getElementById("cmdOutputExamplesTab").innerHTML = jsonResponse.cmd_output;
