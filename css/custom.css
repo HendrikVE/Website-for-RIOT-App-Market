@@ -29,3 +29,9 @@ body {
     visibility: hidden;
     position: absolute;
 }
+
+.vertical-center {
+   display: inline-block;
+   vertical-align: middle;
+   float: none;
+}

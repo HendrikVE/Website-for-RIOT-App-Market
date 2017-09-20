@@ -11,7 +11,8 @@ import textwrap
 from MyDatabase import MyDatabase
 
 BOOTSTRAP_COLUMS_PER_ROW = 12
-CFG_ELEMENTS_PER_ROW = 4
+CFG_APPLICATIONS_PER_ROW = 2
+CFG_MODULES_PER_ROW = 4
 
 db = MyDatabase()
 
@@ -214,7 +215,7 @@ def slices(input_list, group_size):
     return [input_list[x:x + group_size] for x in xrange(0, len(input_list), group_size)]
 
 
-def module_selection(modules, elements_per_row=CFG_ELEMENTS_PER_ROW):
+def module_selection(modules, elements_per_row=CFG_MODULES_PER_ROW):
 
     column_width = int(BOOTSTRAP_COLUMS_PER_ROW / elements_per_row)
     
@@ -267,7 +268,7 @@ def module_selection(modules, elements_per_row=CFG_ELEMENTS_PER_ROW):
     """.format(ROWS=checkboxes_html))
 
 
-def application_selection(apps, elements_per_row=CFG_ELEMENTS_PER_ROW):
+def application_selection(apps, elements_per_row=CFG_APPLICATIONS_PER_ROW):
 
     column_width = int(BOOTSTRAP_COLUMS_PER_ROW / elements_per_row)
     
@@ -279,11 +280,7 @@ def application_selection(apps, elements_per_row=CFG_ELEMENTS_PER_ROW):
     
     column_template = textwrap.dedent("""
         <div class="col-md-""" + str(column_width) + """">
-            <p>
-                <button type="button" class="btn btn-block example-application-button" id="{}" onclick="download_example(this.id)">
-                    <div data-toggle="tooltip" data-placement="bottom" title="{}">{}</div>
-                </button>
-            </p>
+            {APPLICATION_PANEL}
         </div>
     """)
     
@@ -296,10 +293,12 @@ def application_selection(apps, elements_per_row=CFG_ELEMENTS_PER_ROW):
         for application in grouped_applications:
 
             description = application["description"]
-            if description is None:
-                description = ""
+            if not description:
+                description = "There is no description yet"
 
-            columns += column_template.format(application["id"], cgi.escape(description, True), application["name"])
+            application_panel = collapsible_panel(application["name"], cgi.escape(description, True), application["id"])
+
+            columns += column_template.format(APPLICATION_PANEL=application_panel)
         
         applications_html += row_template.format(COLUMNS=columns)
     
@@ -309,6 +308,35 @@ def application_selection(apps, elements_per_row=CFG_ELEMENTS_PER_ROW):
                 {ROWS}
             </div>
     """.format(ROWS=applications_html))
+
+
+def collapsible_panel(title, content, button_id):
+
+    return textwrap.dedent("""
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-11">
+                    <h4 class="panel-title" data-toggle="collapse" data-target="#panel_body{BUTTON_ID}">
+                        <a>{TITLE}</a>
+                    </h4>
+                    </div>
+                    <div class="col-md-1">
+                        <span id="collapse_icon" class="glyphicon glyphicon-collapse-down"></span>
+                    </div>
+                </div>
+                
+            </div>
+            <div id="panel_body{BUTTON_ID}" class="panel-body collapse">
+                {CONTENT}
+            </div>
+            <div class="panel-footer">
+                <button id="{BUTTON_ID}" type="button" class="btn btn-info" onclick="download_example(this.id)">Download</button>
+            </div>
+        </div>
+    """.format(TITLE=title,
+               CONTENT=content,
+               BUTTON_ID=button_id))
 
 
 def footer():
