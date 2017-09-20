@@ -35,3 +35,20 @@ body {
    vertical-align: middle;
    float: none;
 }
+
+/*
+    Mix between two sources:
+    - https://codepen.io/zabielski/pen/ZGLbav
+    - https://stackoverflow.com/questions/18325779/bootstrap-3-collapse-show-state-with-chevron-icon
+*/
+.panel-title a:after {
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+    content: "\e113"; /* glyphicon-chevron-up bootstrap.css */
+    float: right;
+    color: grey;
+}
+.panel-title a.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\e114"; /* glyphicon-chevron-down bootstrap.css */
+}

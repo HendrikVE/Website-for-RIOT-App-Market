@@ -325,17 +325,9 @@ def collapsible_panel(title, content, application_id, progress_div_id_prefix, pr
     return textwrap.dedent("""
         <div id="{PANEL_ID}" class="panel panel-default">
             <div class="panel-heading">
-                <div class="row">
-                    <div class="col-md-11">
-                    <h4 class="panel-title" data-toggle="collapse" data-target="#panel_body{APPLICATION_ID}">
-                        <a>{TITLE}</a>
-                    </h4>
-                    </div>
-                    <div class="col-md-1">
-                        <span id="collapse_icon" class="glyphicon glyphicon-collapse-down"></span>
-                    </div>
-                </div>
-                
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" data-target="#panel_body{APPLICATION_ID}">{TITLE}</a>
+                </h4>
             </div>
             <div id="panel_body{APPLICATION_ID}" class="panel-body collapse">
                 {CONTENT}
