@@ -208,12 +208,16 @@ function download() {
 }
 
 
-function download_example(applicationID, progressDivID, progressBarID, panelID) {
-    
-    var buttons = document.getElementsByClassName("example-application-button");
+function download_example(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID) {
+
     var progressDiv = document.getElementById(progressDivID);
     var progressBar = document.getElementById(progressBarID);
     var panel = document.getElementById(panelID);
+    var button = document.getElementById(buttonID);
+
+    var modalDialog = document.getElementById(modalDialogID);
+    var modalDialogBody = modalDialog.getElementsByClassName("modal-body")[0];
+    var modalDialogFooter = modalDialog.getElementsByClassName("modal-footer")[0];
 
     progressDiv.style.visibility = "visible";
     progressBar.style.visibility = "visible";
@@ -222,8 +226,6 @@ function download_example(applicationID, progressDivID, progressBarID, panelID) 
     xhttp.onreadystatechange = function() {
 
         if (this.readyState == 4 && this.status == 200) {
-            
-            document.getElementById("cmdOutputExamplesTab").innerHTML = this.responseText
 
             var jsonResponse = null;
             try {
@@ -238,17 +240,26 @@ function download_example(applicationID, progressDivID, progressBarID, panelID) 
 
             if(jsonResponse == null || jsonResponse.output_file != null) {
                 panel.className = "panel panel-success";
+
+                button.className = "btn btn-success"
             }
             else {
                 panel.className = "panel panel-danger";
+
+                button.className = "btn btn-danger"
+                button.innerHTML = "Show error log";
+
+                modalDialogBody.innerHTML = "<p>" + jsonResponse.cmd_output + "</p>"
+                modalDialogFooter.innerHTML = '<button type="button" class="btn btn-default" data-dismiss="modal" onclick="sendMailToSupport(\'' + modalDialogID + '\')">Send log to support</button>' + modalDialogFooter.innerHTML;
+
+                $('#' + modalDialogID + '').modal('show');
+                button.onclick = function() {
+                    $('#' + modalDialogID + '').modal('show');
+                }
             }
 
             progressDiv.style.visibility = "hidden";
             progressBar.style.visibility = "hidden";
-
-            //this.responseText has to be a json string
-            document.getElementById("cmdOutputExamplesTab").innerHTML = jsonResponse.cmd_output;
-
 
             //talk to the riotam chrome extension
             var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
@@ -304,6 +315,14 @@ function dateiupload(evt) {
 
     // Die Datei einlesen und in eine Data-URL konvertieren
     reader.readAsDataURL(file);
+}
+
+function sendMailToSupport(modalDialogID) {
+
+    var modalDialog = document.getElementById(modalDialogID);
+    var modalDialogBody = modalDialog.getElementsByClassName("modal-body")[0];
+
+    window.open("mailto:support@vanappsteer.de?subject=riotam&body=" + encodeURIComponent(modalDialogBody.innerHTML) + "");
 }
 
 // https://codepen.io/CSWApps/pen/GKtvH

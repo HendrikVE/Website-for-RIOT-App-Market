@@ -296,7 +296,9 @@ def application_selection(apps, elements_per_row=CFG_APPLICATIONS_PER_ROW):
                                                   application["id"],
                                                   "progressDivExampleTab",
                                                   "progressBarExampleTab",
-                                                  "panelExampleTab")
+                                                  "panelExampleTab",
+                                                  "buttonExampleTab",
+                                                  "modalDialogExampleTab")
 
             columns += column_template.format(APPLICATION_PANEL=application_panel)
         
@@ -310,11 +312,15 @@ def application_selection(apps, elements_per_row=CFG_APPLICATIONS_PER_ROW):
     """.format(ROWS=applications_html))
 
 
-def collapsible_panel(title, content, application_id, progress_div_id_prefix, progressbar_id_prefix, panel_id_prefix):
+def collapsible_panel(title, content, application_id, progress_div_id_prefix, progressbar_id_prefix, panel_id_prefix, button_id_prefix, modal_dialog_id_prefix):
 
     progress_div_id = progress_div_id_prefix + str(application_id)
     progressbar_id = progressbar_id_prefix + str(application_id)
     panel_id = panel_id_prefix + str(application_id)
+    button_id = button_id_prefix + str(application_id)
+
+    modal_dialog_id = modal_dialog_id_prefix + str(application_id)
+    modal_dialog_html = modal_dialog(modal_dialog_id, "Error log", "")
 
     return textwrap.dedent("""
         <div id="{PANEL_ID}" class="panel panel-default">
@@ -337,7 +343,7 @@ def collapsible_panel(title, content, application_id, progress_div_id_prefix, pr
             <div class="panel-footer">
                 <div class="row">
                     <div class="col-md-4">
-                        <button type="button" class="btn btn-primary" onclick="download_example('{APPLICATION_ID}', '{PROGRESS_DIV_ID}', '{PROGRESSBAR_ID}', '{PANEL_ID}')">Download and flash</button>
+                        <button id="{BUTTON_ID}" type="button" class="btn btn-primary" onclick="download_example('{APPLICATION_ID}', '{PROGRESS_DIV_ID}', '{PROGRESSBAR_ID}', '{PANEL_ID}', '{BUTTON_ID}', '{MODAL_DIALOG_ID}')">Download and flash</button>
                     </div>
                     <div class="col-md-8">
                         <div class="progress" id="{PROGRESS_DIV_ID}" style="visibility:hidden">
@@ -347,12 +353,42 @@ def collapsible_panel(title, content, application_id, progress_div_id_prefix, pr
                 </div>
             </div>
         </div>
+        {MODAL_DIALOG}
     """.format(TITLE=title,
                CONTENT=content,
                APPLICATION_ID=application_id,
                PROGRESS_DIV_ID=progress_div_id,
                PROGRESSBAR_ID=progressbar_id,
-               PANEL_ID=panel_id))
+               PANEL_ID=panel_id,
+               BUTTON_ID=button_id,
+               MODAL_DIALOG_ID=modal_dialog_id,
+               MODAL_DIALOG=modal_dialog_html))
+
+
+def modal_dialog(dialog_id, title, message):
+
+    return textwrap.dedent("""
+        <div class="modal fade" id="{DIALOG_ID}" role="dialog">
+            <div class="modal-dialog modal-lg">
+            
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{TITLE}</h4>
+                </div>
+                <div class="modal-body">
+                    {MESSAGE}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            
+            </div>
+        </div>
+    """.format(DIALOG_ID=dialog_id,
+               TITLE=title,
+               MESSAGE=message))
 
 
 def footer():
