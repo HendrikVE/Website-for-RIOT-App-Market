@@ -127,7 +127,7 @@ def custom_tab():
             {MODULES}
             <h3>4. Build and flash:</h3>
             <div class="container-fluid">
-                <button type="button" class="btn" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>
+                <button type="button" class="btn btn-primary" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>
                 <div class="well" id="cmdOutputCustomTab">
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped active" id="progressBarCustomTab" style="width:100%; visibility:hidden"></div>
@@ -152,11 +152,6 @@ def examples_tab():
         <form id="examplesTabForm">
             {BOARD_SELECTOR}
             {APPLICATIONS}
-            <div class="well" id="cmdOutputExamplesTab">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped active" id="progressBarExamplesTab" style="width:100%; visibility:hidden"></div>
-                </div>
-            </div>
         </form>
     """.format(BOARD_SELECTOR=board_selector_html,
                APPLICATIONS=applications_html))
@@ -202,7 +197,7 @@ def board_selector(boards, selector_id, button_id):
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-block" id="{BUTTON_ID}" onclick="autodetect('{SELECTOR_ID}')">Try autodetect</button>
+                    <button type="button" class="btn btn-info btn-block" id="{BUTTON_ID}" onclick="autodetect('{SELECTOR_ID}')">Try autodetect</button>
                 </div>
             </div>
         </div>
@@ -342,7 +337,7 @@ def collapsible_panel(title, content, application_id, progress_div_id_prefix, pr
             <div class="panel-footer">
                 <div class="row">
                     <div class="col-md-4">
-                        <button type="button" class="btn btn-info" onclick="download_example('{APPLICATION_ID}', '{PROGRESS_DIV_ID}', '{PROGRESSBAR_ID}', '{PANEL_ID}')">Download and flash</button>
+                        <button type="button" class="btn btn-primary" onclick="download_example('{APPLICATION_ID}', '{PROGRESS_DIV_ID}', '{PROGRESSBAR_ID}', '{PANEL_ID}')">Download and flash</button>
                     </div>
                     <div class="col-md-8">
                         <div class="progress" id="{PROGRESS_DIV_ID}" style="visibility:hidden">
