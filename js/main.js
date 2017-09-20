@@ -328,12 +328,12 @@ function setNavigationEnabled(enabled) {
 
     // https://stackoverflow.com/questions/20668880/bootstrap-tabs-pills-disabling-and-with-jquery
     if (enabled) {
-        $('.nav li.active').next('li').removeClass('disabled');
-        $('.nav li.active').next('li').find('a').attr("data-toggle","tab")
+        $(".nav li").removeClass('disabled');
+        $(".nav li").find("a").attr("data-toggle","tab")
     }
     else {
-        $('.nav li').not('.active').addClass('disabled');
-        $('.nav li').not('.active').find('a').removeAttr("data-toggle");
+        $(".nav li").addClass('disabled');
+        $(".nav li").find("a").removeAttr("data-toggle");
     }
 }
 
