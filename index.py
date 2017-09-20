@@ -326,7 +326,7 @@ def collapsible_panel(title, content, application_id, progress_div_id_prefix, pr
         <div id="{PANEL_ID}" class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" data-target="#panel_body{APPLICATION_ID}">{TITLE}</a>
+                    <a class="collapsed" data-toggle="collapse" data-target="#panel_body{APPLICATION_ID}" style="cursor:pointer;">{TITLE}</a>
                 </h4>
             </div>
             <div id="panel_body{APPLICATION_ID}" class="panel-body collapse">

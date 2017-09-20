@@ -1,4 +1,5 @@
 var board = null;
+var downloadIsRunning = false;
 
 async function autodetect(selectorID) {
 
@@ -117,6 +118,11 @@ see riotam-backend/js_update.py for details
 
 
 function download() {
+
+    if(downloadIsRunning) {
+        alert("Another process is already running, please wait until it is finished.");
+        return;
+    }
     
     //https://stackoverflow.com/questions/8563240/how-to-get-all-checked-checkboxes
     var checkboxes = document.getElementsByName("module_checkbox");
@@ -141,6 +147,8 @@ function download() {
         alert("You have to upload your main source file for your project!")
     }
     else {
+
+        downloadIsRunning = true;
         
         var downloadButton = document.getElementById("downloadButton");
         var progressBar = document.getElementById("progressBarCustomTab");
@@ -165,9 +173,13 @@ function download() {
             processData: false,
 
             error: function (xhr, ajaxOptions, thrownError) {
+
+                downloadIsRunning = false;
                 alert(thrownError);
             },
             success: function(response) {
+
+                downloadIsRunning = false;
 
                 var jsonResponse = null;
                 try {
@@ -210,6 +222,13 @@ function download() {
 
 function download_example(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID) {
 
+    if(downloadIsRunning) {
+        alert("Another process is already running, please wait until it is finished.");
+        return;
+    }
+
+    downloadIsRunning = true;
+
     var progressDiv = document.getElementById(progressDivID);
     var progressBar = document.getElementById(progressBarID);
     var panel = document.getElementById(panelID);
@@ -224,6 +243,10 @@ function download_example(applicationID, progressDivID, progressBarID, panelID, 
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
+
+        if (this.readyState == 4) {
+            downloadIsRunning = false;
+        }
 
         if (this.readyState == 4 && this.status == 200) {
 
@@ -287,36 +310,6 @@ function download_example(applicationID, progressDivID, progressBarID, panelID, 
 }
 
 
-https://wiki.selfhtml.org/wiki/JavaScript/File_Upload
-function dateiupload(evt) {
-
-    var files = evt.target.files;
-    var file = files[0];
-
-    if (!f.type.match('text/plain')) {
-        return;
-    }
-
-    var reader = new FileReader();
-
-    var senddata = new Object();
-    senddata.name = file.name;
-    senddata.date = file.lastModified;
-    senddata.size = file.size;
-    senddata.type = file.type;
-
-    reader.onload = function(fileContent) {
-        senddata.fileData = fileContent.target.result;
-
-        /*
-        Code für AJAX-Request hier einfügen
-        */
-    }
-
-    // Die Datei einlesen und in eine Data-URL konvertieren
-    reader.readAsDataURL(file);
-}
-
 function sendMailToSupport(modalDialogID) {
 
     var modalDialog = document.getElementById(modalDialogID);
@@ -324,6 +317,7 @@ function sendMailToSupport(modalDialogID) {
 
     window.open("mailto:support@vanappsteer.de?subject=riotam&body=" + encodeURIComponent(modalDialogBody.innerHTML) + "");
 }
+
 
 // https://codepen.io/CSWApps/pen/GKtvH
 $(document).on('click', '.browse', function(){
