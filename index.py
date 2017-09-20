@@ -93,9 +93,9 @@ def header():
 def tabs():
     
     return textwrap.dedent("""
-        <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#tab0">Example applications</a></li>
-            <li><a data-toggle="tab" href="#tab1">Your custom RIOT OS</a></li>
+        <ul id="navigations_tabs" class="nav nav-tabs">
+            <li class="active"><a class="navigationtab" data-toggle="tab" href="#tab0">Example applications</a></li>
+            <li><a class="navigationtab" data-toggle="tab" href="#tab1">Your custom RIOT OS</a></li>
         </ul>
 
         <div class="tab-content">

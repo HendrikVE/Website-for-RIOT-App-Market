@@ -149,6 +149,7 @@ function download() {
     else {
 
         downloadIsRunning = true;
+        setNavigationEnabled(false);
         
         var downloadButton = document.getElementById("downloadButton");
         var progressBar = document.getElementById("progressBarCustomTab");
@@ -175,11 +176,13 @@ function download() {
             error: function (xhr, ajaxOptions, thrownError) {
 
                 downloadIsRunning = false;
+                setNavigationEnabled(true);
                 alert(thrownError);
             },
             success: function(response) {
 
                 downloadIsRunning = false;
+                setNavigationEnabled(true);
 
                 var jsonResponse = null;
                 try {
@@ -228,6 +231,7 @@ function download_example(applicationID, progressDivID, progressBarID, panelID, 
     }
 
     downloadIsRunning = true;
+    setNavigationEnabled(false);
 
     var progressDiv = document.getElementById(progressDivID);
     var progressBar = document.getElementById(progressBarID);
@@ -246,6 +250,7 @@ function download_example(applicationID, progressDivID, progressBarID, panelID, 
 
         if (this.readyState == 4) {
             downloadIsRunning = false;
+            setNavigationEnabled(true);
         }
 
         if (this.readyState == 4 && this.status == 200) {
@@ -316,6 +321,20 @@ function sendMailToSupport(modalDialogID) {
     var modalDialogBody = modalDialog.getElementsByClassName("modal-body")[0];
 
     window.open("mailto:support@vanappsteer.de?subject=riotam&body=" + encodeURIComponent(modalDialogBody.innerHTML) + "");
+}
+
+
+function setNavigationEnabled(enabled) {
+
+    // https://stackoverflow.com/questions/20668880/bootstrap-tabs-pills-disabling-and-with-jquery
+    if (enabled) {
+        $('.nav li.active').next('li').removeClass('disabled');
+        $('.nav li.active').next('li').find('a').attr("data-toggle","tab")
+    }
+    else {
+        $('.nav li').not('.active').addClass('disabled');
+        $('.nav li').not('.active').find('a').removeAttr("data-toggle");
+    }
 }
 
 
