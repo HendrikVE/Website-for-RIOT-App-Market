@@ -204,77 +204,18 @@ function download() {
                 );
             }
         });
-        
-        /*var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            
-            if (this.readyState == 4 && this.status == 200) {
-                
-                var jsonResponse = null;
-                try {
-                    jsonResponse = JSON.parse(this.responseText);
-                }
-                catch(e) {
-                    alert("Server sent broken JSON");
-                    return;
-                }
-
-                if(jsonResponse == null || jsonResponse.output_file != null) {
-                    downloadButton.className = "btn btn-success";
-                    downloadButton.innerHTML = "Download"
-                }
-                else {
-                    downloadButton.className = "btn btn-danger";
-                    downloadButton.innerHTML = "Something went wrong"
-                }
-
-                //this.responseText has to be a json string
-                document.getElementById("cmdOutputCustomTab").innerHTML = jsonResponse.cmd_output;
-
-
-                //talk to the riotam chrome extension
-                var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
-
-                // Make a simple request:
-                chrome.runtime.sendMessage(extensionId, jsonResponse,
-                    function() {
-                        if(chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
-                            alert("You need to install the RIOT OS AppMarket Extension");
-                        }
-                    }
-                );
-           }
-        };
-
-
-        xhttp.open("POST", "/request.py", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        
-        params = "";
-        params += "selected_modules=" + checkboxesChecked.join("&selected_modules=");
-        params += "&";
-        params += "board=" + document.getElementById("boardSelectorCustomTab").value;
-        params += "&";
-        params += "main_file=" + document.getElementById("mainFileInput").value;
-        
-        xhttp.send(params);*/
     }
 }
 
 
-function download_example(buttonID) {
+function download_example(applicationID, progressDivID, progressBarID, panelID) {
     
     var buttons = document.getElementsByClassName("example-application-button");
-    var progressBar = document.getElementById("progressBarExamplesTab");
-    var clickedButton = null;
-    
-    for(var i = 0; i < buttons.length; i++) {
-        buttons[i].disabled = true;
-        
-        if(buttons[i].id == buttonID) {
-            clickedButton = buttons[i];
-        }
-    }
+    var progressDiv = document.getElementById(progressDivID);
+    var progressBar = document.getElementById(progressBarID);
+    var panel = document.getElementById(panelID);
+
+    progressDiv.style.visibility = "visible";
     progressBar.style.visibility = "visible";
 
     var xhttp = new XMLHttpRequest();
@@ -294,12 +235,10 @@ function download_example(buttonID) {
             }
 
             if(jsonResponse == null || jsonResponse.output_file != null) {
-                clickedButton.className = "btn btn-block btn-success";
-                clickedButton.innerHTML = "Download";
+                panel.className = "panel panel-success";
             }
             else {
-                clickedButton.className = "btn btn-block btn-danger";
-                clickedButton.innerHTML = "Something went wrong";
+                panel.className = "panel panel-danger";
             }
 
             //this.responseText has to be a json string
@@ -324,7 +263,7 @@ function download_example(buttonID) {
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     params = "";
-    params += "application=" + buttonID;
+    params += "application=" + applicationID;
     params += "&";
     params += "board=" + document.getElementById("boardSelectorExamplesTab").value;
 

@@ -296,7 +296,12 @@ def application_selection(apps, elements_per_row=CFG_APPLICATIONS_PER_ROW):
             if not description:
                 description = "There is no description yet"
 
-            application_panel = collapsible_panel(application["name"], cgi.escape(description, True), application["id"])
+            application_panel = collapsible_panel(application["name"],
+                                                  cgi.escape(description, True),
+                                                  application["id"],
+                                                  "progressDivExampleTab",
+                                                  "progressBarExampleTab",
+                                                  "panelExampleTab")
 
             columns += column_template.format(APPLICATION_PANEL=application_panel)
         
@@ -310,14 +315,18 @@ def application_selection(apps, elements_per_row=CFG_APPLICATIONS_PER_ROW):
     """.format(ROWS=applications_html))
 
 
-def collapsible_panel(title, content, button_id):
+def collapsible_panel(title, content, application_id, progress_div_id_prefix, progressbar_id_prefix, panel_id_prefix):
+
+    progress_div_id = progress_div_id_prefix + str(application_id)
+    progressbar_id = progressbar_id_prefix + str(application_id)
+    panel_id = panel_id_prefix + str(application_id)
 
     return textwrap.dedent("""
-        <div class="panel panel-default">
+        <div id="{PANEL_ID}" class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-md-11">
-                    <h4 class="panel-title" data-toggle="collapse" data-target="#panel_body{BUTTON_ID}">
+                    <h4 class="panel-title" data-toggle="collapse" data-target="#panel_body{APPLICATION_ID}">
                         <a>{TITLE}</a>
                     </h4>
                     </div>
@@ -327,16 +336,28 @@ def collapsible_panel(title, content, button_id):
                 </div>
                 
             </div>
-            <div id="panel_body{BUTTON_ID}" class="panel-body collapse">
+            <div id="panel_body{APPLICATION_ID}" class="panel-body collapse">
                 {CONTENT}
             </div>
             <div class="panel-footer">
-                <button id="{BUTTON_ID}" type="button" class="btn btn-info" onclick="download_example(this.id)">Download</button>
+                <div class="row">
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-info" onclick="download_example('{APPLICATION_ID}', '{PROGRESS_DIV_ID}', '{PROGRESSBAR_ID}', '{PANEL_ID}')">Download</button>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="progress" id="{PROGRESS_DIV_ID}" style="visibility:hidden">
+                            <div class="progress-bar progress-bar-striped active" id="{PROGRESSBAR_ID}" style="width:100%;"></div>
+                        </div>                        
+                    </div>
+                </div>
             </div>
         </div>
     """.format(TITLE=title,
                CONTENT=content,
-               BUTTON_ID=button_id))
+               APPLICATION_ID=application_id,
+               PROGRESS_DIV_ID=progress_div_id,
+               PROGRESSBAR_ID=progressbar_id,
+               PANEL_ID=panel_id))
 
 
 def footer():
