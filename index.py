@@ -108,64 +108,63 @@ def tabs():
             </div>
             
         </div>
-    """.format(EXAMPLE_TAB=examples_tab(),
-               CUSTOM_TAB=custom_tab()))
+    """.format(EXAMPLE_TAB=examples_tab("examplesTab_"),
+               CUSTOM_TAB=custom_tab("customTab_")))
 
 
-def custom_tab():
+def custom_tab(id_prefix):
 
     boards = fetch_boards()
     modules = fetch_modules()
 
-    board_selector_html = board_selector(boards, "boardSelectorCustomTab", "buttonAutodetectCustomTab")
+    board_selector_html = board_selector(id_prefix, boards)
     modules_html = module_selection(modules)
 
     return textwrap.dedent("""
-        <form id="customTabForm" enctype="multipart/form-data">
-            {BOARD_SELECTOR}
-            {FILE_UPLOAD}
-            {MODULES}
-            <h3>4. Build and flash:</h3>
-            <div class="container-fluid">
-                <button type="button" class="btn btn-primary" id="downloadButton" onclick="download()">Compile your personal RIOT OS</button>
-                <div class="well" id="cmdOutputCustomTab">
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped active" id="progressBarCustomTab" style="width:100%; visibility:hidden"></div>
-                    </div>
+        {BOARD_SELECTOR}
+        {FILE_UPLOAD}
+        {MODULES}
+        <h3>4. Build and flash:</h3>
+        <div class="container-fluid">
+            <button type="button" class="btn btn-primary" id="{BUTTON_ID}" onclick="download()">Compile your personal RIOT OS</button>
+            <div class="well" id="{CMD_OUTPUT_ID}">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" id="{PROGRESSBAR_ID}" style="width:100%; visibility:hidden"></div>
                 </div>
             </div>
-        </form>
+        </div>
     """.format(BOARD_SELECTOR=board_selector_html,
-               FILE_UPLOAD=file_upload_input(),
-               MODULES=modules_html))
+               FILE_UPLOAD=file_upload_input(id_prefix),
+               MODULES=modules_html,
+               BUTTON_ID=id_prefix+"downloadButton",
+               CMD_OUTPUT_ID=id_prefix+"cmdOutput",
+               PROGRESSBAR_ID=id_prefix+"progressBar"))
 
 
-def examples_tab():
+def examples_tab(id_prefix):
 
     boards = fetch_boards()
     apps = fetch_applications()
 
-    board_selector_html = board_selector(boards, "boardSelectorExamplesTab", "buttonAutodetectExamplesTab")
-    applications_html = application_selection(apps)
+    board_selector_html = board_selector(id_prefix, boards)
+    applications_html = application_selection(id_prefix, apps)
 
     return textwrap.dedent("""
-        <form id="examplesTabForm">
-            {BOARD_SELECTOR}
-            {APPLICATIONS}
-        </form>
+        {BOARD_SELECTOR}
+        {APPLICATIONS}
     """.format(BOARD_SELECTOR=board_selector_html,
                APPLICATIONS=applications_html))
 
 
 # https://codepen.io/CSWApps/pen/GKtvH
-def file_upload_input():
+def file_upload_input(id_prefix):
     
     return textwrap.dedent("""
         <h3>2. Upload your main class file:</h3>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6">
-                    <input id="main_file_input" type="file" name="img[]" class="file">
+                    <input id="{INPUT_ID}" type="file" name="img[]" class="file">
                     <div class="input-group">
                         <input type="text" class="form-control" readonly placeholder="Upload main source file">
                         <span class="input-group-btn">
@@ -175,10 +174,10 @@ def file_upload_input():
                 </div>
             </div>
         </div>
-    """)
+    """.format(INPUT_ID=id_prefix+"main_file_input"))
 
 
-def board_selector(boards, selector_id, button_id):
+def board_selector(id_prefix, boards):
 
     selector_options = ''
 
@@ -186,8 +185,8 @@ def board_selector(boards, selector_id, button_id):
         selector_options += '<option value="{!s}">{!s}</option>'.format(board["internal_name"], board["display_name"])
 
     return textwrap.dedent("""
-        <label for="{SELECTOR_ID}"><h3>1. Select a board:</h3></label>
-        <div class="container-fluid" id="applications_container">
+        <h3>1. Select a board:</h3>
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-md-10">
                     <div class="form-group">
@@ -197,13 +196,12 @@ def board_selector(boards, selector_id, button_id):
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-info btn-block" id="{BUTTON_ID}" onclick="autodetect('{SELECTOR_ID}')">Try autodetect</button>
+                    <button type="button" class="btn btn-info btn-block" onclick="autodetect('{SELECTOR_ID}')">Try autodetect</button>
                 </div>
             </div>
         </div>
-    """.format(SELECTOR_ID=selector_id,
-               SELECTOR_OPTIONS=selector_options,
-               BUTTON_ID=button_id))
+    """.format(SELECTOR_ID=id_prefix+"boardSelector",
+               SELECTOR_OPTIONS=selector_options))
 
 
 def slices(input_list, group_size):
@@ -256,14 +254,14 @@ def module_selection(modules, elements_per_row=CFG_MODULES_PER_ROW):
         checkboxes_html += '</div>'
     
     return textwrap.dedent("""
-        <label for="checkboxes_container"><h3>3. Select modules:</h3></label>
-        <div class="container-fluid" id="checkboxes_container">
+        <h3>3. Select modules:</h3>
+        <div class="container-fluid">
             {ROWS}
         </div>
     """.format(ROWS=checkboxes_html))
 
 
-def application_selection(apps, elements_per_row=CFG_APPLICATIONS_PER_ROW):
+def application_selection(id_prefix, apps, elements_per_row=CFG_APPLICATIONS_PER_ROW):
 
     column_width = int(BOOTSTRAP_COLUMS_PER_ROW / elements_per_row)
     
@@ -294,32 +292,28 @@ def application_selection(apps, elements_per_row=CFG_APPLICATIONS_PER_ROW):
             application_panel = collapsible_panel(application["name"],
                                                   cgi.escape(description, True),
                                                   application["id"],
-                                                  "progressDivExampleTab",
-                                                  "progressBarExampleTab",
-                                                  "panelExampleTab",
-                                                  "buttonExampleTab",
-                                                  "modalDialogExampleTab")
+                                                  id_prefix)
 
             columns += column_template.format(APPLICATION_PANEL=application_panel)
         
         applications_html += row_template.format(COLUMNS=columns)
     
     return textwrap.dedent("""
-        <label for="applications_container"><h3>2. Select an application:</h3></label>
-            <div class="container-fluid" id="applications_container">
+        <h3>2. Select an application:</h3>
+            <div class="container-fluid">
                 {ROWS}
             </div>
     """.format(ROWS=applications_html))
 
 
-def collapsible_panel(title, content, application_id, progress_div_id_prefix, progressbar_id_prefix, panel_id_prefix, button_id_prefix, modal_dialog_id_prefix):
+def collapsible_panel(title, content, application_id, id_prefix):
 
-    progress_div_id = progress_div_id_prefix + str(application_id)
-    progressbar_id = progressbar_id_prefix + str(application_id)
-    panel_id = panel_id_prefix + str(application_id)
-    button_id = button_id_prefix + str(application_id)
+    progress_div_id = id_prefix + "progressDiv" + str(application_id)
+    progressbar_id = id_prefix + "progressBar" + str(application_id)
+    panel_id = id_prefix + "panel" + str(application_id)
+    button_id = id_prefix + "button" + str(application_id)
 
-    modal_dialog_id = modal_dialog_id_prefix + str(application_id)
+    modal_dialog_id = id_prefix + "modalDialog" + str(application_id)
     modal_dialog_html = modal_dialog(modal_dialog_id, "Error log", "")
 
     return textwrap.dedent("""

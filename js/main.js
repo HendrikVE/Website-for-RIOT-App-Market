@@ -77,25 +77,6 @@ see riotam-backend/js_update.py for details
             return device;
      })
     .then(() => {
-        /*var infoArray = [
-            ["manufacturerName", device.manufacturerName],
-            ["vendorId", device.vendorId.toString(16)],
-            ["productName", device.productName],
-            ["productId", device.productId.toString(16)],
-            ["serialNumber", device.serialNumber],
-            ["usbVersionMajor", device.usbVersionMajor],
-            ["usbVersionMinor", device.usbVersionMinor],
-            ["usbVersionSubminor", device.usbVersionSubminor],
-            ["deviceClass", device.deviceClass],
-            ["deviceSubclass", device.deviceSubclass],
-            ["deviceProtocol", device.deviceProtocol],
-            ["deviceVersionMajor", device.deviceVersionMajor],
-            ["deviceVersionMinor", device.deviceVersionMinor],
-            ["deviceVersionSubminor", device.deviceVersionSubminor],
-            ["configuration", device.configuration],
-            ["configurations", device.configurations],
-            ["opened", device.opened]
-        ];*/
 
         var boardDictionary = {};
         boardDictionary["MBED CMSIS-DAP"] = "pba-d-01-kw2x";
@@ -135,8 +116,8 @@ function download() {
         }
     }
 
-    var board = document.getElementById("boardSelectorCustomTab").value;
-    var main_file = document.getElementById("main_file_input").files[0];
+    var board = document.getElementById("customTab_boardSelector").value;
+    var main_file = document.getElementById("customTab_main_file_input").files[0];
     
     if (checkboxesChecked.length == 0) {
 
@@ -151,8 +132,8 @@ function download() {
         downloadIsRunning = true;
         setNavigationEnabled(false);
         
-        var downloadButton = document.getElementById("downloadButton");
-        var progressBar = document.getElementById("progressBarCustomTab");
+        var downloadButton = document.getElementById("customTab_downloadButton");
+        var progressBar = document.getElementById("customTab_progressBar");
         
         downloadButton.disabled = true;
         progressBar.style.visibility = "visible";
@@ -203,7 +184,7 @@ function download() {
                 }
 
                 //this.responseText has to be a json string
-                document.getElementById("cmdOutputCustomTab").innerHTML = jsonResponse.cmd_output;
+                document.getElementById("customTab_cmdOutput").innerHTML = jsonResponse.cmd_output;
 
 
                 //talk to the riotam chrome extension
@@ -309,7 +290,7 @@ function download_example(applicationID, progressDivID, progressBarID, panelID, 
     params = "";
     params += "application=" + applicationID;
     params += "&";
-    params += "board=" + document.getElementById("boardSelectorExamplesTab").value;
+    params += "board=" + document.getElementById("examplesTab_boardSelector").value;
 
     xhttp.send(params);
 }
