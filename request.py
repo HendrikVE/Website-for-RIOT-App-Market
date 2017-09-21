@@ -43,7 +43,10 @@ def main():
     proc = Popen(["python build.py " + arguments], stdout=PIPE, stderr=STDOUT, shell=True)
     output = proc.communicate()[0]
 
-    print_result(output)
+    json_message = json.loads(output)
+    json_message["cmd_output"] = json_message["cmd_output"].replace("\n", "<br>")
+
+    print_result(json.dumps(json_message))
 
 
 def print_result(result):
