@@ -196,7 +196,7 @@ def board_selector(id_prefix, boards):
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-info btn-block" onclick="autodetect('{SELECTOR_ID}')">Try autodetect</button>
+                    <button type="button" class="btn btn-default btn-block" onclick="autodetect('{SELECTOR_ID}')">Try autodetect</button>
                 </div>
             </div>
         </div>

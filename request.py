@@ -33,14 +33,17 @@ def main():
         print_result(json.dumps(build_result))"""
         return
 
-    argument_modules = ["--modules"]
-    for module in selected_modules:
-        argument_modules.append(" " + module)
+    cmd = ["python", "build.py"]
 
-    arguments = "".join(argument_modules) + " " + "--board " + board
+    cmd.append("--modules")
+    for module in selected_modules:
+        cmd.append(module)
+
+    cmd.append("--board")
+    cmd.append(board)
 
     os.chdir("../riotam-backend/")
-    proc = Popen(["python build.py " + arguments], stdout=PIPE, stderr=STDOUT, shell=True)
+    proc = Popen(cmd, stdout=PIPE, stderr=STDOUT)
     output = proc.communicate()[0]
 
     json_message = json.loads(output)
