@@ -31,8 +31,12 @@ def main():
         print_result(json.dumps(build_result))"""
         return
 
+    cmd = ["python", "build_example.py",
+           "--application", application,
+           "--board", board]
+
     os.chdir("../riotam-backend/")
-    proc = Popen(["python build_example.py --application " + application + " --board " + board], stdout=PIPE, stderr=STDOUT, shell=True)
+    proc = Popen(cmd, stdout=PIPE, stderr=STDOUT)
     output = proc.communicate()[0]
 
     json_message = json.loads(output)
