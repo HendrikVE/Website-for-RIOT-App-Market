@@ -17,7 +17,7 @@ body {
     /* Set the fixed height of the footer here */
     height: 85px;
     line-height: 85px; /* Vertically center the text there */
-    background-color: #f5f5f5;
+    background-color: #151515;
 }
 
 /*for file upload button when using Bootstrap 3 and not 4*/
