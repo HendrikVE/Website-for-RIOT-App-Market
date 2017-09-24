@@ -42,9 +42,14 @@ def main():
     cmd.append("--board")
     cmd.append(board)
 
+    cmd.append("--mainfile")
+    cmd.append(main_file_content)
+
+    logging.debug(main_file_content)
+
     os.chdir("../riotam-backend/")
-    proc = Popen(cmd, stdout=PIPE, stderr=STDOUT)
-    output = proc.communicate()[0]
+    process = Popen(cmd, stdout=PIPE, stderr=STDOUT)
+    output = process.communicate()[0]
 
     json_message = json.loads(output)
     json_message["cmd_output"] = json_message["cmd_output"].replace("\n", "<br>")

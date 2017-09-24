@@ -36,8 +36,8 @@ def main():
            "--board", board]
 
     os.chdir("../riotam-backend/")
-    proc = Popen(cmd, stdout=PIPE, stderr=STDOUT)
-    output = proc.communicate()[0]
+    process = Popen(cmd, stdout=PIPE, stderr=STDOUT)
+    output = process.communicate()[0]
 
     json_message = json.loads(output)
     json_message["cmd_output"] = json_message["cmd_output"].replace("\n", "<br>")
