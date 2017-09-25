@@ -1,6 +1,8 @@
 var board = null;
 var downloadIsRunning = false;
 
+var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
+
 // https://stackoverflow.com/questions/38241480/detect-macos-ios-windows-android-and-linux-os-with-js
 function getOS() {
 
@@ -129,15 +131,33 @@ see riotam-backend/js_update.py for details
 
 function download() {
 
-    if(downloadIsRunning) {
-        alert("Another process is already running, please wait until it is finished.");
-        return;
-    }
-    
+    // try a simple request:
+    chrome.runtime.sendMessage(extensionId, {request: "version"},
+        function(response) {
+
+            if (chrome.runtime.lastError) {
+                if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
+                    alert("You need to install the RIOT OS AppMarket Extension");
+                    return;
+                }
+            }
+
+            if(downloadIsRunning) {
+                alert("Another process is already running, please wait until it is finished.");
+                return;
+            }
+
+            download_post();
+        }
+    );
+}
+
+function download_post() {
+
     //https://stackoverflow.com/questions/8563240/how-to-get-all-checked-checkboxes
     var checkboxes = document.getElementsByName("module_checkbox");
     var checkboxesChecked = [];
-    
+
     for (var i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked) {
             // add the IDs (retrieved from the database) to the array
@@ -147,7 +167,7 @@ function download() {
 
     var board = document.getElementById("customTab_boardSelector").value;
     var main_file = document.getElementById("customTab_main_file_input").files[0];
-    
+
     if (checkboxesChecked.length == 0) {
 
         alert("You need to select at least one module")
@@ -160,10 +180,10 @@ function download() {
 
         downloadIsRunning = true;
         setNavigationEnabled(false);
-        
+
         var downloadButton = document.getElementById("customTab_downloadButton");
         var progressBar = document.getElementById("customTab_progressBar");
-        
+
         downloadButton.disabled = true;
         progressBar.style.visibility = "visible";
 
@@ -215,18 +235,8 @@ function download() {
                 //this.responseText has to be a json string
                 document.getElementById("customTab_cmdOutput").innerHTML = jsonResponse.cmd_output;
 
-
-                //talk to the riotam chrome extension
-                var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
-
                 // Make a simple request:
-                chrome.runtime.sendMessage(extensionId, jsonResponse,
-                    function() {
-                        if(chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
-                            alert("You need to install the RIOT OS AppMarket Extension");
-                        }
-                    }
-                );
+                chrome.runtime.sendMessage(extensionId, jsonResponse);
             }
         });
     }
@@ -235,10 +245,29 @@ function download() {
 
 function download_example(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID) {
 
-    if(downloadIsRunning) {
-        alert("Another process is already running, please wait until it is finished.");
-        return;
-    }
+    // try a simple request:
+    chrome.runtime.sendMessage(extensionId, {request: "version"},
+        function(response) {
+
+            if (chrome.runtime.lastError) {
+                if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
+                    alert("You need to install the RIOT OS AppMarket Extension");
+                    return;
+                }
+            }
+
+            if(downloadIsRunning) {
+                alert("Another process is already running, please wait until it is finished.");
+                return;
+            }
+
+            download_example_post(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID);
+        }
+    );
+}
+
+
+function download_example_post(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID) {
 
     downloadIsRunning = true;
     setNavigationEnabled(false);
@@ -254,6 +283,10 @@ function download_example(applicationID, progressDivID, progressBarID, panelID, 
 
     progressDiv.style.visibility = "visible";
     progressBar.style.visibility = "visible";
+
+    // reset
+    panel.className = "panel panel-default";
+    button.className = "btn btn-primary"
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -299,17 +332,8 @@ function download_example(applicationID, progressDivID, progressBarID, panelID, 
             progressDiv.style.visibility = "hidden";
             progressBar.style.visibility = "hidden";
 
-            //talk to the riotam chrome extension
-            var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
-
             // Make a simple request:
-            chrome.runtime.sendMessage(extensionId, jsonResponse,
-                function() {
-                    if(chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
-                        alert("You need to install the RIOT OS AppMarket Extension");
-                    }
-                }
-            );
+            chrome.runtime.sendMessage(extensionId, jsonResponse);
        }
     };
 
@@ -323,7 +347,6 @@ function download_example(applicationID, progressDivID, progressBarID, panelID, 
 
     xhttp.send(params);
 }
-
 
 function sendMailToSupport(modalDialogID) {
 
