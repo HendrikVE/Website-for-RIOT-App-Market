@@ -49,7 +49,15 @@ def main():
 
 
 def html_header():
-    
+    """
+    Get HTML code for HTML header
+
+    Returns
+    -------
+    string
+        HTML code
+
+    """
     return textwrap.dedent("""
         <head>
             <meta charset="utf-8">
@@ -69,7 +77,15 @@ def html_header():
 
 
 def header():
-    
+    """
+    Get HTML code for header
+
+    Returns
+    -------
+    string
+        HTML code
+
+    """
     return textwrap.dedent("""
         <div class="jumbotron">
             <div class="container">
@@ -91,7 +107,15 @@ def header():
 
 
 def tabs():
-    
+    """
+    Get HTML code for tab navigation
+
+    Returns
+    -------
+    string
+        HTML code
+
+    """
     return textwrap.dedent("""
         <ul id="navigations_tabs" class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#tab0">Example applications</a></li>
@@ -113,7 +137,20 @@ def tabs():
 
 
 def custom_tab(id_prefix):
+    """
+    Get HTML code for custom tab
 
+    Parameters
+    ----------
+    id_prefix: string
+        ID prefix for the tab
+
+    Returns
+    -------
+    string
+        HTML code
+
+    """
     boards = fetch_boards()
     modules = fetch_modules()
 
@@ -142,7 +179,20 @@ def custom_tab(id_prefix):
 
 
 def examples_tab(id_prefix):
+    """
+    Get HTML code for examples tab
 
+    Parameters
+    ----------
+    id_prefix: string
+        ID prefix for the tab
+
+    Returns
+    -------
+    string
+        HTML code
+
+    """
     boards = fetch_boards()
     apps = fetch_applications()
 
@@ -158,7 +208,20 @@ def examples_tab(id_prefix):
 
 # https://codepen.io/CSWApps/pen/GKtvH
 def file_upload_input(id_prefix):
-    
+    """
+    Get HTML code for file upload input field
+
+    Parameters
+    ----------
+    id_prefix: string
+        ID prefix for the input field
+
+    Returns
+    -------
+    string
+        HTML code
+
+    """
     return textwrap.dedent("""
         <h3>2. Upload your main class file:</h3>
         <div class="container-fluid">
@@ -178,7 +241,22 @@ def file_upload_input(id_prefix):
 
 
 def board_selector(id_prefix, boards):
+    """
+    Get HTML code for board selector
 
+    Parameters
+    ----------
+    id_prefix: string
+        ID prefix for the selector
+    boards: dict
+        Fetched boards from database
+
+    Returns
+    -------
+    string
+        HTML code
+
+    """
     selector_options = ''
 
     for board in boards:
@@ -205,11 +283,42 @@ def board_selector(id_prefix, boards):
 
 
 def slices(input_list, group_size):
+    """
+    Cut list in to chunks of given size
+
+    Parameters
+    ----------
+    input_list: list
+        List to cut
+    group_size: int
+        Chunk size
+
+    Returns
+    -------
+    string
+        List of chunks
+
+    """
     return [input_list[x:x + group_size] for x in xrange(0, len(input_list), group_size)]
 
 
 def module_selection(modules, elements_per_row=CFG_MODULES_PER_ROW):
+    """
+    Get HTML code for module selection
 
+    Parameters
+    ----------
+    modules: dict
+        Fetched modules from database
+    elements_per_row: int, optional
+        Amount of elements per row
+
+    Returns
+    -------
+    string
+        HTML code
+
+    """
     column_width = int(BOOTSTRAP_COLUMS_PER_ROW / elements_per_row)
     
     row_template = textwrap.dedent("""
@@ -262,7 +371,24 @@ def module_selection(modules, elements_per_row=CFG_MODULES_PER_ROW):
 
 
 def application_selection(id_prefix, apps, elements_per_row=CFG_APPLICATIONS_PER_ROW):
+    """
+    Get HTML code for application selector
 
+    Parameters
+    ----------
+    id_prefix: string
+        ID prefix als subelements within selector
+    apps: dict
+        Fetched applications from database
+    elements_per_row: int, optional
+        Amount of elements per row
+
+    Returns
+    -------
+    string
+        HTML code
+
+    """
     column_width = int(BOOTSTRAP_COLUMS_PER_ROW / elements_per_row)
     
     row_template = textwrap.dedent("""
@@ -307,7 +433,26 @@ def application_selection(id_prefix, apps, elements_per_row=CFG_APPLICATIONS_PER
 
 
 def collapsible_panel(title, content, application_id, id_prefix):
+    """
+    Get HTML code for collapsible panel
 
+    Parameters
+    ----------
+    title: string
+        Title for the panel
+    content: string
+        Content text for the panel
+    application_id: string
+        ID of the associated application
+    id_prefix: string
+        ID prefix for all subelements within the panel
+
+    Returns
+    -------
+    string
+        HTML code
+
+    """
     progress_div_id = id_prefix + "progressDiv" + str(application_id)
     progressbar_id = id_prefix + "progressBar" + str(application_id)
     panel_id = id_prefix + "panel" + str(application_id)
@@ -352,7 +497,24 @@ def collapsible_panel(title, content, application_id, id_prefix):
 
 
 def modal_dialog(dialog_id, title, message):
+    """
+    Get HTML code for modal dialog
 
+    Parameters
+    ----------
+    dialog_id: string
+        ID for the dialog
+    title: string
+        Title for the dialog
+    message: string
+        Message for the dialog
+
+    Returns
+    -------
+    string
+        HTML code
+
+    """
     return textwrap.dedent("""
         <div class="modal fade" id="{DIALOG_ID}" role="dialog">
             <div class="modal-dialog modal-lg">
@@ -378,7 +540,15 @@ def modal_dialog(dialog_id, title, message):
 
 
 def footer():
-    
+    """
+    Get HTML code for footer
+
+    Returns
+    -------
+    string
+        HTML code
+
+    """
     return textwrap.dedent("""
         <footer class="footer">
             <div class="container">

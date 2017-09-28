@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import cgitb, cgi
+import cgitb
 
 cgitb.enable()
 
