@@ -6,12 +6,14 @@ from __future__ import print_function
 import random
 import logging
 
+import os
+
 
 def main():
 
     print_result("git event handling successfull")
 
-    logging.debug(random.randint(0, 9999))
+    logging.debug(random.randint(0, 9999) + ": " + os.environ["X-Hub-Signature"])
 
 
 def print_result(result):
