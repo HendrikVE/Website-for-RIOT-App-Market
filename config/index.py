@@ -1,9 +1,5 @@
 #!/usr/bin/python
 
-import cgitb
-
-cgitb.enable()
-
 print 'Content-Type: text/html'
 print '\n\r'
 

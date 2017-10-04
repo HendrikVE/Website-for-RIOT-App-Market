@@ -4,7 +4,6 @@
 from __future__ import print_function
 
 import cgi
-import cgitb
 import logging
 import textwrap
 
@@ -18,8 +17,6 @@ db = MyDatabase()
 
 
 def main():
-    
-    cgitb.enable()
     
     print ('Content-Type: text/html')
     print ('\n\r')

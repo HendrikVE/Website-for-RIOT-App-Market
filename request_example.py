@@ -3,7 +3,7 @@
 
 from __future__ import print_function
 
-import cgi, cgitb
+import cgi
 from subprocess import Popen, PIPE, STDOUT
 import os
 import logging
@@ -15,8 +15,6 @@ build_result = {
 
 
 def main():
-
-    cgitb.enable()
 
     form = cgi.FieldStorage()
 
