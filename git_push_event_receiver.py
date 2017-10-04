@@ -13,7 +13,7 @@ def main():
 
     print_result("git event handling successfull")
 
-    logging.debug(random.randint(0, 9999) + ": " + os.environ["X-Hub-Signature"])
+    logging.debug(str(random.randint(0, 9999)) + ": " + str(os.environ["X-Hub-Signature"]))
 
 
 def print_result(result):
