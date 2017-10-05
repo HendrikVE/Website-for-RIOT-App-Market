@@ -25,7 +25,9 @@ def main():
 
     secret_key = "riotam"
     request_body = sys.stdin.read()
-    logging.debug("is valid: " + is_valid_signature(os.environ["HTTP_X_HUB_SIGNATURE"], secret_key, request_body))
+
+    is_valid = is_valid_signature(os.environ["HTTP_X_HUB_SIGNATURE"], secret_key, request_body)
+    logging.debug("is valid: " + str(is_valid))
 
 
 def is_valid_signature(signature, secret_key, body):
