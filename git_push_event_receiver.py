@@ -37,7 +37,7 @@ def main():
 
         else:
             print_error()
-            logging.error("script called by unconfigured repository")
+            logging.error("script called by unconfigured repository " + repo_name)
             return
 
         print_result("webhook handled successfully")
