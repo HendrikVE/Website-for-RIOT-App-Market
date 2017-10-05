@@ -3,11 +3,15 @@
 
 from __future__ import print_function
 
+import hashlib
+import hmac
 import random
 import logging
 
 import os
 import cgi
+
+import sys
 
 cgi.print_arguments()
 cgi.print_environ_usage()
@@ -18,6 +22,18 @@ def main():
     print_result("git event handling successfull")
 
     logging.debug(str(random.randint(0, 9999)) + ": " + str(os.environ["HTTP_X_HUB_SIGNATURE"]))
+
+    secret_key = "riotam"
+    request_body = sys.stdin.read()
+    logging.debug("is valid: " + is_valid_signature(os.environ["HTTP_X_HUB_SIGNATURE"], secret_key, request_body))
+
+
+def is_valid_signature(signature, secret_key, body):
+
+    #https://stackoverflow.com/questions/28228392/failed-to-verify-github-x-hub-signature-in-my-application
+    computed_signature = 'sha1=' + hmac.new(secret_key, body, hashlib.sha1).hexdigest()
+
+    return computed_signature == signature
 
 
 def print_result(result):
