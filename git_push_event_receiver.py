@@ -5,10 +5,11 @@ from __future__ import print_function
 
 import hashlib
 import hmac
-import logging
 import json
+import logging
+import os
+import subprocess
 import sys
-from os import subprocess, environ
 
 
 #enum
@@ -20,7 +21,7 @@ def main():
 
     secret_key = "riotam"
     request_body = sys.stdin.read()
-    is_valid = is_valid_signature(environ["HTTP_X_HUB_SIGNATURE"], secret_key, request_body)
+    is_valid = is_valid_signature(os.environ["HTTP_X_HUB_SIGNATURE"], secret_key, request_body)
 
     json_message = json.loads(request_body)
     repo_name = json_message["repository"]["full_name"]
