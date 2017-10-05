@@ -7,13 +7,17 @@ import random
 import logging
 
 import os
+import cgi
+
+cgi.print_arguments()
+cgi.print_environ_usage()
 
 
 def main():
 
     print_result("git event handling successfull")
 
-    logging.debug(str(random.randint(0, 9999)) + ": " + str(os.environ["X-Hub-Signature"]))
+    logging.debug(str(random.randint(0, 9999)) + ": " + str(os.environ["HTTP_X_HUB_SIGNATURE"]))
 
 
 def print_result(result):
