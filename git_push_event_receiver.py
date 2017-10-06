@@ -65,6 +65,9 @@ def update_backend():
     output = execute_command(["git", "-C", PATH_RIOTAM_BACKEND, "pull"])
     logging.debug("PULL BACKEND REPO:\n" + output)
 
+    output = execute_command(["git", "-C", PATH_RIOTAM_BACKEND, "submodule", "update", "--recursive", "--remote"])
+    logging.debug("UPDATE SUBMODULES:\n" + output)
+
     output = execute_command(["python", "db_update.py"], PATH_RIOTAM_BACKEND)
     logging.debug("DB_UPDATE:\n" + output)
 
