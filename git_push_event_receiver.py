@@ -62,15 +62,30 @@ def update_website():
 
 
 def update_backend():
+    """
+
+    :return:
+    """
+
+    """UPDATE GIT REPOSITORY"""
     output = execute_command(["git", "-C", PATH_RIOTAM_BACKEND, "pull"])
     logging.debug("PULL BACKEND REPO:\n" + output)
 
     output = execute_command(["git", "-C", PATH_RIOTAM_BACKEND, "submodule", "update", "--recursive", "--remote"])
     logging.debug("UPDATE SUBMODULES:\n" + output)
 
+    """SETUP DATABASE"""
+    output = execute_command(["python", "db_create.py"], os.path.join(PATH_RIOTAM_BACKEND, "setup"))
+    logging.debug("DB_UPDATE:\n" + output)
+
+    output = execute_command(["python", "db_setup.py"], os.path.join(PATH_RIOTAM_BACKEND, "setup"))
+    logging.debug("DB_UPDATE:\n" + output)
+
+    """UPDATE DATABASE"""
     output = execute_command(["python", "db_update.py"], PATH_RIOTAM_BACKEND)
     logging.debug("DB_UPDATE:\n" + output)
 
+    """CREATE STRIPPED RIOT REPOSITORY"""
     output = execute_command(["python", "strip_riot_repo.py"], PATH_RIOTAM_BACKEND)
     logging.debug("STRIP_RIOT_REPO.py:\n" + output)
 
