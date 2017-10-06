@@ -50,19 +50,19 @@ def main():
         print_error()
 
 
-def execute_command(cmd, cwd):
+def execute_command(cmd, cwd=None):
 
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=cwd)
     return process.communicate()[0]
 
 
 def update_website():
-    output = execute_command(["git -C %s pull" % PATH_RIOTAM_WEBSITE], None)
+    output = execute_command(["git", "-C", PATH_RIOTAM_WEBSITE, "pull"])
     logging.debug(output)
 
 
 def update_backend():
-    output = execute_command(["git -C %s pull" % PATH_RIOTAM_BACKEND], None)
+    output = execute_command(["git", "-C", PATH_RIOTAM_BACKEND, "pull"])
     logging.debug(output)
 
     output = execute_command(["python", "db_update.py"], PATH_RIOTAM_BACKEND)
