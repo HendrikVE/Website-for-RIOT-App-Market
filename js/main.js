@@ -41,10 +41,6 @@ Wenn nicht anders genannt stammen alle vendorid und productid Einträge von:
 
     navigator.usb.requestDevice({ filters: [
 
-/*
-see riotam-backend/js_update.py for details
-*/
-/* begin of replacement */
 {vendorId: 0x0d28, productId: 0x0204}, //Phytec phyWAVE-KW22
 {vendorId: 0x2047}, //MSP430 (family)
 {vendorId: 0x03eb}, //ATmega (family)
@@ -100,7 +96,6 @@ see riotam-backend/js_update.py for details
 {vendorId: 0x0000}, //UDOO
 {vendorId: 0x0000}, //Zolertia remote
 {vendorId: 0x0000}, //Zolertia Z1
-/* end of replacement */
         
     ] })
     .then(selectedDevice => {

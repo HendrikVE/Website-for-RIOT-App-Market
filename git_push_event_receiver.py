@@ -68,9 +68,6 @@ def update_backend():
     output = execute_command(["python", "db_update.py"], PATH_RIOTAM_BACKEND)
     logging.debug("DB_UPDATE:\n" + output)
 
-    output = execute_command(["python", "js_update.py"], PATH_RIOTAM_BACKEND)
-    logging.debug("JS_UPDATE:\n" + output)
-
     output = execute_command(["python", "strip_riot_repo.py"], PATH_RIOTAM_BACKEND)
     logging.debug("STRIP_RIOT_REPO.py:\n" + output)
 
