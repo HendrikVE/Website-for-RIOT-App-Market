@@ -17,6 +17,10 @@ class PushedRepo:
     Website, Backend = range(2)
 
 
+PATH_RIOTAM_BACKEND = "/var/www/riotam-backend"
+PATH_RIOTAM_WEBSITE = "/var/www/riotam-website"
+
+
 def main():
 
     secret_key = "riotam"
@@ -46,20 +50,29 @@ def main():
         print_error()
 
 
-def execute_command(cmd):
+def execute_command(cmd, cwd):
 
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=cwd)
     return process.communicate()[0]
 
 
 def update_website():
-    logging.debug("update website")
-    pass
+    output = execute_command(["git -C %s pull" % PATH_RIOTAM_WEBSITE], None)
+    logging.debug(output)
 
 
 def update_backend():
-    logging.debug("update backend")
-    pass
+    output = execute_command(["git -C %s pull" % PATH_RIOTAM_BACKEND], None)
+    logging.debug(output)
+
+    output = execute_command(["python", "db_update.py"], PATH_RIOTAM_BACKEND)
+    logging.debug(output)
+
+    output = execute_command(["python", "js_update.py"], PATH_RIOTAM_BACKEND)
+    logging.debug(output)
+
+    output = execute_command(["python", "strip_riot_repo.py"], PATH_RIOTAM_BACKEND)
+    logging.debug(output)
 
 
 def get_repo_type(name):
