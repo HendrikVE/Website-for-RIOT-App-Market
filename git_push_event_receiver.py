@@ -58,21 +58,21 @@ def execute_command(cmd, cwd=None):
 
 def update_website():
     output = execute_command(["git", "-C", PATH_RIOTAM_WEBSITE, "pull"])
-    logging.debug(output)
+    logging.debug("PULL WEBSITE REPO:\n" + output)
 
 
 def update_backend():
     output = execute_command(["git", "-C", PATH_RIOTAM_BACKEND, "pull"])
-    logging.debug(output)
+    logging.debug("PULL BACKEND REPO:\n" + output)
 
     output = execute_command(["python", "db_update.py"], PATH_RIOTAM_BACKEND)
-    logging.debug(output)
+    logging.debug("DB_UPDATE:\n" + output)
 
     output = execute_command(["python", "js_update.py"], PATH_RIOTAM_BACKEND)
-    logging.debug(output)
+    logging.debug("JS_UPDATE:\n" + output)
 
     output = execute_command(["python", "strip_riot_repo.py"], PATH_RIOTAM_BACKEND)
-    logging.debug(output)
+    logging.debug("STRIP_RIOT_REPO.py:\n" + output)
 
 
 def get_repo_type(name):
