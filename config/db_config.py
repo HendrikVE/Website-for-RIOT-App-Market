@@ -2,7 +2,7 @@
 
 db_config = {
     "host": "localhost",
-    "user": "backend_script",
-    "passwd": "password",
+    "user": "riotam_website",
+    "passwd": "feKorDjv94vR",
     "db": "riot_os"
 }
