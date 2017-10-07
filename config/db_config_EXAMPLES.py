@@ -3,6 +3,6 @@
 db_config = {
     "host": "localhost",
     "user": "riotam_website",
-    "passwd": "feKorDjv94vR",
+    "passwd": "PASSWORD_WEBSITE",
     "db": "riot_os"
 }
