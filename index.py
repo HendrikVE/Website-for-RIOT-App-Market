@@ -96,7 +96,7 @@ def header():
                     </div>
 
                     <div class="col-sm-4">
-                        <img src="/img/riot_logo.png" alt="RIOT logo" height="200" width="445"></img>
+                        <img src="/img/riot_logo.png" alt="RIOT logo" class="img-responsive"></img>
                     </div>
 
                 </div>
