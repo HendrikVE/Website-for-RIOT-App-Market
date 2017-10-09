@@ -11,6 +11,8 @@ import os
 import subprocess
 import sys
 
+from config import config
+
 
 #enum
 class PushedRepo:
@@ -23,9 +25,8 @@ PATH_RIOTAM_WEBSITE = "/var/www/riotam-website"
 
 def main():
 
-    secret_key = "riotam"
     request_body = sys.stdin.read()
-    is_valid = is_valid_signature(os.environ["HTTP_X_HUB_SIGNATURE"], secret_key, request_body)
+    is_valid = is_valid_signature(os.environ["HTTP_X_HUB_SIGNATURE"], config.GITHUB_SECRET_KEY, request_body)
 
     json_message = json.loads(request_body)
     repo_name = json_message["repository"]["full_name"]

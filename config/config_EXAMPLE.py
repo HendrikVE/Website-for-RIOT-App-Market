@@ -6,3 +6,5 @@ db_config = {
     "passwd": "PASSWORD_WEBSITE",
     "db": "riot_os"
 }
+
+GITHUB_SECRET_KEY = "SECRET_KEY"

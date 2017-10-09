@@ -3,7 +3,7 @@
 
 import MySQLdb
 
-import config.db_config as config
+from config import config
 
 
 class MyDatabase(object):
