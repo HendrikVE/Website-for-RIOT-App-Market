@@ -7,4 +7,4 @@ db_config = {
     "db": "riot_os"
 }
 
-GITHUB_SECRET_KEY = "SECRET_KEY"
+GITHUB_SECRET_KEY = "YOUR_SECRET_KEY"
