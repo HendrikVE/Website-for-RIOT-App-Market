@@ -3,6 +3,7 @@
 
 from __future__ import print_function
 
+import ast
 import cgi
 from subprocess import Popen, PIPE, STDOUT
 import os
@@ -23,24 +24,20 @@ def main():
 
     if not all([application, board]):
         print_error()
-        """build_result["cmd_output"] = "missing parameters for request!"
-        build_result["cmd_output"] += "application = " + str(application)
-        build_result["cmd_output"] += "board = " + str(board)
-        print_result(json.dumps(build_result))"""
         return
 
     cmd = ["python", "build_example.py",
            "--application", application,
            "--board", board]
 
-    os.chdir("../riotam-backend/")
-    process = Popen(cmd, stdout=PIPE, stderr=STDOUT)
+    process = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd="../riotam-backend")
     output = process.communicate()[0]
 
-    json_message = json.loads(output)
-    json_message["cmd_output"] = json_message["cmd_output"].replace("\n", "<br>")
+    # convert string representation of dictionary to "real" dictionary
+    build_result = ast.literal_eval(output)
+    build_result["cmd_output"] = build_result["cmd_output"].replace("\n", "<br>")
 
-    print_result(json.dumps(json_message))
+    print_result(json.dumps(build_result))
 
 
 def print_result(result):
