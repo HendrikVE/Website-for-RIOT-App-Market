@@ -83,7 +83,7 @@ def update_backend():
     logging.debug("DB_SETUP:\n" + output)
 
     """UPDATE DATABASE"""
-    output = execute_command(["python", "db_update.py"], os.path.join(PATH_RIOTAM_BACKEND, "tasks", "database"))
+    output = execute_command(["python", "db_update.py"], os.path.join(PATH_RIOTAM_BACKEND, "riotam_backend", "tasks", "database"))
     logging.debug("DB_UPDATE:\n" + output)
 
     """CREATE STRIPPED RIOT REPOSITORY"""
