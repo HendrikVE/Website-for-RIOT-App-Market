@@ -76,18 +76,18 @@ def update_backend():
     logging.debug("UPDATE SUBMODULES:\n" + output)
 
     """SETUP DATABASE"""
-    output = execute_command(["python", "db_create.py", "--user", "root", "--password", "eBXa1zG2jlfwt1P71Udy"], os.path.join(PATH_RIOTAM_BACKEND, "setup"))
+    output = execute_command(["python", "db_create.py", "--user", "root", "--password", "eBXa1zG2jlfwt1P71Udy"], os.path.join(PATH_RIOTAM_BACKEND, "riotam_backend", "setup"))
     logging.debug("DB_CREATE:\n" + output)
 
-    output = execute_command(["python", "db_setup.py"], os.path.join(PATH_RIOTAM_BACKEND, "setup"))
+    output = execute_command(["python", "db_setup.py"], os.path.join(PATH_RIOTAM_BACKEND, "riotam_backend", "setup"))
     logging.debug("DB_SETUP:\n" + output)
 
     """UPDATE DATABASE"""
-    output = execute_command(["python", "db_update.py"], PATH_RIOTAM_BACKEND)
+    output = execute_command(["python", "db_update.py"], os.path.join(PATH_RIOTAM_BACKEND, "tasks", "database"))
     logging.debug("DB_UPDATE:\n" + output)
 
     """CREATE STRIPPED RIOT REPOSITORY"""
-    output = execute_command(["python", "strip_riot_repo.py"], PATH_RIOTAM_BACKEND)
+    output = execute_command(["python", "strip_riot_repo.py"], os.path.join(PATH_RIOTAM_BACKEND, "riotam_backend"))
     logging.debug("STRIP_RIOT_REPO.py:\n" + output)
 
 
