@@ -30,7 +30,7 @@ def main():
            "--application", application,
            "--board", board]
 
-    process = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd="../riotam-backend")
+    process = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd="../riotam-backend/riotam_backend")
     output = process.communicate()[0]
 
     # convert string representation of dictionary to "real" dictionary

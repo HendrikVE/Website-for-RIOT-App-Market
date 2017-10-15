@@ -5,10 +5,9 @@ from __future__ import print_function
 
 import ast
 import cgi
-from subprocess import Popen, PIPE, STDOUT
-import os
-import logging
 import json
+import logging
+from subprocess import Popen, PIPE, STDOUT
 
 build_result = {
     "cmd_output": ""
@@ -46,7 +45,7 @@ def main():
 
     logging.debug(main_file_content)
 
-    process = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd="../riotam-backend")
+    process = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd="../riotam-backend/riotam_backend")
     output = process.communicate()[0]
 
     # convert string representation of dictionary to "real" dictionary
