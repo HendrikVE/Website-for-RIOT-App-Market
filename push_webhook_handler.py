@@ -15,6 +15,7 @@ from config import config
 
 CUR_DIR = os.path.abspath(os.path.dirname(__file__))
 PATH_RIOTAM_WEBSITE = CUR_DIR
+LOGFILE = os.path.join(PATH_RIOTAM_WEBSITE, "log", "push_webhook_handler_log.txt")
 
 
 #enum
@@ -140,7 +141,7 @@ def print_error():
 
 if __name__ == "__main__":
 
-    logging.basicConfig(filename="log/push_webhook_handler_log.txt", format="%(asctime)s [%(levelname)s]: %(message)s",
+    logging.basicConfig(filename=LOGFILE, format="%(asctime)s [%(levelname)s]: %(message)s",
                         datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
 
     try:
