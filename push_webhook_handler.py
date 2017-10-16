@@ -8,19 +8,18 @@ import hmac
 import json
 import logging
 import os
-import subprocess
 import sys
+from subprocess import Popen, PIPE, STDOUT
 
 from config import config
+
+CUR_DIR = os.path.abspath(os.path.dirname(__file__))
+PATH_RIOTAM_WEBSITE = CUR_DIR
 
 
 #enum
 class PushedRepo:
     Website, Backend = range(2)
-
-
-PATH_RIOTAM_BACKEND = "/var/www/riotam-backend"
-PATH_RIOTAM_WEBSITE = "/var/www/riotam-website"
 
 
 def main():
@@ -52,47 +51,61 @@ def main():
 
 
 def execute_command(cmd, cwd=None):
+    """
+    Execute command with Popen
 
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=cwd)
+    Parameters
+    ----------
+    cmd: array_like
+        List of strings of the command to execute. Needs to be split on spaces
+    cwd: string
+        working directory to change to (default is None)
+
+    Returns
+    -------
+    string
+        Commandline output
+
+    """
+
+    process = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd=cwd)
     return process.communicate()[0]
 
 
 def update_website():
+    """
+    Update git repository of frontend (website)
+
+    """
     output = execute_command(["git", "-C", PATH_RIOTAM_WEBSITE, "pull"])
     logging.debug("PULL WEBSITE REPO:\n" + output)
 
 
 def update_backend():
     """
+    Update git repository of backend and run some scripts to update database or the backend itself
 
-    :return:
     """
-
-    """UPDATE GIT REPOSITORY"""
-    output = execute_command(["git", "-C", PATH_RIOTAM_BACKEND, "pull"])
-    logging.debug("PULL BACKEND REPO:\n" + output)
-
-    output = execute_command(["git", "-C", PATH_RIOTAM_BACKEND, "submodule", "update", "--recursive", "--remote"])
-    logging.debug("UPDATE SUBMODULES:\n" + output)
-
-    """SETUP DATABASE"""
-    output = execute_command(["python", "db_create.py", "--user", "root", "--password", "eBXa1zG2jlfwt1P71Udy"], os.path.join(PATH_RIOTAM_BACKEND, "riotam_backend", "setup"))
-    logging.debug("DB_CREATE:\n" + output)
-
-    output = execute_command(["python", "db_setup.py"], os.path.join(PATH_RIOTAM_BACKEND, "riotam_backend", "setup"))
-    logging.debug("DB_SETUP:\n" + output)
-
-    """UPDATE DATABASE"""
-    output = execute_command(["python", "db_update.py"], os.path.join(PATH_RIOTAM_BACKEND, "riotam_backend", "tasks", "database"))
-    logging.debug("DB_UPDATE:\n" + output)
-
-    """CREATE STRIPPED RIOT REPOSITORY"""
-    output = execute_command(["python", "strip_riot_repo.py"], os.path.join(PATH_RIOTAM_BACKEND, "riotam_backend"))
-    logging.debug("STRIP_RIOT_REPO.py:\n" + output)
+    wd = os.path.normpath(os.path.join(PATH_RIOTAM_WEBSITE, "..", "riotam-backend", "riotam_backend"))
+    output = execute_command(["python", "push_webhook_handler.py"], cwd=wd)
+    logging.debug(output)
 
 
 def get_repo_type(name):
+    """
+    Determine repository type by name
 
+    Parameters
+    ----------
+    name: string
+        Name of the repository
+
+    Returns
+    -------
+    PushedRepo
+        Recognized repository type, None if nothing has matched
+
+    """
     if name.endswith("riotam-website"):
         return PushedRepo.Website
 
@@ -127,7 +140,7 @@ def print_error():
 
 if __name__ == "__main__":
 
-    logging.basicConfig(filename="log/git_push_event_receiver_log.txt", format="%(asctime)s [%(levelname)s]: %(message)s",
+    logging.basicConfig(filename="log/push_webhook_handler_log.txt", format="%(asctime)s [%(levelname)s]: %(message)s",
                         datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
 
     try:

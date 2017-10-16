@@ -5,10 +5,9 @@ from __future__ import print_function
 
 import ast
 import cgi
-from subprocess import Popen, PIPE, STDOUT
-import os
-import logging
 import json
+import logging
+from subprocess import Popen, PIPE, STDOUT
 
 build_result = {
     "cmd_output": ""
