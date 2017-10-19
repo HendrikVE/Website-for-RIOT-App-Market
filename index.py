@@ -7,7 +7,7 @@ import cgi
 import logging
 import textwrap
 
-from MyDatabase import MyDatabase
+from common.MyDatabase import MyDatabase
 
 BOOTSTRAP_COLUMS_PER_ROW = 12
 CFG_APPLICATIONS_PER_ROW = 2
@@ -294,7 +294,7 @@ def slices(input_list, group_size):
 
     Returns
     -------
-    string
+    array_like
         List of chunks
 
     """

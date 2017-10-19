@@ -24,11 +24,6 @@ def main():
 
     if not all([selected_modules, board, main_file_content]):
         print_error()
-        """build_result["cmd_output"] = "missing parameters for request!<br>"
-        build_result["cmd_output"] += "selected_modules = {}<br>".format(str(selected_modules))
-        build_result["cmd_output"] += "board = {}<br>".format(str(board))
-        build_result["cmd_output"] += "main_file_content = {}<br>".format(str(main_file_content))
-        print_result(json.dumps(build_result))"""
         return
 
     cmd = ["python", "build.py"]
