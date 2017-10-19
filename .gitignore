@@ -3,4 +3,4 @@
 .idea/
 
 # ignore config files containing passwords
-config/config.py
+*/config/config.py

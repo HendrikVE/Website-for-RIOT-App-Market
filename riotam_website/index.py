@@ -5,9 +5,20 @@ from __future__ import print_function
 
 import cgi
 import logging
+import os
+import sys
 import textwrap
 
+# append root of the python code tree to sys.apth so that imports are working
+#   alternative: add path to riotam_backend to the PYTHONPATH environment variable, but this includes one more step
+#   which could be forget
+CUR_DIR = os.path.abspath(os.path.dirname(__file__))
+PROJECT_ROOT_DIR = os.path.normpath(os.path.join(CUR_DIR, ".."))
+sys.path.append(PROJECT_ROOT_DIR)
+
 from common.MyDatabase import MyDatabase
+
+LOGFILE = os.path.join(PROJECT_ROOT_DIR, "log", "index_log.txt")
 
 BOOTSTRAP_COLUMS_PER_ROW = 12
 CFG_APPLICATIONS_PER_ROW = 2
@@ -577,7 +588,7 @@ def fetch_modules():
 
 if __name__ == "__main__":
 
-    logging.basicConfig(filename="log/index_log.txt", format="%(asctime)s [%(levelname)s]: %(message)s",
+    logging.basicConfig(filename=LOGFILE, format="%(asctime)s [%(levelname)s]: %(message)s",
                         datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
 
     try:
