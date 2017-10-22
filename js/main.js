@@ -225,7 +225,7 @@ function download_post() {
                     return;
                 }
 
-                if(jsonResponse == null || jsonResponse.output_file != null) {
+                if(jsonResponse == null || jsonResponse.output_archive != null) {
                     downloadButton.className = "btn btn-success";
                     downloadButton.innerHTML = "Download"
                 }
@@ -317,7 +317,7 @@ function download_example_post(applicationID, progressDivID, progressBarID, pane
                 return;
             }
 
-            if(jsonResponse == null || jsonResponse.output_file != null) {
+            if(jsonResponse == null || jsonResponse.output_archive != null) {
                 panel.className = "panel panel-success";
 
                 button.className = "btn btn-success"

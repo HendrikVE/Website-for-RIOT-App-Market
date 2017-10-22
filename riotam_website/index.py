@@ -233,7 +233,7 @@ def file_upload_input(id_prefix):
 
     """
     return textwrap.dedent("""
-        <h3>2. Upload your main class file:</h3>
+        <h3>2. Upload your main C file:</h3>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6">

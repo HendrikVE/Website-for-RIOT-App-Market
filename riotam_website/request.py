@@ -9,9 +9,16 @@ import json
 import logging
 from subprocess import Popen, PIPE, STDOUT
 
+import os
+
 build_result = {
     "cmd_output": ""
 }
+
+CUR_DIR = os.path.abspath(os.path.dirname(__file__))
+PROJECT_ROOT_DIR = os.path.normpath(os.path.join(CUR_DIR, ".."))
+
+LOGFILE = os.path.join(PROJECT_ROOT_DIR, "log", "request_log.txt")
 
 
 def main():
@@ -40,7 +47,7 @@ def main():
 
     logging.debug(main_file_content)
 
-    process = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd="../riotam-backend/riotam_backend")
+    process = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd="../../riotam-backend/riotam_backend")
     output = process.communicate()[0]
 
     # convert string representation of dictionary to "real" dictionary
@@ -65,7 +72,7 @@ def print_error():
 
 if __name__ == "__main__":
 
-    logging.basicConfig(filename="log/request_log.txt", format="%(asctime)s [%(levelname)s]: %(message)s",
+    logging.basicConfig(filename=LOGFILE, format="%(asctime)s [%(levelname)s]: %(message)s",
                         datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
 
     try:
