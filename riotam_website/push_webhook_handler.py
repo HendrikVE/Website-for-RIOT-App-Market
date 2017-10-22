@@ -14,6 +14,7 @@ from subprocess import Popen, PIPE, STDOUT
 from config import config
 
 CUR_DIR = os.path.abspath(os.path.dirname(__file__))
+PATH_RIOTAM_WEBSITE = CUR_DIR
 PROJECT_ROOT_DIR = os.path.normpath(os.path.join(CUR_DIR, ".."))
 
 LOGFILE = os.path.join(PROJECT_ROOT_DIR, "log", "push_webhook_handler_log.txt")
@@ -79,7 +80,7 @@ def update_website():
     Update git repository of frontend (website)
 
     """
-    output = execute_command(["git", "-C", PATH_RIOTAM_WEBSITE, "pull"])
+    output = execute_command(["git", "-C", PROJECT_ROOT_DIR, "pull"])
     logging.debug("PULL WEBSITE REPO:\n" + output)
 
 
