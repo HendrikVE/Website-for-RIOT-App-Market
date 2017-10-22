@@ -14,7 +14,6 @@ from subprocess import Popen, PIPE, STDOUT
 from config import config
 
 CUR_DIR = os.path.abspath(os.path.dirname(__file__))
-PATH_RIOTAM_WEBSITE = CUR_DIR
 PROJECT_ROOT_DIR = os.path.normpath(os.path.join(CUR_DIR, ".."))
 
 LOGFILE = os.path.join(PROJECT_ROOT_DIR, "log", "push_webhook_handler_log.txt")
@@ -89,7 +88,7 @@ def update_backend():
     Update git repository of backend and run some scripts to update database or the backend itself
 
     """
-    wd = os.path.normpath(os.path.join(PATH_RIOTAM_WEBSITE, "..", "riotam-backend", "riotam_backend"))
+    wd = os.path.normpath(os.path.join(PROJECT_ROOT_DIR, "..", "riotam-backend", "riotam_backend"))
     output = execute_command(["python", "push_webhook_handler.py"], cwd=wd)
     logging.debug(output)
 
