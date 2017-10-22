@@ -14,8 +14,9 @@ from subprocess import Popen, PIPE, STDOUT
 from config import config
 
 CUR_DIR = os.path.abspath(os.path.dirname(__file__))
-PATH_RIOTAM_WEBSITE = CUR_DIR
-LOGFILE = os.path.join(PATH_RIOTAM_WEBSITE, "log", "push_webhook_handler_log.txt")
+PROJECT_ROOT_DIR = os.path.normpath(os.path.join(CUR_DIR, ".."))
+
+LOGFILE = os.path.join(PROJECT_ROOT_DIR, "log", "push_webhook_handler_log.txt")
 
 
 #enum
