@@ -225,9 +225,11 @@ function download_post() {
                     return;
                 }
 
-                if(jsonResponse == null || jsonResponse.output_archive != null) {
+                if(jsonResponse != null && jsonResponse.output_archive != null) {
                     downloadButton.className = "btn btn-success";
                     downloadButton.innerHTML = "Download"
+
+                    chrome.runtime.sendMessage(extensionId, jsonResponse);
                 }
                 else {
                     downloadButton.className = "btn btn-danger";
@@ -237,7 +239,7 @@ function download_post() {
                 //this.responseText has to be a json string
                 document.getElementById("customTab_cmdOutput").innerHTML = jsonResponse.cmd_output;
 
-                chrome.runtime.sendMessage(extensionId, jsonResponse);
+
             }
         });
     }
@@ -317,10 +319,12 @@ function download_example_post(applicationID, progressDivID, progressBarID, pane
                 return;
             }
 
-            if(jsonResponse == null || jsonResponse.output_archive != null) {
+            if(jsonResponse != null && jsonResponse.output_archive != null) {
                 panel.className = "panel panel-success";
 
                 button.className = "btn btn-success"
+
+                chrome.runtime.sendMessage(extensionId, jsonResponse);
             }
             else {
                 panel.className = "panel panel-danger";
@@ -339,8 +343,6 @@ function download_example_post(applicationID, progressDivID, progressBarID, pane
 
             progressDiv.style.visibility = "hidden";
             progressBar.style.visibility = "hidden";
-
-            chrome.runtime.sendMessage(extensionId, jsonResponse);
        }
     };
 
