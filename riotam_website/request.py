@@ -11,6 +11,8 @@ from subprocess import Popen, PIPE, STDOUT
 
 import os
 
+from config import config
+
 build_result = {
     "cmd_output": ""
 }
@@ -18,7 +20,7 @@ build_result = {
 CUR_DIR = os.path.abspath(os.path.dirname(__file__))
 PROJECT_ROOT_DIR = os.path.normpath(os.path.join(CUR_DIR, ".."))
 
-LOGFILE = os.path.join(PROJECT_ROOT_DIR, "log", "request_log.txt")
+LOGFILE = os.path.join(PROJECT_ROOT_DIR, "log", "request.log")
 
 
 def main():
@@ -72,7 +74,7 @@ def print_error():
 
 if __name__ == "__main__":
 
-    logging.basicConfig(filename=LOGFILE, format="%(asctime)s [%(levelname)s]: %(message)s",
+    logging.basicConfig(filename=LOGFILE, format=config.LOGGING_FORMAT,
                         datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
 
     try:

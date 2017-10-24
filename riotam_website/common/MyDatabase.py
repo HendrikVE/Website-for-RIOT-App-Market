@@ -19,7 +19,7 @@ class MyDatabase(object):
 
         self._db_cursor = self._db_connection.cursor(cursorclass=MySQLdb.cursors.DictCursor)
 
-    def query(self, query, params = ""):
+    def query(self, query, params=None):
         return self._db_cursor.execute(query, params)
 
     def fetchall(self):

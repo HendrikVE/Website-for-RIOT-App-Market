@@ -238,8 +238,6 @@ function download_post() {
 
                 //this.responseText has to be a json string
                 document.getElementById("customTab_cmdOutput").innerHTML = jsonResponse.cmd_output;
-
-
             }
         });
     }

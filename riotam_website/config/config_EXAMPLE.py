@@ -8,3 +8,7 @@ db_config = {
 }
 
 GITHUB_SECRET_KEY = "YOUR_SECRET_KEY"
+
+LOGGING_FORMAT = "[%(levelname)s]: %(asctime)s\n"\
+                 + "in %(filename)s in %(funcName)s on line %(lineno)d\n"\
+                 + "%(message)s\n"
