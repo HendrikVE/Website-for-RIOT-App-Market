@@ -18,7 +18,7 @@ build_result = {
 }
 
 CUR_DIR = os.path.abspath(os.path.dirname(__file__))
-PROJECT_ROOT_DIR = os.path.normpath(os.path.join(CUR_DIR, ".."))
+PROJECT_ROOT_DIR = os.path.normpath(os.path.join(CUR_DIR, os.pardir))
 
 LOGFILE = os.path.join(PROJECT_ROOT_DIR, "log", "request_example.log")
 
