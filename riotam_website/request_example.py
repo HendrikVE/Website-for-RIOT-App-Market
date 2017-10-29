@@ -44,7 +44,8 @@ def main():
 
     cmd = ["python", "build_example.py",
            "--application", application,
-           "--board", board]
+           "--board", board,
+           "--caching"]
 
     process = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd="../../riotam-backend/riotam_backend")
     output = process.communicate()[0]

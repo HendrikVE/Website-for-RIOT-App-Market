@@ -55,6 +55,8 @@ def main():
     cmd.append("--mainfile")
     cmd.append(main_file_content)
 
+    cmd.append("--caching")
+
     logging.debug(main_file_content)
 
     process = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd="../../riotam-backend/riotam_backend")
