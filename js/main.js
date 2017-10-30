@@ -11,6 +11,27 @@ var downloadIsRunning = false;
 
 var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
 
+// show pop up, before closing tab by running download
+// https://stackoverflow.com/questions/6966319/javascript-confirm-dialog-box-before-close-browser-window
+window.onbeforeunload = function (event) {
+
+    if (downloadIsRunning) {
+
+        var message = "Download is still running. Are you sure you want to leave?";
+        if (typeof event == "undefined") {
+            event = window.event;
+        }
+        if (event && downloadIsRunning) {
+            event.returnValue = message;
+        }
+        return message;
+    }
+    else {
+        // dont show a dialog when no download is running
+        return null;
+    }
+}
+
 // https://stackoverflow.com/questions/38241480/detect-macos-ios-windows-android-and-linux-os-with-js
 function getOS() {
 
