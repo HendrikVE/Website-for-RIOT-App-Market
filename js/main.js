@@ -179,7 +179,7 @@ function download() {
             //first check: is the extension itself installed/ activated
             if (chrome.runtime.lastError) {
                 if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
-                    alert("You need to install the RIOT OS AppMarket Extension");
+                    alert("You need to install the RIOT OS AppMarket Extension. See https://github.com/HendrikVE/riotam-chrome-integration");
                     return;
                 }
             }
@@ -299,7 +299,7 @@ function download_example(applicationID, progressDivID, progressBarID, panelID, 
             //first check: is the extension itself installed/ activated
             if (chrome.runtime.lastError) {
                 if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
-                    alert("You need to install the RIOT OS AppMarket Extension");
+                    alert("You need to install the RIOT OS AppMarket Extension. See https://github.com/HendrikVE/riotam-chrome-integration");
                     return;
                 }
             }

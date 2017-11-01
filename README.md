@@ -10,6 +10,9 @@
 1. copy config/config_EXAMPLES.py and rename the copy to config.py
 2. change password in config/config.py to the password you set by creating user 'riotam-website'
 
+### More Information
+Graphics are editable with [yEd](http://www.yworks.com/products/yed "http://www.yworks.com/products/yed")
+
 ## LICENSE
 * The project itself is licensed under the GNU Lesser General Public License
   (LGPL) version 2.1 as published by the Free Software Foundation.
