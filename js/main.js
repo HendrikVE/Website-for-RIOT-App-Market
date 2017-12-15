@@ -174,7 +174,7 @@ unless otherwise specified, following vendorid and productid entries are coming 
 
 function download() {
 
-    if (typeof chrome !== "undefined") {
+    if (typeof chrome === "undefined") {
         download_post();
         return;
     }
@@ -209,7 +209,7 @@ function download() {
 
 function messageExtension(givenMessage) {
 
-    if (typeof chrome !== "undefined") {
+    if (typeof chrome === "undefined") {
         chrome.runtime.sendMessage(chromeExtensionId, givenMessage);
     }
     else {
@@ -313,7 +313,7 @@ function download_post() {
 
 function download_example(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID) {
 
-    if (typeof chrome !== "undefined") {
+    if (typeof chrome === "undefined") {
         download_example_post(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID);
         return
     }
