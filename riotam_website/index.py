@@ -88,7 +88,7 @@ def html_header():
             <script src="/js/bootstrap.min.js"></script>
 
             <script src="/js/main.js"></script>
-            <title>Rapstore</title>
+            <title>RAPstore</title>
         </head>
     """)
 
@@ -109,7 +109,7 @@ def header():
                 <div class="row">
 
                     <div class="col-sm-8">
-                        <h1>Rapstore</h1>
+                        <h1>RAPstore</h1>
                         <p>Let us build your custom RIOT OS according to your needs</p>
                     </div>
 
