@@ -9,7 +9,8 @@
 var board = null;
 var downloadIsRunning = false;
 
-var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
+var chromeExtensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
+var firefoxExtensionId = "";
 
 // show pop up, before closing tab by running download
 // https://stackoverflow.com/questions/6966319/javascript-confirm-dialog-box-before-close-browser-window
@@ -173,7 +174,12 @@ unless otherwise specified, following vendorid and productid entries are coming 
 
 function download() {
 
-    chrome.runtime.sendMessage(extensionId, {request: "native_messaging_host_accessible"},
+    if (chrome === undefined) {
+        download_post();
+        return;
+    }
+
+    chrome.runtime.sendMessage(chromeExtensionId, {request: "native_messaging_host_accessible"},
         function(response) {
 
             //first check: is the extension itself installed/ activated
@@ -199,6 +205,20 @@ function download() {
             download_post();
         }
     );
+}
+
+function messageExtension(givenMessage) {
+
+    if (chrome !== undefined) {
+        chrome.runtime.sendMessage(chromeExtensionId, givenMessage);
+    }
+    else {
+        window.postMessage({
+            direction: "rapstore",
+            message: givenMessage
+        },
+        "*");
+    }
 }
 
 function download_post() {
@@ -276,7 +296,7 @@ function download_post() {
                     downloadButton.className = "btn btn-success";
                     downloadButton.innerHTML = "Download"
 
-                    chrome.runtime.sendMessage(extensionId, jsonResponse);
+                    messageExtension(jsonResponse);
                 }
                 else {
                     downloadButton.className = "btn btn-danger";
@@ -293,7 +313,12 @@ function download_post() {
 
 function download_example(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID) {
 
-    chrome.runtime.sendMessage(extensionId, {request: "native_messaging_host_accessible"},
+    if (chrome === undefined) {
+        download_example_post(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID);
+        return
+    }
+
+    chrome.runtime.sendMessage(chromeExtensionId, {request: "native_messaging_host_accessible"},
         function(response) {
 
             //first check: is the extension itself installed/ activated
@@ -369,7 +394,7 @@ function download_example_post(applicationID, progressDivID, progressBarID, pane
 
                 button.className = "btn btn-success"
 
-                chrome.runtime.sendMessage(extensionId, jsonResponse);
+                messageExtension(jsonResponse);
             }
             else {
                 panel.className = "panel panel-danger";
