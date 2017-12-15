@@ -11,14 +11,6 @@ var downloadIsRunning = false;
 
 var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
 
-//switch namespace if necessary
-window.browser = (function () {
-    return
-        window.browser ||
-        window.chrome;
-})();
-
-
 // show pop up, before closing tab by running download
 // https://stackoverflow.com/questions/6966319/javascript-confirm-dialog-box-before-close-browser-window
 window.onbeforeunload = function (event) {
