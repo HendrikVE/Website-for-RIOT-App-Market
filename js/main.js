@@ -173,13 +173,13 @@ unless otherwise specified, following vendorid and productid entries are coming 
 
 function download() {
 
-    browser.runtime.sendMessage(extensionId, {request: "native_messaging_host_accessible"},
+    chrome.runtime.sendMessage(extensionId, {request: "native_messaging_host_accessible"},
         function(response) {
 
             //first check: is the extension itself installed/ activated
-            if (browser.runtime.lastError) {
-                if (browser.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
-                    alert("You need to install the RIOT OS AppMarket Extension. See https://github.com/riot-appstore/riotam-chrome-integration");
+            if (chrome.runtime.lastError) {
+                if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
+                    alert("You need to install the RIOT OS AppMarket Extension. See https://github.com/HendrikVE/riotam-chrome-integration");
                     return;
                 }
             }
@@ -276,7 +276,7 @@ function download_post() {
                     downloadButton.className = "btn btn-success";
                     downloadButton.innerHTML = "Download"
 
-                    browser.runtime.sendMessage(extensionId, jsonResponse);
+                    chrome.runtime.sendMessage(extensionId, jsonResponse);
                 }
                 else {
                     downloadButton.className = "btn btn-danger";
@@ -293,13 +293,13 @@ function download_post() {
 
 function download_example(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID) {
 
-    browser.runtime.sendMessage(extensionId, {request: "native_messaging_host_accessible"},
+    chrome.runtime.sendMessage(extensionId, {request: "native_messaging_host_accessible"},
         function(response) {
 
             //first check: is the extension itself installed/ activated
-            if (browser.runtime.lastError) {
-                if (browser.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
-                    alert("You need to install the RIOT OS AppMarket Extension. See https://github.com/riot-appstore/riotam-chrome-integration");
+            if (chrome.runtime.lastError) {
+                if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
+                    alert("You need to install the RIOT OS AppMarket Extension. See https://github.com/HendrikVE/riotam-chrome-integration");
                     return;
                 }
             }
@@ -369,7 +369,7 @@ function download_example_post(applicationID, progressDivID, progressBarID, pane
 
                 button.className = "btn btn-success"
 
-                browser.runtime.sendMessage(extensionId, jsonResponse);
+                chrome.runtime.sendMessage(extensionId, jsonResponse);
             }
             else {
                 panel.className = "panel panel-danger";
