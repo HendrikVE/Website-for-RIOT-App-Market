@@ -14,8 +14,8 @@ var extensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
 //switch namespace if necessary
 window.browser = (function () {
     return
-        window.chrome ||
-        window.browser;
+        window.browser ||
+        window.chrome;
 })();
 
 
