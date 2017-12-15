@@ -210,14 +210,14 @@ function download() {
 function messageExtension(givenMessage) {
 
     if (typeof chrome === "undefined") {
-        chrome.runtime.sendMessage(chromeExtensionId, givenMessage);
-    }
-    else {
         window.postMessage({
             direction: "rapstore",
             message: givenMessage
         },
         "*");
+    }
+    else {
+        chrome.runtime.sendMessage(chromeExtensionId, givenMessage);
     }
 }
 
