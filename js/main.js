@@ -159,7 +159,7 @@ unless otherwise specified, following vendorid and productid entries are coming 
             alert("Sorry, your board could not be recognized :(");
         }
         else {
-            console.log(selectedRule.boardInternalName)
+            console.log(selectedRule.boardInternalName);
             document.getElementById(selectorID).value = selectedRule.boardInternalName;
         }
 
@@ -209,15 +209,21 @@ function download() {
 
 function messageExtension(givenMessage) {
 
-    if (typeof chrome === "undefined") {
+    var isFirefox = typeof InstallTrigger !== 'undefined';
+    var isChrome = !!window.chrome && !!window.chrome.webstore;
+
+    if (isFirefox) {
         window.postMessage({
             direction: "rapstore",
             message: givenMessage
         },
         "*");
     }
-    else {
+    else if (isChrome) {
         chrome.runtime.sendMessage(chromeExtensionId, givenMessage);
+    }
+    else {
+        alert("Browser not supported yet, sry!");
     }
 }
 
@@ -239,11 +245,11 @@ function download_post() {
 
     if (checkboxesChecked.length == 0) {
 
-        alert("You need to select at least one module")
+        alert("You need to select at least one module");
     }
     else if (main_file == null) {
 
-        alert("You have to upload your main source file for your project!")
+        alert("You have to upload your main source file for your project!");
     }
     else {
 
@@ -441,7 +447,7 @@ function setNavigationEnabled(enabled) {
     // https://stackoverflow.com/questions/20668880/bootstrap-tabs-pills-disabling-and-with-jquery
     if (enabled) {
         $(".nav li").removeClass('disabled');
-        $(".nav li").find("a").attr("data-toggle","tab")
+        $(".nav li").find("a").attr("data-toggle","tab");
     }
     else {
         $(".nav li").addClass('disabled');
