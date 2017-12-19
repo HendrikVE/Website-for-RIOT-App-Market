@@ -315,7 +315,7 @@ function do_prechecks() {
             //first check: is the extension itself installed/ activated
             if (chrome.runtime.lastError) {
                 if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
-                    alert("You need to install the RAPstore Extension. See https://github.com/riot-appstore/riotam-browser-integration");
+                    alert("You need to install the RAPstore extension. See https://github.com/riot-appstore/riotam-browser-integration");
                     success = false;
                 }
             }
