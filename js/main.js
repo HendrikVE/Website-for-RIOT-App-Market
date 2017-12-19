@@ -183,25 +183,6 @@ function download() {
     }
 }
 
-function messageExtension(givenMessage) {
-
-    var isFirefox = typeof InstallTrigger !== 'undefined';
-    var isChrome = !!window.chrome && !!window.chrome.webstore;
-
-    if (isFirefox) {
-        window.postMessage({
-            direction: "rapstore",
-            message: givenMessage
-        },
-        "*");
-    }
-    else if (isChrome) {
-        chrome.runtime.sendMessage(chromeExtensionId, givenMessage);
-    }
-    else {
-        alert("Browser not supported yet, sry!");
-    }
-}
 
 function download_post() {
 
@@ -305,43 +286,6 @@ function download_example(applicationID, progressDivID, progressBarID, panelID, 
     }
 }
 
-// return true if everything went fine, false in case of failure
-function do_prechecks() {
-
-    var success;
-
-    chrome.runtime.sendMessage(chromeExtensionId, {request: "native_messaging_host_accessible"},
-        function(response) {
-            //first check: is the extension itself installed/ activated
-            if (chrome.runtime.lastError) {
-                if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
-                    alert("You need to install the RAPstore extension. See https://github.com/riot-appstore/riotam-browser-integration");
-                    success = false;
-                    return;
-                }
-            }
-
-            //second check: look in to the response if the extension was able to connect to native messaging host
-            if(!response.success) {
-                alert("You need to install the riotam Native Messaging Host provided in riotam-browser-integration/native-messaging-host/");
-                success = false;
-                return;
-            }
-
-            //third check: is another download already running?
-            if(downloadIsRunning) {
-                alert("Another process is already running, please wait until it is finished.");
-                success = false;
-                return;
-            }
-
-            success = true;
-        }
-    );
-
-    return success;
-}
-
 
 function download_example_post(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID) {
 
@@ -422,6 +366,65 @@ function download_example_post(applicationID, progressDivID, progressBarID, pane
 
     xhttp.send(params);
 }
+
+
+function messageExtension(givenMessage) {
+
+    var isFirefox = typeof InstallTrigger !== 'undefined';
+    var isChrome = !!window.chrome && !!window.chrome.webstore;
+
+    if (isFirefox || isChrome) {
+        window.postMessage({
+            direction: "rapstore",
+            message: givenMessage
+        },
+        "*");
+    }
+    else {
+        alert("Browser not supported yet, sry!");
+    }
+}
+
+
+// return true if everything went fine, false in case of failure
+function do_prechecks() {
+
+    return true;
+
+    var success;
+
+    chrome.runtime.sendMessage(chromeExtensionId, {request: "native_messaging_host_accessible"},
+        function(response) {
+            //first check: is the extension itself installed/ activated
+            if (chrome.runtime.lastError) {
+                if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
+                    alert("You need to install the RAPstore extension. See https://github.com/riot-appstore/riotam-browser-integration");
+                    success = false;
+                    return;
+                }
+            }
+
+            //second check: look in to the response if the extension was able to connect to native messaging host
+            if(!response.success) {
+                alert("You need to install the RAPstore Native Messaging Host provided in riotam-browser-integration/native-messaging-host/");
+                success = false;
+                return;
+            }
+
+            //third check: is another download already running?
+            if(downloadIsRunning) {
+                alert("Another process is already running, please wait until it is finished.");
+                success = false;
+                return;
+            }
+
+            success = true;
+        }
+    );
+
+    return success;
+}
+
 
 function sendMailToSupport(modalDialogID) {
 
