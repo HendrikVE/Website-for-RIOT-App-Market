@@ -317,6 +317,7 @@ function do_prechecks() {
                 if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
                     alert("You need to install the RAPstore extension. See https://github.com/riot-appstore/riotam-browser-integration");
                     success = false;
+                    return;
                 }
             }
 
@@ -324,12 +325,14 @@ function do_prechecks() {
             if(!response.success) {
                 alert("You need to install the riotam Native Messaging Host provided in riotam-browser-integration/native-messaging-host/");
                 success = false;
+                return;
             }
 
             //third check: is another download already running?
             if(downloadIsRunning) {
                 alert("Another process is already running, please wait until it is finished.");
                 success = false;
+                return;
             }
 
             success = true;
