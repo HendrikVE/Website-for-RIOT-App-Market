@@ -182,25 +182,7 @@ function download() {
     chrome.runtime.sendMessage(chromeExtensionId, {request: "native_messaging_host_accessible"},
         function(response) {
 
-            //first check: is the extension itself installed/ activated
-            if (chrome.runtime.lastError) {
-                if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
-                    alert("You need to install the RIOT OS AppMarket Extension. See https://github.com/HendrikVE/riotam-chrome-integration");
-                    return;
-                }
-            }
-
-            //second check: look in to the response if the extension was able to connect to native messaging host
-            if(!response.success) {
-                alert("You need to install the riotam Native Messaging Host provided in riotam-chrome-integration/native-messaging-host/");
-                return;
-            }
-
-            //third check: is another download already running?
-            if(downloadIsRunning) {
-                alert("Another process is already running, please wait until it is finished.");
-                return;
-            }
+            do_prechecks();
 
             download_post();
         }
@@ -327,29 +309,33 @@ function download_example(applicationID, progressDivID, progressBarID, panelID, 
     chrome.runtime.sendMessage(chromeExtensionId, {request: "native_messaging_host_accessible"},
         function(response) {
 
-            //first check: is the extension itself installed/ activated
-            if (chrome.runtime.lastError) {
-                if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
-                    alert("You need to install the RIOT OS AppMarket Extension. See https://github.com/HendrikVE/riotam-chrome-integration");
-                    return;
-                }
-            }
-
-            //second check: look in to the response if the extension was able to connect to native messaging host
-            if(!response.success) {
-                alert("You need to install the riotam Native Messaging Host provided in riotam-chrome-integration/native-messaging-host/");
-                return;
-            }
-
-            //third check: is another download already running?
-            if(downloadIsRunning) {
-                alert("Another process is already running, please wait until it is finished.");
-                return;
-            }
+            do_prechecks();
 
             download_example_post(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID);
         }
     );
+}
+
+function do_prechecks() {
+    //first check: is the extension itself installed/ activated
+    if (chrome.runtime.lastError) {
+        if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
+            alert("You need to install the RIOT OS AppMarket Extension. See https://github.com/HendrikVE/riotam-chrome-integration");
+            return;
+        }
+    }
+
+    //second check: look in to the response if the extension was able to connect to native messaging host
+    if(!response.success) {
+        alert("You need to install the riotam Native Messaging Host provided in riotam-chrome-integration/native-messaging-host/");
+        return;
+    }
+
+    //third check: is another download already running?
+    if(downloadIsRunning) {
+        alert("Another process is already running, please wait until it is finished.");
+        return;
+    }
 }
 
 
