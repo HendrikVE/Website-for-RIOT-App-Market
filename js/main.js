@@ -9,7 +9,36 @@
 var board = null;
 var downloadIsRunning = false;
 
+var extensionAvailable = false;
+var nativeMessagingHostAvailable = false;
+
 var chromeExtensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
+
+$(window).on("load", function() {
+
+    $body = $('body');
+
+    // waiting for async operations of extension to finish before continue
+    setTimeout(checkBrowserIntegration, 1 * 1000);
+
+    return extensionAvailable && nativeMessagingHostAvailable;
+});
+
+function checkBrowserIntegration() {
+
+    var containsExtensionTag = document.body.classList.contains("rapstore_extension_installed");
+    var containsNativeMessagingHostTag = document.body.classList.contains("rapstore_native_messaging_host_installed");
+
+    if (!containsExtensionTag) {
+        alert("You need to install the RAPstore extension. See https://github.com/riot-appstore/riotam-browser-integration");
+    }
+    else if (!containsNativeMessagingHostTag) {
+        alert("You need to install the Native Messaging Host in addition to the RAPstore extension. See https://github.com/riot-appstore/riotam-browser-integration");
+    }
+
+    extensionAvailable = containsExtensionTag;
+    nativeMessagingHostAvailable = containsNativeMessagingHostTag;
+}
 
 // show pop up, before closing tab by running download
 // https://stackoverflow.com/questions/6966319/javascript-confirm-dialog-box-before-close-browser-window
@@ -259,7 +288,7 @@ function download_post() {
                     downloadButton.className = "btn btn-success";
                     downloadButton.innerHTML = "Download"
 
-                    messageExtension(jsonResponse);
+                    messageExtension("rapstore", jsonResponse);
                 }
                 else {
                     downloadButton.className = "btn btn-danger";
@@ -334,7 +363,7 @@ function download_example_post(applicationID, progressDivID, progressBarID, pane
 
                 button.className = "btn btn-success"
 
-                messageExtension(jsonResponse);
+                messageExtension("rapstore", jsonResponse);
             }
             else {
                 panel.className = "panel panel-danger";
@@ -368,14 +397,14 @@ function download_example_post(applicationID, progressDivID, progressBarID, pane
 }
 
 
-function messageExtension(givenMessage) {
+function messageExtension(givenAction, givenMessage="") {
 
     var isFirefox = typeof InstallTrigger !== 'undefined';
     var isChrome = !!window.chrome && !!window.chrome.webstore;
 
     if (isFirefox || isChrome) {
         window.postMessage({
-            direction: "rapstore",
+            action: givenAction,
             message: givenMessage
         },
         "*");
