@@ -30,14 +30,52 @@ function checkBrowserIntegration() {
     var containsNativeMessagingHostTag = document.body.classList.contains("rapstore_native_messaging_host_installed");
 
     if (!containsExtensionTag) {
-        alert("You need to install the RAPstore extension. See https://github.com/riot-appstore/riotam-browser-integration");
+        showAlertNoExtension();
     }
     else if (!containsNativeMessagingHostTag) {
-        alert("You need to install the Native Messaging Host in addition to the RAPstore extension. See https://github.com/riot-appstore/riotam-browser-integration");
+        showAlertNoNativeMessagingHost();
     }
 
     extensionAvailable = containsExtensionTag;
     nativeMessagingHostAvailable = containsNativeMessagingHostTag;
+}
+
+
+// return true if everything went fine, false in case of failure
+function do_prechecks() {
+
+    // first check: is another download already running?
+    if(downloadIsRunning) {
+        showAlertDownloadProcessRunning();
+        return false;
+    }
+    // second check: is the extension itself installed/ activated
+    else if (!extensionAvailable) {
+        showAlertNoExtension();
+        return false;
+    }
+    // third check: check if the extension was able to connect to native messaging host
+    else if (!nativeMessagingHostAvailable) {
+        showAlertNoNativeMessagingHost();
+        return false;
+    }
+
+    // all tests passed successfully
+    return true;
+}
+
+
+function showAlertDownloadProcessRunning() {
+    alert("Another process is already running, please wait until it's finished.");
+}
+
+
+function showAlertNoExtension() {
+    alert("You need to install the RAPstore extension and then reload this page. See https://github.com/riot-appstore/riotam-browser-integration");
+}
+
+function showAlertNoNativeMessagingHost() {
+    alert("You need to install the Native Messaging Host along with the RAPstore extension and then reload this page. See https://github.com/riot-appstore/riotam-browser-integration");
 }
 
 // show pop up, before closing tab by running download
@@ -202,11 +240,6 @@ unless otherwise specified, following vendorid and productid entries are coming 
 
 function download() {
 
-    if (typeof chrome === "undefined") {
-        download_post();
-        return;
-    }
-
     if (do_prechecks()) {
         download_post();
     }
@@ -304,11 +337,6 @@ function download_post() {
 
 
 function download_example(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID) {
-
-    if (typeof chrome === "undefined") {
-        download_example_post(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID);
-        return
-    }
 
     if (do_prechecks()) {
         download_example_post(applicationID, progressDivID, progressBarID, panelID, buttonID, modalDialogID);
@@ -412,46 +440,6 @@ function messageExtension(givenAction, givenMessage="") {
     else {
         alert("Browser not supported yet, sry!");
     }
-}
-
-
-// return true if everything went fine, false in case of failure
-function do_prechecks() {
-
-    return true;
-
-    var success;
-
-    chrome.runtime.sendMessage(chromeExtensionId, {request: "native_messaging_host_accessible"},
-        function(response) {
-            //first check: is the extension itself installed/ activated
-            if (chrome.runtime.lastError) {
-                if (chrome.runtime.lastError.message == "Could not establish connection. Receiving end does not exist.") {
-                    alert("You need to install the RAPstore extension. See https://github.com/riot-appstore/riotam-browser-integration");
-                    success = false;
-                    return;
-                }
-            }
-
-            //second check: look in to the response if the extension was able to connect to native messaging host
-            if(!response.success) {
-                alert("You need to install the RAPstore Native Messaging Host provided in riotam-browser-integration/native-messaging-host/");
-                success = false;
-                return;
-            }
-
-            //third check: is another download already running?
-            if(downloadIsRunning) {
-                alert("Another process is already running, please wait until it is finished.");
-                success = false;
-                return;
-            }
-
-            success = true;
-        }
-    );
-
-    return success;
 }
 
 
