@@ -12,8 +12,6 @@ var downloadIsRunning = false;
 var extensionAvailable = false;
 var nativeMessagingHostAvailable = false;
 
-var chromeExtensionId = "knldjmfmopnpolahpmmgbagdohdnhkik";
-
 $(window).on("load", function() {
 
     $body = $('body');
@@ -290,7 +288,7 @@ function download_post() {
 
         // https://stackoverflow.com/questions/166221/how-can-i-upload-files-asynchronously
         $.ajax({
-            url: "/request.py",
+            url: "/requests/request.py",
             type: "POST",
             data: formData,
             cache: false,
@@ -413,7 +411,7 @@ function download_example_post(applicationID, progressDivID, progressBarID, pane
        }
     };
 
-    xhttp.open("POST", "/request_example.py", true);
+    xhttp.open("POST", "/requests/request_example.py", true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     params = "";
