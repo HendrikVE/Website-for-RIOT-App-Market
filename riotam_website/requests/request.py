@@ -19,6 +19,9 @@ from subprocess import Popen, PIPE, STDOUT
 
 import os
 
+import sys
+
+sys.path.append('../')
 from config import config
 
 build_result = {
