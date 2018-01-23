@@ -315,7 +315,9 @@ function download_post() {
                     return;
                 }
 
-                if(jsonResponse != null && jsonResponse.output_archive != null) {
+                var innerMessage = JSON.parse(jsonResponse.message);
+
+                if(innerMessage != null && innerMessage.output_archive != null) {
                     downloadButton.className = "btn btn-success";
                     downloadButton.innerHTML = "Download"
 
@@ -384,7 +386,9 @@ function download_example_post(applicationID, progressDivID, progressBarID, pane
                 return;
             }
 
-            if(jsonResponse != null && jsonResponse.output_archive != null) {
+            var innerMessage = JSON.parse(jsonResponse.message);
+
+            if(innerMessage != null && innerMessage.output_archive != null) {
                 panel.className = "panel panel-success";
 
                 button.className = "btn btn-success"
@@ -397,7 +401,7 @@ function download_example_post(applicationID, progressDivID, progressBarID, pane
                 button.className = "btn btn-danger"
                 button.innerHTML = "Show error log";
 
-                modalDialogBody.innerHTML = "<p>" + jsonResponse.cmd_output + "</p>"
+                modalDialogBody.innerHTML = "<p>" + innerMessage.cmd_output + "</p>"
                 modalDialogFooter.innerHTML = '<button type="button" class="btn btn-default" data-dismiss="modal" onclick="sendMailToSupport(\'' + modalDialogID + '\')">Send log to support</button>' + modalDialogFooter.innerHTML;
 
                 $('#' + modalDialogID + '').modal('show');

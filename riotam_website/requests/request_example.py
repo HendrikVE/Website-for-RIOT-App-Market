@@ -2,14 +2,14 @@
 # -*- coding: UTF-8 -*-
 
 """
- * Copyright (C) 2017 Hendrik van Essen
+ * Copyright (C) 2018 Hendrik van Essen and FU Berlin
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
  * directory for more details.
 """
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function, unicode_literals
 
 import ast
 import cgi
@@ -18,6 +18,8 @@ import logging
 from subprocess import Popen, PIPE, STDOUT
 import os
 import sys
+
+from http_prints import print_signed_result, print_bad_request
 
 sys.path.append('../')
 from config import config
@@ -40,7 +42,7 @@ def main():
     board = form.getfirst('board')
 
     if not all([application, board]):
-        print_error()
+        print_bad_request()
         return
 
     cmd = ['python', 'build_example.py',
@@ -55,20 +57,7 @@ def main():
     build_result = ast.literal_eval(output)
     build_result['cmd_output'] = build_result['cmd_output'].replace('\n', '<br>')
 
-    print_result(json.dumps(build_result))
-
-
-def print_result(result):
-
-    print ('Content-Type: text/html')
-    print ('\n\r')
-    print (result)
-
-
-def print_error():
-
-    print ('Status: 400 Bad Request')
-    print ()
+    print_signed_result(json.dumps(build_result))
 
 
 if __name__ == '__main__':
@@ -83,4 +72,4 @@ if __name__ == '__main__':
         logging.error(str(e), exc_info=True)
         build_result['cmd_output'] = 'Something really bad happened on server side: ' + str(e)
 
-        print_result(json.dumps(build_result))
+        print_signed_result(json.dumps(build_result))

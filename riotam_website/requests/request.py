@@ -9,17 +9,17 @@
  * directory for more details.
 """
 
-from __future__ import print_function
+from __future__ import absolute_import, print_function, unicode_literals
 
 import ast
 import cgi
 import json
 import logging
+import os
+import sys
 from subprocess import Popen, PIPE, STDOUT
 
-import os
-
-import sys
+from http_prints import print_signed_result, print_bad_request
 
 sys.path.append('../')
 from config import config
@@ -43,7 +43,7 @@ def main():
     main_file_content = form.getfirst('main_file_content')
 
     if not all([selected_modules, board, main_file_content]):
-        print_error()
+        print_bad_request()
         return
 
     cmd = ['python', 'build.py']
@@ -69,20 +69,7 @@ def main():
     build_result = ast.literal_eval(output)
     build_result['cmd_output'] = build_result['cmd_output'].replace('\n', '<br>')
 
-    print_result(json.dumps(build_result))
-
-
-def print_result(result):
-
-    print ('Content-Type: text/html')
-    print ('\n\r')
-    print (result)
-
-
-def print_error():
-
-    print ('Status: 403 Forbidden')
-    print ('\n\r')
+    print_signed_result(json.dumps(build_result))
 
 
 if __name__ == '__main__':
@@ -97,4 +84,4 @@ if __name__ == '__main__':
         logging.error(str(e), exc_info=True)
         build_result['cmd_output'] = 'Something really bad happened on server side: ' + str(e)
 
-        print_result(json.dumps(build_result))
+        print_signed_result(json.dumps(build_result))

@@ -4,3 +4,5 @@
 
 # ignore config files containing passwords
 */config/config.py
+
+*.pem
