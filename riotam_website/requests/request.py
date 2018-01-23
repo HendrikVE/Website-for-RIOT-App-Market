@@ -17,7 +17,7 @@ import json
 import logging
 import os
 import sys
-from subprocess import Popen, PIPE, STDOUT
+import subprocess
 
 from http_prints import print_signed_result, print_bad_request
 
@@ -62,8 +62,7 @@ def main():
 
     logging.debug(main_file_content)
 
-    process = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd='../../../riotam-backend/riotam_backend')
-    output = process.communicate()[0]
+    output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, cwd='../../../riotam-backend/riotam_backend').strip()
 
     # convert string representation of dictionary to "real" dictionary
     build_result = ast.literal_eval(output)

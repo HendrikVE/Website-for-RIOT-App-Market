@@ -15,7 +15,7 @@ import ast
 import cgi
 import json
 import logging
-from subprocess import Popen, PIPE, STDOUT
+import subprocess
 import os
 import sys
 
@@ -50,8 +50,7 @@ def main():
            '--board', board,
            '--caching']
 
-    process = Popen(cmd, stdout=PIPE, stderr=STDOUT, cwd='../../../riotam-backend/riotam_backend')
-    output = process.communicate()[0]
+    output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, cwd='../../../riotam-backend/riotam_backend').strip()
 
     # convert string representation of dictionary to "real" dictionary
     build_result = ast.literal_eval(output)

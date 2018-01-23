@@ -26,6 +26,7 @@ PRIVATE_KEY_FILE = os.path.join(PROJECT_ROOT_DIR, 'website.pem')
 
 
 class _HttpStatus(object):
+    """class to represent HTTP status"""
 
     code = None
     description = None
@@ -45,6 +46,7 @@ _HTTP_INTERNAL_SERVER_ERROR = _HttpStatus(500, 'Internal Server Error')
 
 
 def print_signed_result(content):
+    """like print_result, but also signing the message by putting message and signature in to two json fields"""
 
     def get_signature(private_key, message):
 
