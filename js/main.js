@@ -12,9 +12,20 @@ var downloadIsRunning = false;
 var extensionAvailable = false;
 var nativeMessagingHostAvailable = false;
 
+var isFirefox = typeof InstallTrigger !== 'undefined';
+var isChrome = !!window.chrome && !!window.chrome.webstore;
+
 $(window).on("load", function() {
 
     $body = $('body');
+
+    if (isFirefox) {
+        var autodetectButton1 = document.getElementById('examplesTab_autodetectButton');
+        autodetectButton1.parentNode.removeChild(autodetectButton1);
+
+        var autodetectButton2 = document.getElementById('customTab_autodetectButton');
+        autodetectButton2.parentNode.removeChild(autodetectButton2);
+    }
 
     // waiting for async operations of extension to finish before continue
     setTimeout(checkBrowserIntegration, 1 * 1000);
@@ -428,9 +439,6 @@ function download_example_post(applicationID, progressDivID, progressBarID, pane
 
 
 function messageExtension(givenAction, givenMessage="") {
-
-    var isFirefox = typeof InstallTrigger !== 'undefined';
-    var isChrome = !!window.chrome && !!window.chrome.webstore;
 
     if (isFirefox || isChrome) {
         window.postMessage({

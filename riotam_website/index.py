@@ -291,11 +291,12 @@ def board_selector(id_prefix, boards):
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-default btn-block" onclick="autodetect('{SELECTOR_ID}')">Try autodetect</button>
+                    <button id="{ID_PREFIX}autodetectButton" type="button" class="btn btn-default btn-block" onclick="autodetect('{SELECTOR_ID}')">Try autodetect</button>
                 </div>
             </div>
         </div>
-    """.format(SELECTOR_ID=id_prefix+"boardSelector",
+    """.format(ID_PREFIX=id_prefix,
+               SELECTOR_ID=id_prefix+"boardSelector",
                SELECTOR_OPTIONS=selector_options))
 
 
