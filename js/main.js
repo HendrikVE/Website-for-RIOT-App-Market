@@ -332,7 +332,7 @@ function download_post() {
                     downloadButton.className = "btn btn-success";
                     downloadButton.innerHTML = "Download"
 
-                    messageExtension("rapstore", jsonResponse);
+                    messageExtension("install_image", jsonResponse);
                 }
                 else {
                     downloadButton.className = "btn btn-danger";
@@ -404,7 +404,7 @@ function download_example_post(applicationID, progressDivID, progressBarID, pane
 
                 button.className = "btn btn-success"
 
-                messageExtension("rapstore", jsonResponse);
+                messageExtension("install_image", jsonResponse);
             }
             else {
                 panel.className = "panel panel-danger";
