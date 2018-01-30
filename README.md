@@ -8,7 +8,7 @@
 ## Setup
 0. Important to notice: Please run every command with 'sudo -u www-data'
 1. copy config/config_EXAMPLES.py and rename the copy to config.py
-2. change password in config/config.py to the password you set by creating user 'riotam-website'
+2. change password in config/config.py to the password you set by creating user 'rapstore-website'
 
 ### More Information
 Graphics are editable with [yEd](http://www.yworks.com/products/yed "http://www.yworks.com/products/yed")

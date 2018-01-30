@@ -6,3 +6,4 @@
 */config/config.py
 
 *.pem
+*.key

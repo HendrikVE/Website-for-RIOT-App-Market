@@ -80,11 +80,11 @@ function showAlertDownloadProcessRunning() {
 
 
 function showAlertNoExtension() {
-    alert("You need to install the RAPstore extension and then reload this page. See https://github.com/riot-appstore/riotam-browser-integration");
+    alert("You need to install the RAPstore extension and then reload this page. See https://github.com/riot-appstore/rapstore-browser-integration");
 }
 
 function showAlertNoNativeMessagingHost() {
-    alert("You need to install the Native Messaging Host along with the RAPstore extension and then reload this page. See https://github.com/riot-appstore/riotam-browser-integration");
+    alert("You need to install the Native Messaging Host along with the RAPstore extension and then reload this page. See https://github.com/riot-appstore/rapstore-browser-integration");
 }
 
 // show pop up, before closing tab by running download
@@ -458,7 +458,7 @@ function sendMailToSupport(modalDialogID) {
     var modalDialog = document.getElementById(modalDialogID);
     var modalDialogBody = modalDialog.getElementsByClassName("modal-body")[0];
 
-    window.open("mailto:hendrikve@zedat.fu-berlin.de?subject=riotam&body=" + encodeURIComponent(modalDialogBody.innerHTML) + "");
+    window.open("mailto:hendrik.ve@fu-berlin.de?subject=rapstore&body=" + encodeURIComponent(modalDialogBody.innerHTML) + "");
 }
 
 

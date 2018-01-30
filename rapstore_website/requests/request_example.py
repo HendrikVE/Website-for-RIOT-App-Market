@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 """
- * Copyright (C) 2017 Hendrik van Essen
+ * Copyright (C) 2018 Hendrik van Essen and FU Berlin
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -15,9 +15,9 @@ import ast
 import cgi
 import json
 import logging
+import subprocess
 import os
 import sys
-import subprocess
 
 from http_prints import print_signed_result, print_bad_request
 
@@ -31,38 +31,26 @@ build_result = {
 CUR_DIR = os.path.abspath(os.path.dirname(__file__))
 PROJECT_ROOT_DIR = os.path.normpath(os.path.join(CUR_DIR, os.pardir, os.pardir))
 
-LOGFILE = os.path.join(PROJECT_ROOT_DIR, 'log', 'request.log')
+LOGFILE = os.path.join(PROJECT_ROOT_DIR, 'log', 'request_example.log')
 
 
 def main():
 
     form = cgi.FieldStorage()
 
-    selected_modules = form.getlist('selected_modules[]')
+    application = form.getfirst('application')
     board = form.getfirst('board')
-    main_file_content = form.getfirst('main_file_content')
 
-    if not all([selected_modules, board, main_file_content]):
+    if not all([application, board]):
         print_bad_request()
         return
 
-    cmd = ['python', 'build.py']
+    cmd = ['python', 'build_example.py',
+           '--application', application,
+           '--board', board,
+           '--caching']
 
-    cmd.append('--modules')
-    for module in selected_modules:
-        cmd.append(module)
-
-    cmd.append('--board')
-    cmd.append(board)
-
-    cmd.append('--mainfile')
-    cmd.append(main_file_content)
-
-    cmd.append('--caching')
-
-    logging.debug(main_file_content)
-
-    output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, cwd='../../../riotam-backend/riotam_backend').strip()
+    output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, cwd='../../../rapstore-backend/rapstore_backend').strip()
 
     # convert string representation of dictionary to "real" dictionary
     build_result = ast.literal_eval(output)

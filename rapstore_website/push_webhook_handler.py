@@ -96,7 +96,7 @@ def update_backend():
     Update git repository of backend and run some scripts to update database or the backend itself
 
     """
-    wd = os.path.normpath(os.path.join(PROJECT_ROOT_DIR, os.pardir, "riotam-backend", "riotam_backend"))
+    wd = os.path.normpath(os.path.join(PROJECT_ROOT_DIR, os.pardir, "rapstore-backend", "rapstore_backend"))
     output = execute_command(["python", "push_webhook_handler.py"], cwd=wd)
     logging.debug(output)
 
@@ -116,10 +116,10 @@ def get_repo_type(name):
         Recognized repository type, None if nothing has matched
 
     """
-    if name.endswith("riotam-website"):
+    if name.endswith("rapstore-website"):
         return PushedRepo.Website
 
-    elif name.endswith("riotam-backend"):
+    elif name.endswith("rapstore-backend"):
         return PushedRepo.Backend
 
     else:

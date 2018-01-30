@@ -26,7 +26,7 @@ CUR_DIR = os.path.abspath(os.path.dirname(__file__))
 PROJECT_ROOT_DIR = os.path.join(CUR_DIR, os.pardir, os.pardir)
 
 BACKEND_DIR = os.path.join(PROJECT_ROOT_DIR, os.pardir,
-                           'riotam-backend', 'riotam_backend')
+                           'rapstore-backend', 'rapstore_backend')
 LOGFILE = os.path.join(PROJECT_ROOT_DIR, 'log', 'webhook_riot.log')
 
 

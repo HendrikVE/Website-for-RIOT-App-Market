@@ -10,7 +10,7 @@
 
 db_config = {
     "host": "localhost",
-    "user": "riotam_website",
+    "user": "rapstore_website",
     "passwd": "PASSWORD_WEBSITE",
     "db": "riot_os"
 }
