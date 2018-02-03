@@ -571,7 +571,7 @@ def footer():
         <footer class="footer">
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-8">&copy; Hendrik van Essen, 2017</div>
+                    <div class="col-sm-8">&copy; 2017-2018</div>
                     <div class="col-sm-4"><a href="https://riot-os.org/"><img src="/img/riot_logo_footer.png" alt="RIOT logo" width="64" height="35"></img></a></div>
                 </div>
             </div>
