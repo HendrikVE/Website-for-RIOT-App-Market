@@ -88,6 +88,10 @@ def html_header():
             <script src="/js/bootstrap.min.js"></script>
 
             <script src="/js/main.js"></script>
+            <script src="/js/browser-integration.js"></script>
+            <script src="/js/dialogs.js"></script>
+            <script src="/js/webusb-autodetect.js"></script>
+            
             <title>RAPstore</title>
         </head>
     """)
@@ -116,11 +120,13 @@ def header():
                     <div class="col-sm-4">
                         <img src="/img/riot_logo.png" alt="RIOT logo" class="img-responsive"></img>
                     </div>
+                    
+                    {MODAL_DIALOG}
 
                 </div>
             </div>
         </div>
-    """)
+    """.format(MODAL_DIALOG=modal_dialog('modalDialogBrowserIntegration', '', '')))
 
 
 def tabs():
