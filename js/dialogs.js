@@ -12,10 +12,24 @@ function showAlertDownloadProcessRunning() {
 
 
 function showAlertNoExtension() {
-    alert("You need to install the RAPstore extension and then reload this page. See https://github.com/riot-appstore/rapstore-browser-integration");
+
+    var modalDialog = document.getElementById("modalDialogBrowserIntegration");
+    var modalDialogBody = modalDialog.getElementsByClassName("modal-body")[0];
+
+    modalDialogBody.innerHTML = "<p>You need to install the RAPstore extension and then reload this page. "
+    + "See instructions on <a href=\"https://github.com/riot-appstore/rapstore-browser-integration\">https://github.com/riot-appstore/rapstore-browser-integration</a></p>"
+
+    $('#modalDialogBrowserIntegration').modal('show');
 }
 
 
 function showAlertNoNativeMessagingHost() {
-    alert("You need to install the Native Messaging Host along with the RAPstore extension and then reload this page. See https://github.com/riot-appstore/rapstore-browser-integration");
+
+    var modalDialog = document.getElementById("modalDialogBrowserIntegration");
+    var modalDialogBody = modalDialog.getElementsByClassName("modal-body")[0];
+
+    modalDialogBody.innerHTML = "<p>You need to install the Native Messaging Host along with the RAPstore extension and then reload this page. "
+    + "See instructions on <a href=\"https://github.com/riot-appstore/rapstore-browser-integration\">https://github.com/riot-appstore/rapstore-browser-integration</a></p>"
+
+    $('#modalDialogBrowserIntegration').modal('show');
 }

@@ -126,7 +126,7 @@ def header():
                 </div>
             </div>
         </div>
-    """.format(MODAL_DIALOG=modal_dialog('modalDialogBrowserIntegration', '', '')))
+    """.format(MODAL_DIALOG=modal_dialog('modalDialogBrowserIntegration', 'Component for RAPstore browser integration is missing', '')))
 
 
 def tabs():
